@@ -601,6 +601,156 @@
     background: var(--surface-2);
   }
 
+  /* ============ SLIDE — PIX CARD (light, animated) ============ */
+  .pix {
+    background: #FFFFFF;
+    color: #0A0A0A;
+  }
+  .pix-bird {
+    position: absolute;
+    top: 26px; left: 40px;
+    width: 30px; height: auto;
+    opacity: 0;
+    animation: fadeUp 0.7s ease-out 0.1s forwards;
+  }
+  .pix-tag {
+    position: absolute;
+    top: 44px; right: 56px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: #B0B0B0;
+    opacity: 0;
+    animation: fadeUp 0.7s ease-out 0.2s forwards;
+  }
+  .pix-tag b { color: #0A0A0A; font-weight: 500; }
+  .pix-head {
+    position: absolute;
+    top: 40px; left: 80px;
+    max-width: 1080px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease-out forwards;
+  }
+  .pix-head h1 {
+    font-family: var(--sans);
+    font-size: 62px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    color: #0A0A0A;
+  }
+  .pix-head p {
+    font-family: var(--dmsans);
+    font-size: 18px;
+    color: #6B6B6B;
+    margin-top: 18px;
+    font-weight: 400;
+  }
+
+  .fan {
+    position: absolute;
+    left: 56px; top: 318px;
+    width: 840px; height: 400px;
+  }
+  .pcard {
+    position: absolute;
+    left: 50%; top: 0;
+    width: 190px; height: 288px;
+    margin-left: -95px;
+    border-radius: 18px;
+    transform-origin: 50% 150%;
+    transform: rotate(var(--rot));
+    opacity: 0;
+    animation: fanIn 0.85s cubic-bezier(.18,.7,.2,1) var(--d) forwards;
+    box-shadow: 0 18px 44px rgba(0,0,0,0.22);
+    overflow: hidden;
+  }
+  .pcard-inner {
+    width: 100%; height: 100%;
+    position: relative;
+    padding: 18px;
+    animation: floaty 6s ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+  @keyframes fanIn {
+    from { opacity: 0; transform: rotate(0deg) translateY(70px) scale(.92); }
+    to   { opacity: 1; transform: rotate(var(--rot)) translateY(0) scale(1); }
+  }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-7px); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .pmark { width: 30px; height: 30px; display: block; }
+  .pmark path { fill: rgba(255,255,255,0.92); }
+  .pname {
+    position: absolute;
+    bottom: 18px; left: 18px; right: 18px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  .pname.sm { font-size: 11px; letter-spacing: 0.06em; font-weight: 600; }
+  .pname.lower { text-transform: none; letter-spacing: -0.01em; }
+  .pcard .pbird {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 20px; height: 20px;
+    opacity: 0.92;
+  }
+  .pcard .pbird path { fill: #fff; }
+  .robbin-vert {
+    position: absolute;
+    top: 50%; right: 16px;
+    transform: translateY(-50%) rotate(180deg);
+    writing-mode: vertical-rl;
+    font-family: var(--sans);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: rgba(255,255,255,0.95);
+  }
+
+  .pix-points {
+    position: absolute;
+    right: 56px; top: 300px;
+    width: 600px;
+  }
+  .pix-point {
+    border-top: 1px solid #E6E6E6;
+    padding: 24px 0 22px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+  .pix-point:last-child { border-bottom: 1px solid #E6E6E6; }
+  .pp-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: #B0B0B0;
+    margin-bottom: 10px;
+  }
+  .pp-title {
+    font-family: var(--sans);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0A0A0A;
+    margin-bottom: 8px;
+  }
+  .pp-desc {
+    font-family: var(--dmsans);
+    font-size: 15px;
+    color: #6B6B6B;
+    line-height: 1.55;
+  }
+
   @media print {
     html, body { background: #fff; }
     .deck { gap: 0; padding: 0; }
@@ -621,11 +771,90 @@
     <span class="slide-num">01</span>
   </section>
 
-  <!-- ===== SLIDE 2 — PRESENTERS ===== -->
+  <!-- ===== SLIDE 2 — CARTÃO PIX (animado) ===== -->
+  <section class="slide pix">
+    <img class="pix-bird" src="robbin-bird-black.svg" alt="Robbin">
+    <span class="pix-tag"><b>02</b> &mdash; O NOVO TRILHO</span>
+
+    <div class="pix-head">
+      <h1>Conheça o cartão de<br>crédito sobre o trilho do PIX.</h1>
+      <p>UX de cartão. Economia do PIX. Liquidação instantânea. Já no ar com âncoras co-brand.</p>
+    </div>
+
+    <div class="fan">
+      <div class="pcard" style="--rot:-48deg; --d:0.15s; z-index:1; background:linear-gradient(160deg,#FF2E63,#D11A4B);">
+        <div class="pcard-inner">
+          <svg class="pmark" viewBox="0 0 40 40"><path d="M20 1 C 23 13 27 17 39 20 C 27 23 23 27 20 39 C 17 27 13 23 1 20 C 13 17 17 13 20 1Z"/></svg>
+          <span class="pname">Chilli Beans</span>
+        </div>
+      </div>
+      <div class="pcard" style="--rot:-32deg; --d:0.25s; z-index:2; background:linear-gradient(160deg,#0E6E63,#0A4A43);">
+        <div class="pcard-inner">
+          <svg class="pmark" viewBox="0 0 40 40"><path d="M20 1 C 23 13 27 17 39 20 C 27 23 23 27 20 39 C 17 27 13 23 1 20 C 13 17 17 13 20 1Z"/></svg>
+          <span class="pname sm">Grupo Brinox</span>
+        </div>
+      </div>
+      <div class="pcard" style="--rot:-16deg; --d:0.35s; z-index:3; background:linear-gradient(160deg,#1C7A42,#0E4A28);">
+        <div class="pcard-inner">
+          <svg class="pmark" viewBox="0 0 40 40"><path d="M20 1 C 23 13 27 17 39 20 C 27 23 23 27 20 39 C 17 27 13 23 1 20 C 13 17 17 13 20 1Z"/></svg>
+          <span class="pname lower">malwee</span>
+        </div>
+      </div>
+      <div class="pcard" style="--rot:16deg; --d:0.45s; z-index:5; background:linear-gradient(160deg,#6E33A3,#3F1A66);">
+        <div class="pcard-inner">
+          <svg class="pmark" viewBox="0 0 40 40"><path d="M20 1 C 23 13 27 17 39 20 C 27 23 23 27 20 39 C 17 27 13 23 1 20 C 13 17 17 13 20 1Z"/></svg>
+          <svg class="pbird" viewBox="0 0 187 159"><path d="M185.601 43.96c-.001 0 .001.002.001 0H180.103c-.448 0-.828-.336-.875-.78-.24-2.236-1.123-8.77-3.67-12.815-2.101-3.338-5.446-7.354-10.304-10.262-8.683-5.19-22.489-13.214-23.543-13.804-.596-.352-1.356-.27-1.861.195l-6.272 5.767c-.363.336-.926.303-1.254-.068-.497-.563-.973-1.148-1.437-1.744-1.438-1.909-3.192-3.4-5.274-4.53-2.99-1.737-6.154-3.232-9.488-4.272-1.134-.344-2.29-.652-3.528-.834-.205-.027-.415.016-.593.14-.372.255-.462.769-.199 1.13.718 1.015 1.519 1.898 2.339 2.745 2.429 2.483 5.205 4.611 8.121 6.469.973.612 1.935 1.226 3.017 1.662 1.328.555 2.809.842 4.271 1.148.689.149.932 1.004.413 1.481l-4.993 4.6c-.661.612-.224 1.711.681 1.711h9.088c.651 0 .899.829.358 1.181-.06.044-.068.035-.121.088-1.875 1.86-134.522 132.478-134.522 132.478-.576.574-.576 1.378-.199 1.949.265.409.727.691 1.303.691h23.343c.426 0 .819-.217 1.052-.572 5.839-8.837 14.505-15.682 24.717-19.275.248-.089.497-.179.745-.262 3.348-1.138 6.826-1.893 10.212-2.237 1.817-.203 3.662-.309 5.531-.309h55.812c1.12 0 2.241-.086 3.347-.26 5.414-.861 17.396-3.633 25.843-12.002 11.228-11.128 14.346-21.016 14.972-35.231.432-9.907.257-20.117.115-25.392-.06-2.334.06-4.665.366-6.977.082-.628.487-1.173 1.058-1.46l17.322-8.71c.825-.411.527-1.646-.398-1.646ZM159.609 40.584c-.938.61-2.134.883-3.385.631-1.815-.363-3.235-1.855-3.514-3.669-.312-2.03.768-3.863 2.443-4.684.847-.417 1.836-.582 2.877-.382 1.812.353 3.26 1.82 3.558 3.626.306 1.86-.56 3.554-1.98 4.478Z"/></svg>
+          <span class="pname sm">Co-brand</span>
+        </div>
+      </div>
+      <div class="pcard" style="--rot:32deg; --d:0.5s; z-index:4; background:linear-gradient(160deg,#2B6FC0,#123E78);">
+        <div class="pcard-inner">
+          <svg class="pmark" viewBox="0 0 40 40"><path d="M20 1 C 23 13 27 17 39 20 C 27 23 23 27 20 39 C 17 27 13 23 1 20 C 13 17 17 13 20 1Z"/></svg>
+          <svg class="pbird" viewBox="0 0 187 159"><path d="M185.601 43.96c-.001 0 .001.002.001 0H180.103c-.448 0-.828-.336-.875-.78-.24-2.236-1.123-8.77-3.67-12.815-2.101-3.338-5.446-7.354-10.304-10.262-8.683-5.19-22.489-13.214-23.543-13.804-.596-.352-1.356-.27-1.861.195l-6.272 5.767c-.363.336-.926.303-1.254-.068-.497-.563-.973-1.148-1.437-1.744-1.438-1.909-3.192-3.4-5.274-4.53-2.99-1.737-6.154-3.232-9.488-4.272-1.134-.344-2.29-.652-3.528-.834-.205-.027-.415.016-.593.14-.372.255-.462.769-.199 1.13.718 1.015 1.519 1.898 2.339 2.745 2.429 2.483 5.205 4.611 8.121 6.469.973.612 1.935 1.226 3.017 1.662 1.328.555 2.809.842 4.271 1.148.689.149.932 1.004.413 1.481l-4.993 4.6c-.661.612-.224 1.711.681 1.711h9.088c.651 0 .899.829.358 1.181-.06.044-.068.035-.121.088-1.875 1.86-134.522 132.478-134.522 132.478-.576.574-.576 1.378-.199 1.949.265.409.727.691 1.303.691h23.343c.426 0 .819-.217 1.052-.572 5.839-8.837 14.505-15.682 24.717-19.275.248-.089.497-.179.745-.262 3.348-1.138 6.826-1.893 10.212-2.237 1.817-.203 3.662-.309 5.531-.309h55.812c1.12 0 2.241-.086 3.347-.26 5.414-.861 17.396-3.633 25.843-12.002 11.228-11.128 14.346-21.016 14.972-35.231.432-9.907.257-20.117.115-25.392-.06-2.334.06-4.665.366-6.977.082-.628.487-1.173 1.058-1.46l17.322-8.71c.825-.411.527-1.646-.398-1.646ZM159.609 40.584c-.938.61-2.134.883-3.385.631-1.815-.363-3.235-1.855-3.514-3.669-.312-2.03.768-3.863 2.443-4.684.847-.417 1.836-.582 2.877-.382 1.812.353 3.26 1.82 3.558 3.626.306 1.86-.56 3.554-1.98 4.478Z"/></svg>
+          <span class="pname sm">CredMoura</span>
+        </div>
+      </div>
+      <div class="pcard" style="--rot:48deg; --d:0.6s; z-index:2; background:linear-gradient(160deg,#1E4E8C,#10203F);">
+        <div class="pcard-inner">
+          <svg class="pmark" viewBox="0 0 40 40"><path d="M20 1 C 23 13 27 17 39 20 C 27 23 23 27 20 39 C 17 27 13 23 1 20 C 13 17 17 13 20 1Z"/></svg>
+          <svg class="pbird" viewBox="0 0 187 159"><path d="M185.601 43.96c-.001 0 .001.002.001 0H180.103c-.448 0-.828-.336-.875-.78-.24-2.236-1.123-8.77-3.67-12.815-2.101-3.338-5.446-7.354-10.304-10.262-8.683-5.19-22.489-13.214-23.543-13.804-.596-.352-1.356-.27-1.861.195l-6.272 5.767c-.363.336-.926.303-1.254-.068-.497-.563-.973-1.148-1.437-1.744-1.438-1.909-3.192-3.4-5.274-4.53-2.99-1.737-6.154-3.232-9.488-4.272-1.134-.344-2.29-.652-3.528-.834-.205-.027-.415.016-.593.14-.372.255-.462.769-.199 1.13.718 1.015 1.519 1.898 2.339 2.745 2.429 2.483 5.205 4.611 8.121 6.469.973.612 1.935 1.226 3.017 1.662 1.328.555 2.809.842 4.271 1.148.689.149.932 1.004.413 1.481l-4.993 4.6c-.661.612-.224 1.711.681 1.711h9.088c.651 0 .899.829.358 1.181-.06.044-.068.035-.121.088-1.875 1.86-134.522 132.478-134.522 132.478-.576.574-.576 1.378-.199 1.949.265.409.727.691 1.303.691h23.343c.426 0 .819-.217 1.052-.572 5.839-8.837 14.505-15.682 24.717-19.275.248-.089.497-.179.745-.262 3.348-1.138 6.826-1.893 10.212-2.237 1.817-.203 3.662-.309 5.531-.309h55.812c1.12 0 2.241-.086 3.347-.26 5.414-.861 17.396-3.633 25.843-12.002 11.228-11.128 14.346-21.016 14.972-35.231.432-9.907.257-20.117.115-25.392-.06-2.334.06-4.665.366-6.977.082-.628.487-1.173 1.058-1.46l17.322-8.71c.825-.411.527-1.646-.398-1.646ZM159.609 40.584c-.938.61-2.134.883-3.385.631-1.815-.363-3.235-1.855-3.514-3.669-.312-2.03.768-3.863 2.443-4.684.847-.417 1.836-.582 2.877-.382 1.812.353 3.26 1.82 3.558 3.626.306 1.86-.56 3.554-1.98 4.478Z"/></svg>
+          <span class="pname sm">Juntos Somos+</span>
+        </div>
+      </div>
+      <div class="pcard" style="--rot:0deg; --d:0.55s; z-index:10; background:linear-gradient(160deg,#1A1A1A,#000);">
+        <div class="pcard-inner">
+          <svg class="pmark" viewBox="0 0 40 40"><path d="M20 1 C 23 13 27 17 39 20 C 27 23 23 27 20 39 C 17 27 13 23 1 20 C 13 17 17 13 20 1Z"/></svg>
+          <span class="robbin-vert">robbin</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pix-points">
+      <div class="pix-point" style="animation-delay:0.8s;">
+        <div class="pp-num">&mdash; 01</div>
+        <div class="pp-title">Tempo real no PIX</div>
+        <div class="pp-desc">Liquidação em segundos, 24/7. Sem interchange. Sem middleware de adquirência.</div>
+      </div>
+      <div class="pix-point" style="animation-delay:0.95s;">
+        <div class="pp-num">&mdash; 02</div>
+        <div class="pp-title">Insights exclusivos de PMEs</div>
+        <div class="pp-desc">Dados de sell-out das marcas âncora embasam cada transação.</div>
+      </div>
+      <div class="pix-point" style="animation-delay:1.1s;">
+        <div class="pp-num">&mdash; 03</div>
+        <div class="pp-title">Co-branded com âncoras</div>
+        <div class="pp-desc">Cantu, Brinox, Malwee, Chilli Beans, Baterias Moura, Juntos Somos Mais (Votorantim, Tigre, Gerdau) — já no ar.</div>
+      </div>
+    </div>
+
+    <span class="slide-num" style="color:#C8C8C8">02</span>
+  </section>
+
+  <!-- ===== SLIDE 3 — PRESENTERS ===== -->
   <section class="slide presenters glow-tr">
     <div class="sec-head">
       <span class="eyebrow"><span class="eyebrow-dot"></span>Quem apresenta</span>
-      <h2>Presenters</h2>
+      <h2>Apresentadores</h2>
     </div>
     <div class="pres-grid">
 
@@ -634,7 +863,7 @@
           <img class="pres-photo" src="Tomas.jpeg" alt="Tomás Corrêa">
           <div>
             <div class="pres-name">Tomás Corrêa</div>
-            <div class="pres-role">CTO &amp; Co-Founder</div>
+            <div class="pres-role">CTO &amp; Cofundador</div>
           </div>
         </div>
         <p class="pres-bio">
@@ -661,10 +890,10 @@
 
     </div>
     <span class="slide-foot">ROBBIN · CONFIDENCIAL</span>
-    <span class="slide-num">02</span>
+    <span class="slide-num">03</span>
   </section>
 
-  <!-- ===== SLIDE 3 — ARQUITETURA ===== -->
+  <!-- ===== SLIDE 4 — ARQUITETURA ===== -->
   <section class="slide arch">
     <span class="eyebrow"><span class="eyebrow-dot"></span>Arquitetura de Plataforma</span>
     <h1 class="headline">Empoderamento do time não técnico<br>sem abrir mão de segurança e acuracidade.</h1>
@@ -728,10 +957,10 @@
       </div>
     </div>
     <span class="slide-foot">ROBBIN · ARQUITETURA AI-ERA</span>
-    <span class="slide-num">03</span>
+    <span class="slide-num">04</span>
   </section>
 
-  <!-- ===== SLIDE 4 — TOOL FLOW ===== -->
+  <!-- ===== SLIDE 5 — TOOL FLOW ===== -->
   <section class="slide flow-slide">
     <div class="flow-left glow-tr">
       <div>
@@ -821,10 +1050,10 @@
         </div>
       </div>
     </div>
-    <span class="slide-num" style="color:var(--text-dimmer)">04</span>
+    <span class="slide-num" style="color:var(--text-dimmer)">05</span>
   </section>
 
-  <!-- ===== SLIDE 5 — TBD MARCOS ===== -->
+  <!-- ===== SLIDE 6 — TBD MARCOS ===== -->
   <section class="slide tbd glow-bl">
     <span class="tbd-owner">Marcos · 01</span>
     <span class="eyebrow"><span class="eyebrow-dot"></span>A definir</span>
@@ -835,10 +1064,10 @@
       <p>Espaço reservado para o conteúdo que o Marcos vai apresentar. Estrutura e visual prontos — é só preencher.</p>
     </div>
     <span class="slide-foot">ROBBIN · CONFIDENCIAL</span>
-    <span class="slide-num">05</span>
+    <span class="slide-num">06</span>
   </section>
 
-  <!-- ===== SLIDE 6 — TBD MARCOS ===== -->
+  <!-- ===== SLIDE 7 — TBD MARCOS ===== -->
   <section class="slide tbd glow-tr">
     <span class="tbd-owner">Marcos · 02</span>
     <span class="eyebrow"><span class="eyebrow-dot"></span>A definir</span>
@@ -849,18 +1078,18 @@
       <p>Segundo slide reservado para o Marcos. Mesmo template — pronto para receber o conteúdo final.</p>
     </div>
     <span class="slide-foot">ROBBIN · CONFIDENCIAL</span>
-    <span class="slide-num">06</span>
+    <span class="slide-num">07</span>
   </section>
 
-  <!-- ===== SLIDE 7 — Q&A ===== -->
+  <!-- ===== SLIDE 8 — Q&A ===== -->
   <section class="slide qa glow-tr glow-bl">
     <h2>Q&amp;A</h2>
     <p>Perguntas, respostas e discussão</p>
     <img class="qa-logo" src="robbin-logo-white.svg" alt="Robbin">
-    <span class="slide-num">07</span>
+    <span class="slide-num">08</span>
   </section>
 
-  <!-- ===== SLIDE 8 — VAGAS ===== -->
+  <!-- ===== SLIDE 9 — VAGAS ===== -->
   <section class="slide vagas glow-bl">
     <span class="eyebrow"><span class="eyebrow-dot"></span>Junte-se ao time</span>
     <h2>Vagas em aberto</h2>
@@ -870,33 +1099,33 @@
       <div class="vaga">
         <span class="vaga-num">01</span>
         <div>
-          <div class="vaga-title">Software Engineer</div>
-          <div class="vaga-meta">Plataforma · backend transacional<br>São Paulo · Híbrido</div>
-          <div class="vaga-tags"><span class="chip">full-stack</span><span class="chip">AI-first</span></div>
+          <div class="vaga-title">Summer em Engineering</div>
+          <div class="vaga-meta">Programa de verão · Engenharia<br>São Paulo · Híbrido</div>
+          <div class="vaga-tags"><span class="chip">Summer</span><span class="chip">AI-first</span></div>
         </div>
       </div>
       <div class="vaga">
         <span class="vaga-num">02</span>
         <div>
-          <div class="vaga-title">Data Engineer</div>
-          <div class="vaga-meta">Data lake · Snowflake · dbt<br>São Paulo · Híbrido</div>
-          <div class="vaga-tags"><span class="chip">Snowflake</span><span class="chip">Kafka</span></div>
+          <div class="vaga-title">Summer em Data &amp; Analytics</div>
+          <div class="vaga-meta">Programa de verão · Dados<br>São Paulo · Híbrido</div>
+          <div class="vaga-tags"><span class="chip">Summer</span><span class="chip">Analytics</span></div>
         </div>
       </div>
       <div class="vaga">
         <span class="vaga-num">03</span>
         <div>
-          <div class="vaga-title">Product Designer</div>
-          <div class="vaga-meta">Produto · experiência<br>São Paulo · Híbrido</div>
-          <div class="vaga-tags"><span class="chip">UX/UI</span><span class="chip">design system</span></div>
+          <div class="vaga-title">Intern em Strategic Finance</div>
+          <div class="vaga-meta">Estágio · Finanças estratégicas<br>São Paulo · Híbrido</div>
+          <div class="vaga-tags"><span class="chip">Intern</span><span class="chip">Finance</span></div>
         </div>
       </div>
       <div class="vaga">
         <span class="vaga-num">04</span>
         <div>
-          <div class="vaga-title">Credit / Risk Analyst</div>
-          <div class="vaga-meta">Crédito · modelagem de risco<br>São Paulo · Híbrido</div>
-          <div class="vaga-tags"><span class="chip">crédito</span><span class="chip">analytics</span></div>
+          <div class="vaga-title">Intern em Data &amp; Analytics</div>
+          <div class="vaga-meta">Estágio · Dados<br>São Paulo · Híbrido</div>
+          <div class="vaga-tags"><span class="chip">Intern</span><span class="chip">Analytics</span></div>
         </div>
       </div>
     </div>
@@ -906,7 +1135,7 @@
       <span style="color:var(--text-dim)">— manda seu CV ou indica alguém</span>
     </div>
     <span class="slide-foot">ROBBIN · CONFIDENCIAL</span>
-    <span class="slide-num">08</span>
+    <span class="slide-num">09</span>
   </section>
 
 </div>
