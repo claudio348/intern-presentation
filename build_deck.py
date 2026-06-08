@@ -128,9 +128,9 @@ BODY = r"""
 <div class="deck-mark-mini"><img src="robbin-bird-black.svg" alt="Robbin"></div>
 <div class="slide-counter"><span class="current">01</span><span style="opacity:0.4"> / 09</span></div>
 <div class="deck-meta">
-  <button class="nav-btn" id="prevBtn">&larr; prev</button>
+  <button class="nav-btn" id="prevBtn">&larr; anterior</button>
   <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
-  <button class="nav-btn" id="nextBtn">next &rarr;</button>
+  <button class="nav-btn" id="nextBtn">próximo &rarr;</button>
 </div>
 
 <div class="deck" id="deck">
@@ -141,16 +141,16 @@ BODY = r"""
     <div class="cover5-center">
       <img class="cover5-logo" src="robbin-logo-black.svg" alt="Robbin">
     </div>
-    <div class="cover5-meta">Confidential</div>
+    <div class="cover5-meta">Confidencial</div>
   </section>
 
   <!-- 2 — PRESENTERS -->
   <section class="slide theme-light vcenter" data-num="02">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Presenters</span>
+      <span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Apresentadores</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Presenters<span class="accent">.</span></h1>
+      <h1>Apresentadores<span class="accent">.</span></h1>
     </div>
     <div class="pres-grid reveal" data-stagger>
       <div class="pres">
@@ -158,10 +158,10 @@ BODY = r"""
           <img class="pres-photo" src="Tomas.jpeg" alt="Tomás Corrêa">
           <div>
             <div class="pres-name">Tomás Corrêa</div>
-            <div class="pres-role">CTO &amp; Co-Founder</div>
+            <div class="pres-role">CTO &amp; Cofundador</div>
           </div>
         </div>
-        <p class="pres-bio">A biologist by training from the <b>University of São Paulo</b>, he was co-founder and <b>CTO of Open Co</b> (originally Geru), Brazil's first 100% digital lender, founded in 2014. Leading the company's technology for nearly nine years, he helped build one of the country's largest digital credit platforms, with over <b>USD 1 billion</b> in loans originated. In 2023 he co-founded <b>Robbin</b>, a B2B credit fintech for retail, where he remains CTO — a company that raised <b>USD 8M</b> in seed and recently announced a <b>USD 108M</b> round.</p>
+        <p class="pres-bio">Biólogo de formação pela <b>Universidade de São Paulo</b>, foi cofundador e <b>CTO da Open Co</b> (originalmente Geru), primeira credora 100% digital do Brasil, fundada em 2014. À frente da tecnologia da empresa por quase nove anos, ajudou a construir uma das maiores plataformas digitais de crédito do país, com mais de <b>USD 1 bilhão</b> em empréstimos concedidos. Em 2023 cofundou a <b>Robbin</b>, fintech de crédito B2B para o varejo, onde segue como CTO — empresa que captou <b>USD 8 milhões</b> em rodada seed e recentemente anunciou uma rodada de <b>USD 108 milhões</b>.</p>
         <div class="pres-exp"><span class="lbl">ex—</span><img src="openco.svg" alt="Open Co"><span class="lbl" style="margin-left:.5vw">now—</span><img src="robbin-logo-black.svg" alt="Robbin"></div>
       </div>
       <div class="pres">
@@ -172,7 +172,7 @@ BODY = r"""
             <div class="pres-role">Head of Data</div>
           </div>
         </div>
-        <p class="pres-bio">A Computer Scientist from <b>USP (IME-USP)</b>, with over a decade in data and technology across Brazil, Japan and the US. He was a <b>Business Intelligence Engineer at Amazon</b> in Tokyo and Head of Data &amp; Tech at Cedar Brands, where he built a GCP data lakehouse architecture from scratch and led initiatives that lifted the group's brand conversion rates by more than <b>50%</b>. Today he is Head of Data at Robbin.</p>
+        <p class="pres-bio">Cientista da Computação pela <b>USP (IME-USP)</b>, acumula mais de uma década em dados e tecnologia entre Brasil, Japão e EUA. Foi <b>Business Intelligence Engineer na Amazon</b> em Tóquio e Head of Data &amp; Tech na Cedar Brands, onde construiu do zero uma arquitetura de data lakehouse na GCP e liderou iniciativas que elevaram em mais de <b>50%</b> as taxas de conversão das marcas do grupo. Hoje é Head of Data na Robbin.</p>
         <div class="pres-exp"><span class="lbl">ex—</span><img src="Amazon_logo.svg.png" alt="Amazon"><img src="images.png" alt="Rakuten"><span class="lbl" style="margin-left:.5vw">now—</span><img src="robbin-logo-black.svg" alt="Robbin"></div>
       </div>
     </div>
@@ -181,11 +181,11 @@ BODY = r"""
   <!-- 3 — PIX CARD -->
   <section class="slide theme-light pix-slide vcenter" data-num="03">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">The Card</span>
+      <span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">O Cartão</span>
     </div>
     <div class="slide-head reveal">
-      <h1>The credit card <span class="accent">on PIX rails.</span></h1>
-      <p class="sub">Card UX. PIX economics. Instant settlement. Already live with co-brand anchors.</p>
+      <h1>O cartão de crédito <span class="accent">sobre o trilho do PIX.</span></h1>
+      <p class="sub">UX de cartão. Economia do PIX. Liquidação instantânea. Já no ar com âncoras co-brand.</p>
     </div>
     <div class="pix-body reveal">
       <div class="pixfan">
@@ -200,18 +200,18 @@ BODY = r"""
       <div class="pix-points" data-stagger>
         <div class="pix-point">
           <div class="pp-num">— 01</div>
-          <div class="pp-title">Real-time on PIX</div>
-          <div class="pp-desc">Settlement in seconds, 24/7. No interchange. No acquiring middleware.</div>
+          <div class="pp-title">Tempo real no PIX</div>
+          <div class="pp-desc">Liquidação em segundos, 24/7. Sem interchange. Sem middleware de adquirência.</div>
         </div>
         <div class="pix-point">
           <div class="pp-num">— 02</div>
-          <div class="pp-title">SME behavior, unique insights</div>
-          <div class="pp-desc">Sell-out data from anchor brands underwrites every transaction.</div>
+          <div class="pp-title">Insights exclusivos de PMEs</div>
+          <div class="pp-desc">Dados de sell-out das marcas âncora embasam cada transação.</div>
         </div>
         <div class="pix-point">
           <div class="pp-num">— 03</div>
-          <div class="pp-title">Co-branded with anchors</div>
-          <div class="pp-desc">Cantu, Brinox, Malwee, Chilli Beans, Baterias Moura, Juntos Somos Mais (Votorantim, Tigre, Gerdau) — already live.</div>
+          <div class="pp-title">Co-branded com âncoras</div>
+          <div class="pp-desc">Cantu, Brinox, Malwee, Chilli Beans, Baterias Moura, Juntos Somos Mais (Votorantim, Tigre, Gerdau) — já no ar.</div>
         </div>
       </div>
     </div>
@@ -220,19 +220,19 @@ BODY = r"""
   <!-- 4 — ARQUITETURA -->
   <section class="slide theme-light vcenter" data-num="04">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Architecture</span>
+      <span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Arquitetura</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Non-technical team in command — <span class="accent">without giving up security.</span></h1>
-      <p class="sub">4 layers that separate what moves fast from what must stay stable: anyone builds, the platform guarantees.</p>
+      <h1>Time não técnico no comando — <span class="accent">sem abrir mão de segurança.</span></h1>
+      <p class="sub">4 camadas que separam o que muda rápido do que precisa ser estável: qualquer pessoa cria, a plataforma garante.</p>
     </div>
     <div class="layers reveal" data-stagger>
       <div class="layer">
         <span class="layer-num">01</span>
         <div>
           <h3>Vibe code + AI tools</h3>
-          <p>Anyone on the team builds complete apps with AI. Skills and rules embed Robbin's context — the AI acts like a teammate, not a stranger.</p>
-          <div class="chips"><span>max speed</span><span>tools.robbin.com.br</span><span>skills &amp; rules</span><span>Claude · Cursor</span></div>
+          <p>Qualquer pessoa do time cria apps completos com IA. Skills e rules embutem o contexto da Robbin — a IA age como alguém do time, não como estranho.</p>
+          <div class="chips"><span>velocidade máxima</span><span>tools.robbin.com.br</span><span>skills &amp; rules</span><span>Claude · Cursor</span></div>
         </div>
         <span class="layer-badge strong">move fast</span>
       </div>
@@ -240,25 +240,25 @@ BODY = r"""
         <span class="layer-num">02</span>
         <div>
           <h3>BFF — Ops / Client / Partner</h3>
-          <p>Three backends by audience. Vibe code consumes stable contracts — never touches internal logic directly.</p>
-          <div class="chips"><span>contracts by audience</span><span>single ALB</span></div>
+          <p>Três backends por audiência. Vibe code consome contratos estáveis — nunca acessa lógica interna diretamente.</p>
+          <div class="chips"><span>contratos por audiência</span><span>single ALB</span></div>
         </div>
-        <span class="layer-badge">boundary</span>
+        <span class="layer-badge">fronteira</span>
       </div>
       <div class="layer hi">
         <span class="layer-num">03</span>
         <div>
-          <h3>Platform — transactional + managerial</h3>
-          <p>7 micro-monoliths by team boundary. A 4-layer data lake for trustworthy data. The stability that lets vibe code fly.</p>
-          <div class="chips"><span>auth · credit · payments · cards</span><span>Kafka · Temporal</span><span>Snowflake · dbt</span></div>
+          <h3>Platform — transacional + gerencial</h3>
+          <p>7 micro-monólitos por fronteira de time. Data lake em 4 camadas para dados confiáveis. A estabilidade que deixa o vibe code voar.</p>
+          <div class="chips"><span>auth · crédito · pagamentos · cartões</span><span>Kafka · Temporal</span><span>Snowflake · dbt</span></div>
         </div>
-        <span class="layer-badge">stability</span>
+        <span class="layer-badge">estabilidade</span>
       </div>
       <div class="layer">
         <span class="layer-num">04</span>
         <div>
           <h3>Knowledge system — rules, skills, Ganesha</h3>
-          <p>Robbin's accumulated context available to any AI. Without it, every vibe code would be a gamble.</p>
+          <p>Contexto acumulado da Robbin disponível para qualquer IA. Sem isso, cada vibe code seria uma aposta.</p>
           <div class="chips"><span>behavioral rules</span><span>reusable skills</span><span>Ganesha — API catalog</span></div>
         </div>
         <span class="layer-badge">guardrail</span>
@@ -272,37 +272,37 @@ BODY = r"""
       <span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Robbin Tools</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Creating a tool <span class="muted">is just asking.</span></h1>
-      <p class="sub">Claude handles all the technical setup. You just describe what you need. — tools.robbin.com.br</p>
+      <h1>Criar uma ferramenta <span class="muted">é só pedir.</span></h1>
+      <p class="sub">O Claude cuida de todo o setup técnico. Você só descreve o que precisa. — tools.robbin.com.br</p>
     </div>
     <div class="flow reveal" data-stagger>
       <div class="flow-row">
         <div class="flow-spine"><div class="flow-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="flow-line"></div></div>
         <div class="flow-card">
-          <div class="flow-label">You</div>
-          <div class="flow-title">Ask Claude to create a tool</div>
-          <div class="flow-bubble"><span class="flow-pill-inline">"I want to create a Robbin Tool for the ops team"</span></div>
+          <div class="flow-label">Você</div>
+          <div class="flow-title">Pede ao Claude para criar uma ferramenta</div>
+          <div class="flow-bubble"><span class="flow-pill-inline">"Quero criar uma Robbin Tool para o time de ops"</span></div>
         </div>
       </div>
       <div class="flow-row">
         <div class="flow-spine"><div class="flow-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div class="flow-line"></div></div>
         <div class="flow-card">
-          <div class="flow-claude"><span class="pill">Claude</span><span class="flow-title" style="font-size:clamp(13px,1.1vw,18px)">Sets up the environment automatically</span></div>
+          <div class="flow-claude"><span class="pill">Claude</span><span class="flow-title" style="font-size:clamp(13px,1.1vw,18px)">Configura o ambiente automaticamente</span></div>
           <div class="flow-steps">
-            <div class="flow-step"><b>1</b>Checks and installs Git</div>
-            <div class="flow-step"><b>2</b>Generates the SSH key</div>
-            <div class="flow-step"><b>3</b>Authenticates with GitHub</div>
-            <div class="flow-step"><b>4</b>Clones the ai-powers repo</div>
-            <div class="flow-step"><b>5</b>Installs the create-robbin-tool skill</div>
+            <div class="flow-step"><b>1</b>Verifica e instala o Git</div>
+            <div class="flow-step"><b>2</b>Gera a chave SSH</div>
+            <div class="flow-step"><b>3</b>Autentica no GitHub</div>
+            <div class="flow-step"><b>4</b>Clona o repositório ai-powers</div>
+            <div class="flow-step"><b>5</b>Instala a skill create-robbin-tool</div>
           </div>
         </div>
       </div>
       <div class="flow-row">
         <div class="flow-spine"><div class="flow-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="flow-line"></div></div>
         <div class="flow-card">
-          <div class="flow-label">You</div>
-          <div class="flow-title">Describe the tool you want to build</div>
-          <div class="flow-bubble">Claude asks: "What does it do? Who will use it? How should it work?"</div>
+          <div class="flow-label">Você</div>
+          <div class="flow-title">Descreve a ferramenta que quer criar</div>
+          <div class="flow-bubble">O Claude pergunta: "O que ela faz? Quem vai usar? Como deve funcionar?"</div>
         </div>
       </div>
       <div class="flow-row">
@@ -310,8 +310,8 @@ BODY = r"""
         <div class="flow-done">
           <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0C0C0C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
           <div>
-            <div class="flow-title">Tool is live</div>
-            <div class="flow-bubble" style="font-style:normal;margin-top:2px;">Ready for the team to use at tools.robbin.com.br</div>
+            <div class="flow-title">Ferramenta no ar</div>
+            <div class="flow-bubble" style="font-style:normal;margin-top:2px;">Pronta para o time usar em tools.robbin.com.br</div>
           </div>
         </div>
       </div>
@@ -321,83 +321,83 @@ BODY = r"""
   <!-- 6 — MARCOS · DATA ROLES -->
   <section class="slide theme-light vcenter" data-num="06">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Data · roles</span>
+      <span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Dados · papéis</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Who does what in <span class="accent">Data.</span></h1>
-      <p class="sub">Data isn't one person — it's a team. Each role owns a different skill.</p>
+      <h1>Quem faz o quê em <span class="accent">Dados.</span></h1>
+      <p class="sub">Dados não é uma pessoa só — é um time. Cada papel domina uma habilidade diferente.</p>
     </div>
     <div class="layers reveal" data-stagger>
       <div class="layer">
         <span class="layer-num">01</span>
-        <div><h3>Data Engineer</h3><p>Builds the plumbing. Makes sure data arrives complete and reliable.</p></div>
+        <div><h3>Data Engineer</h3><p>Constrói o encanamento. Garante que o dado chegue completo e confiável.</p></div>
         <span class="layer-badge">pipelines</span>
       </div>
       <div class="layer">
         <span class="layer-num">02</span>
-        <div><h3>Analytics Engineer</h3><p>The bridge. Models raw data into clean, ready-to-use tables.</p></div>
-        <span class="layer-badge">modeling</span>
+        <div><h3>Analytics Engineer</h3><p>A ponte. Modela o dado bruto em tabelas limpas, prontas pra usar.</p></div>
+        <span class="layer-badge">modelagem</span>
       </div>
       <div class="layer">
         <span class="layer-num">03</span>
-        <div><h3>Data Analyst</h3><p>Turns data into answers — numbers, charts and business recommendations.</p></div>
+        <div><h3>Data Analyst</h3><p>Transforma dado em resposta — número, gráfico e recomendação de negócio.</p></div>
         <span class="layer-badge">insight</span>
       </div>
       <div class="layer">
         <span class="layer-num">04</span>
-        <div><h3>Data Scientist</h3><p>Finds patterns and predicts. Uses statistics and models to anticipate the future.</p></div>
-        <span class="layer-badge">prediction</span>
+        <div><h3>Data Scientist</h3><p>Encontra padrões e prevê. Usa estatística e modelos pra antecipar o futuro.</p></div>
+        <span class="layer-badge">previsão</span>
       </div>
       <div class="layer">
         <span class="layer-num">05</span>
-        <div><h3>ML Engineer</h3><p>Puts the model to real work — in production and at scale.</p></div>
-        <span class="layer-badge">production</span>
+        <div><h3>ML Engineer</h3><p>Coloca o modelo pra rodar de verdade — em produção e em escala.</p></div>
+        <span class="layer-badge">produção</span>
       </div>
     </div>
-    <p class="df-note">Behind the scenes: Data Platform Engineer (the infra) and DataOps (the quality culture).</p>
+    <p class="df-note">Nos bastidores: Data Platform Engineer (a infra) e DataOps (a cultura de qualidade).</p>
   </section>
 
   <!-- 7 — MARCOS · DATA ARCHITECTURE -->
   <section class="slide theme-light vcenter" data-num="07">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Data · architecture</span>
+      <span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Dados · arquitetura</span>
     </div>
     <div class="slide-head reveal">
-      <h1>From <span class="accent">source to consumption.</span></h1>
-      <p class="sub">Sources are ingested, transformed across landing, prepared, trusted and delivery layers, then consumed.</p>
+      <h1>Da <span class="accent">fonte ao consumo.</span></h1>
+      <p class="sub">As fontes são ingeridas, transformadas nas camadas landing, prepared, trusted e delivery, e então consumidas.</p>
     </div>
     <div class="dataflow reveal">
       <div class="df-band">
-        <span class="df-band-cell">Orchestration</span>
-        <span class="df-band-cell">Data catalog</span>
+        <span class="df-band-cell">Orquestração</span>
+        <span class="df-band-cell">Catálogo de dados</span>
       </div>
       <div class="df-cols">
         <div class="df-col">
-          <div class="df-stage">Ingestion · sources</div>
-          <div class="df-item">Database</div>
-          <div class="df-item">Files</div>
+          <div class="df-stage">Ingestão · fontes</div>
+          <div class="df-item">Banco</div>
+          <div class="df-item">Arquivos</div>
           <div class="df-item">APIs</div>
-          <div class="df-item">Spreadsheets</div>
+          <div class="df-item">Planilhas</div>
         </div>
         <div class="df-arrow">→</div>
         <div class="df-col">
-          <div class="df-stage">Transformation</div>
-          <div class="df-layer"><b>Landing</b><i>raw, as it came</i></div>
-          <div class="df-layer"><b>Prepared</b><i>clean &amp; standardized</i></div>
-          <div class="df-layer"><b>Trusted</b><i>reliable, integrated</i></div>
-          <div class="df-layer"><b>Delivery</b><i>business-ready</i></div>
+          <div class="df-stage">Transformação</div>
+          <div class="df-layer"><b>Landing</b><i>dado cru, como veio</i></div>
+          <div class="df-layer"><b>Prepared</b><i>limpo e padronizado</i></div>
+          <div class="df-layer"><b>Trusted</b><i>confiável, integrado</i></div>
+          <div class="df-layer"><b>Delivery</b><i>pronto pro negócio</i></div>
         </div>
         <div class="df-arrow">→</div>
         <div class="df-col">
-          <div class="df-stage">Consumption</div>
+          <div class="df-stage">Consumo</div>
           <div class="df-item">Dashboards</div>
-          <div class="df-item">Reports</div>
-          <div class="df-item">Analyses</div>
-          <div class="df-item">ML models</div>
-          <div class="df-item">AI</div>
+          <div class="df-item">Relatórios</div>
+          <div class="df-item">Análises</div>
+          <div class="df-item">Modelos de ML</div>
+          <div class="df-item">IA</div>
         </div>
       </div>
-      <p class="df-note">Data is born scattered across sources, cleaned and organized into layers, and only then becomes a chart, report, analysis, model or AI answer — each stop a specialty.</p>
+      <p class="df-note">O dado nasce espalhado nas fontes, é limpo e organizado em camadas, e só então vira gráfico, relatório, análise, modelo ou resposta de IA — cada parada é uma especialidade.</p>
     </div>
   </section>
 
@@ -405,7 +405,7 @@ BODY = r"""
   <section class="slide theme-dark closing2" data-num="08">
     <div class="closing2-bg"><div class="closing2-grid"></div><div class="closing2-glow"></div></div>
     <div class="closing2-inner">
-      <div class="closing2-eyebrow reveal"><span>—</span><span>Discussion</span></div>
+      <div class="closing2-eyebrow reveal"><span>—</span><span>Discussão</span></div>
       <h2 class="closing2-line reveal">
         <span class="cl-row hi">Q&amp;A</span>
       </h2>
@@ -417,21 +417,21 @@ BODY = r"""
   <!-- 9 — VAGAS -->
   <section class="slide theme-light vcenter" data-num="09">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Join the team</span>
+      <span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Junte-se ao time</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Open <span class="accent">positions.</span></h1>
-      <p class="sub">We're building the financial platform for the AI era — and we want great people with us.</p>
+      <h1>Vagas em <span class="accent">aberto.</span></h1>
+      <p class="sub">Estamos construindo a plataforma financeira da era da IA — e queremos gente boa junto.</p>
     </div>
     <div class="vagas-grid reveal" data-stagger>
-      <div class="vaga"><span class="vaga-num">01</span><div><h3>Summer in Engineering</h3><div class="vaga-meta">Summer program · Engineering<br>São Paulo · Hybrid</div><div class="vaga-tags"><span>Summer</span><span>AI-first</span></div></div></div>
-      <div class="vaga"><span class="vaga-num">02</span><div><h3>Summer in Data &amp; Analytics</h3><div class="vaga-meta">Summer program · Data<br>São Paulo · Hybrid</div><div class="vaga-tags"><span>Summer</span><span>Analytics</span></div></div></div>
-      <div class="vaga"><span class="vaga-num">03</span><div><h3>Intern in Strategic Finance</h3><div class="vaga-meta">Internship · Strategic Finance<br>São Paulo · Hybrid</div><div class="vaga-tags"><span>Intern</span><span>Finance</span></div></div></div>
-      <div class="vaga"><span class="vaga-num">04</span><div><h3>Intern in Data &amp; Analytics</h3><div class="vaga-meta">Internship · Data<br>São Paulo · Hybrid</div><div class="vaga-tags"><span>Intern</span><span>Analytics</span></div></div></div>
+      <div class="vaga"><span class="vaga-num">01</span><div><h3>Summer em Engineering</h3><div class="vaga-meta">Programa de verão · Engenharia<br>São Paulo · Híbrido</div><div class="vaga-tags"><span>Summer</span><span>AI-first</span></div></div></div>
+      <div class="vaga"><span class="vaga-num">02</span><div><h3>Summer em Data &amp; Analytics</h3><div class="vaga-meta">Programa de verão · Dados<br>São Paulo · Híbrido</div><div class="vaga-tags"><span>Summer</span><span>Analytics</span></div></div></div>
+      <div class="vaga"><span class="vaga-num">03</span><div><h3>Intern em Strategic Finance</h3><div class="vaga-meta">Estágio · Finanças estratégicas<br>São Paulo · Híbrido</div><div class="vaga-tags"><span>Intern</span><span>Finance</span></div></div></div>
+      <div class="vaga"><span class="vaga-num">04</span><div><h3>Intern em Data &amp; Analytics</h3><div class="vaga-meta">Estágio · Dados<br>São Paulo · Híbrido</div><div class="vaga-tags"><span>Intern</span><span>Analytics</span></div></div></div>
     </div>
     <div class="vagas-cta reveal">
       <span class="pill">careers@robbin.com.br</span>
-      <span class="dim">— send your CV or refer someone</span>
+      <span class="dim">— manda seu CV ou indica alguém</span>
     </div>
   </section>
 
@@ -495,7 +495,7 @@ SCRIPT = r"""
 """
 
 HEAD = """<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
