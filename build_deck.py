@@ -3,9 +3,13 @@ import re, base64, mimetypes, os
 
 SRC = "/root/.claude/uploads/15b373a3-4975-569f-b77d-8889479b7950/60d451ab-Robbin_Pitchdeck_May26_vFFF.html"
 
-# --- extract original framework CSS ---
-orig = open(SRC, encoding="utf-8", errors="replace").read()
-css = orig.split("<style>", 1)[1].split("</style>", 1)[0]
+# --- framework CSS: from original pitchdeck upload, else cached local copy ---
+if os.path.exists(SRC):
+    orig = open(SRC, encoding="utf-8", errors="replace").read()
+    css = orig.split("<style>", 1)[1].split("</style>", 1)[0]
+    open("framework_css.css", "w", encoding="utf-8").write(css)
+else:
+    css = open("framework_css.css", encoding="utf-8").read()
 
 CUSTOM_CSS = r"""
 /* ============ CUSTOM SLIDES (Robbin intern deck) ============ */
@@ -88,6 +92,9 @@ CUSTOM_CSS = r"""
 .tbd-tag { font-family:var(--font-mono); font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
 .tbd-box p { font-family:var(--font-sans); font-size:clamp(15px,1.1vw,20px); color:var(--muted-2); margin-top:1.4vh; line-height:1.6; }
 .tbd-owner { position:absolute; top:5vh; right:4vw; z-index:6; font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); border:1px solid rgba(12,12,12,.18); border-radius:100px; padding:6px 14px; }
+/* Framed SVG content (Marcos data slides) */
+.svgcard { background:#fff; border:1px solid rgba(12,12,12,.10); border-radius:18px; padding:2.6vh 2.4vw; box-shadow:0 16px 48px rgba(0,0,0,.07); margin:1vh auto 0; }
+.svgcard img { display:block; height:auto; width:auto; max-height:74vh; max-width:80vw; }
 
 /* Vagas */
 .vagas-grid { margin-top:4vh; display:grid; grid-template-columns:1fr 1fr; gap:1.4vw; }
@@ -297,34 +304,20 @@ BODY = r"""
     </div>
   </section>
 
-  <!-- 6 — TBD MARCOS 1 -->
+  <!-- 6 — MARCOS · DATA ROLES -->
   <section class="slide theme-light vcenter" data-num="06">
-    <div class="tbd-owner">Marcos · 01</div>
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">TBD</span>
+      <span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Data · roles</span>
     </div>
-    <div class="tbd-wrap reveal">
-      <div class="slide-head"><h1>Marcos's <span class="muted">content.</span></h1></div>
-      <div class="tbd-box" style="margin-top:4vh;">
-        <div class="tbd-tag">// TBD</div>
-        <p>Placeholder for the content Marcos will present. Structure and visuals ready — just fill it in.</p>
-      </div>
-    </div>
+    <div class="svgcard reveal"><img src="slide1_papeis_area_dados.svg" alt="Os cinco papéis da área de dados"></div>
   </section>
 
-  <!-- 7 — TBD MARCOS 2 -->
+  <!-- 7 — MARCOS · DATA PIPELINE -->
   <section class="slide theme-light vcenter" data-num="07">
-    <div class="tbd-owner">Marcos · 02</div>
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">TBD</span>
+      <span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Data · pipeline</span>
     </div>
-    <div class="tbd-wrap reveal">
-      <div class="slide-head"><h1>Marcos's <span class="muted">content.</span></h1></div>
-      <div class="tbd-box" style="margin-top:4vh;">
-        <div class="tbd-tag">// TBD</div>
-        <p>Second slide reserved for Marcos. Same template — ready for the final content.</p>
-      </div>
-    </div>
+    <div class="svgcard reveal"><img src="slide2_pipeline_dados_v3.svg" alt="Pipeline de dados"></div>
   </section>
 
   <!-- 8 — Q&A (closing) -->
@@ -447,7 +440,7 @@ def datauri(path):
 
 assets = ["robbin-logo-black.svg","robbin-logo-white.svg","robbin-bird-black.svg",
           "Robbin.png","Chilli.png","Brinox.png","Malwee.png","Credmoura.png","JSM.png","Cantu.png",
-          "Tomas.jpeg","Marcos.jpeg","openco.svg","Amazon_logo.svg.png","images.png"]
+          "Tomas.jpeg","Marcos.jpeg","openco.svg","Amazon_logo.svg.png","images.png","slide1_papeis_area_dados.svg","slide2_pipeline_dados_v3.svg"]
 preview = html
 for a in assets:
     preview = preview.replace('src="%s"' % a, 'src="%s"' % datauri(a))
