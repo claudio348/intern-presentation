@@ -191,7 +191,7 @@ BODY = r"""
           </div>
         </div>
         <p class="pres-bio">A Computer Scientist from <b>USP (IME-USP)</b>, with over a decade in data and technology across Brazil, Japan and the US. He was a <b>Business Intelligence Engineer at Amazon</b> in Tokyo and Head of Data &amp; Tech at Cedar Brands, where he built a GCP data lakehouse architecture from scratch and led initiatives that lifted the group's brand conversion rates by more than <b>50%</b>. Today he is Head of Data at Robbin.</p>
-        <div class="pres-exp"><span class="lbl">ex—</span><img src="Amazon_logo.svg.png" alt="Amazon"><img src="images.png" alt="Rakuten"></div>
+        <div class="pres-exp"><span class="lbl">ex—</span><img src="Amazon_logo.svg.png" alt="Amazon"><img src="images.png" alt="Rakuten"><span class="lbl" style="margin-left:.5vw">now—</span><img src="robbin-logo-black.svg" alt="Robbin"></div>
       </div>
     </div>
   </section>
