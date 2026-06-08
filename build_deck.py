@@ -92,9 +92,20 @@ CUSTOM_CSS = r"""
 .tbd-tag { font-family:var(--font-mono); font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
 .tbd-box p { font-family:var(--font-sans); font-size:clamp(15px,1.1vw,20px); color:var(--muted-2); margin-top:1.4vh; line-height:1.6; }
 .tbd-owner { position:absolute; top:5vh; right:4vw; z-index:6; font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); border:1px solid rgba(12,12,12,.18); border-radius:100px; padding:6px 14px; }
-/* Framed SVG content (Marcos data slides) */
-.svgcard { background:#fff; border:1px solid rgba(12,12,12,.10); border-radius:18px; padding:2.6vh 2.4vw; box-shadow:0 16px 48px rgba(0,0,0,.07); margin:1vh auto 0; }
-.svgcard img { display:block; height:min(72vh,560px); width:auto; max-width:82vw; }
+/* Note line (Marcos data slides) */
+.df-note { font-family:var(--font-mono); font-style:italic; font-size:clamp(11px,.85vw,13px); color:var(--muted-2); margin-top:1.8vh; line-height:1.55; max-width:78ch; }
+/* Data architecture flow */
+.dataflow { margin-top:2.5vh; }
+.df-band { display:grid; grid-template-columns:1fr 1fr; gap:1.2vw; margin-bottom:1.4vh; }
+.df-band-cell { text-align:center; font-family:var(--font-mono); font-size:clamp(10px,.85vw,13px); letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2); border:1px dashed rgba(12,12,12,.25); border-radius:9px; padding:1vh 0; }
+.df-cols { display:grid; grid-template-columns:1fr auto 1.25fr auto 1fr; align-items:stretch; gap:.5vw; }
+.df-col { display:flex; flex-direction:column; gap:.7vh; border:1px solid rgba(12,12,12,.13); border-radius:14px; padding:1.6vh 1vw; }
+.df-stage { font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:.4vh; }
+.df-item { font-family:var(--font-sans); font-weight:600; font-size:clamp(12px,.98vw,15px); border:1px solid rgba(12,12,12,.12); border-radius:9px; padding:.85vh 1vw; }
+.df-layer { display:flex; flex-direction:column; border:1px solid rgba(12,12,12,.16); border-radius:9px; padding:.75vh 1vw; background:rgba(12,12,12,.035); }
+.df-layer b { font-family:var(--font-sans); font-weight:700; font-size:clamp(12px,.98vw,15px); }
+.df-layer i { font-family:var(--font-mono); font-style:normal; font-size:10px; color:var(--muted); margin-top:1px; letter-spacing:.02em; }
+.df-arrow { display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--muted); }
 
 /* Vagas */
 .vagas-grid { margin-top:4vh; display:grid; grid-template-columns:1fr 1fr; gap:1.4vw; }
@@ -309,15 +320,82 @@ BODY = r"""
     <div class="chapter-mark light-mark">
       <span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Data · roles</span>
     </div>
-    <div class="svgcard reveal"><img src="slide1_papeis_area_dados.svg" alt="Os cinco papéis da área de dados"></div>
+    <div class="slide-head reveal">
+      <h1>Who does what in <span class="accent">Data.</span></h1>
+      <p class="sub">Data isn't one person — it's a team. Each role owns a different skill.</p>
+    </div>
+    <div class="layers reveal" data-stagger>
+      <div class="layer">
+        <span class="layer-num">01</span>
+        <div><h3>Data Engineer</h3><p>Builds the plumbing. Makes sure data arrives complete and reliable.</p></div>
+        <span class="layer-badge">pipelines</span>
+      </div>
+      <div class="layer">
+        <span class="layer-num">02</span>
+        <div><h3>Analytics Engineer</h3><p>The bridge. Models raw data into clean, ready-to-use tables.</p></div>
+        <span class="layer-badge">modeling</span>
+      </div>
+      <div class="layer">
+        <span class="layer-num">03</span>
+        <div><h3>Data Analyst</h3><p>Turns data into answers — numbers, charts and business recommendations.</p></div>
+        <span class="layer-badge">insight</span>
+      </div>
+      <div class="layer">
+        <span class="layer-num">04</span>
+        <div><h3>Data Scientist</h3><p>Finds patterns and predicts. Uses statistics and models to anticipate the future.</p></div>
+        <span class="layer-badge">prediction</span>
+      </div>
+      <div class="layer">
+        <span class="layer-num">05</span>
+        <div><h3>ML Engineer</h3><p>Puts the model to real work — in production and at scale.</p></div>
+        <span class="layer-badge">production</span>
+      </div>
+    </div>
+    <p class="df-note">Behind the scenes: Data Platform Engineer (the infra) and DataOps (the quality culture).</p>
   </section>
 
-  <!-- 7 — MARCOS · DATA PIPELINE -->
+  <!-- 7 — MARCOS · DATA ARCHITECTURE -->
   <section class="slide theme-light vcenter" data-num="07">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Data · pipeline</span>
+      <span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Data · architecture</span>
     </div>
-    <div class="svgcard reveal"><img src="slide2_pipeline_dados_v3.svg" alt="Pipeline de dados"></div>
+    <div class="slide-head reveal">
+      <h1>From <span class="accent">source to consumption.</span></h1>
+      <p class="sub">Sources are ingested, transformed across landing, prepared, trusted and delivery layers, then consumed.</p>
+    </div>
+    <div class="dataflow reveal">
+      <div class="df-band">
+        <span class="df-band-cell">Orchestration</span>
+        <span class="df-band-cell">Data catalog</span>
+      </div>
+      <div class="df-cols">
+        <div class="df-col">
+          <div class="df-stage">Ingestion · sources</div>
+          <div class="df-item">Database</div>
+          <div class="df-item">Files</div>
+          <div class="df-item">APIs</div>
+          <div class="df-item">Spreadsheets</div>
+        </div>
+        <div class="df-arrow">→</div>
+        <div class="df-col">
+          <div class="df-stage">Transformation</div>
+          <div class="df-layer"><b>Landing</b><i>raw, as it came</i></div>
+          <div class="df-layer"><b>Prepared</b><i>clean &amp; standardized</i></div>
+          <div class="df-layer"><b>Trusted</b><i>reliable, integrated</i></div>
+          <div class="df-layer"><b>Delivery</b><i>business-ready</i></div>
+        </div>
+        <div class="df-arrow">→</div>
+        <div class="df-col">
+          <div class="df-stage">Consumption</div>
+          <div class="df-item">Dashboards</div>
+          <div class="df-item">Reports</div>
+          <div class="df-item">Analyses</div>
+          <div class="df-item">ML models</div>
+          <div class="df-item">AI</div>
+        </div>
+      </div>
+      <p class="df-note">Data is born scattered across sources, cleaned and organized into layers, and only then becomes a chart, report, analysis, model or AI answer — each stop a specialty.</p>
+    </div>
   </section>
 
   <!-- 8 — Q&A (closing) -->
@@ -440,7 +518,7 @@ def datauri(path):
 
 assets = ["robbin-logo-black.svg","robbin-logo-white.svg","robbin-bird-black.svg",
           "Robbin.png","Chilli.png","Brinox.png","Malwee.png","Credmoura.png","JSM.png","Cantu.png",
-          "Tomas.jpeg","Marcos.jpeg","openco.svg","Amazon_logo.svg.png","images.png","slide1_papeis_area_dados.svg","slide2_pipeline_dados_v3.svg"]
+          "Tomas.jpeg","Marcos.jpeg","openco.svg","Amazon_logo.svg.png","images.png"]
 preview = html
 for a in assets:
     preview = preview.replace('src="%s"' % a, 'src="%s"' % datauri(a))
