@@ -13,6 +13,9 @@ else:
 
 CUSTOM_CSS = r"""
 /* ============ CUSTOM SLIDES (Robbin intern deck) ============ */
+/* Darker grays on light slides for readability (scoped so dark slides keep contrast) */
+.slide.theme-light, .slide.theme-cream { --muted:#5A5A5A; --muted-2:#2E2E2E; }
+.slide.theme-light .slide-head .sub, .slide.theme-cream .slide-head .sub { color:#2E2E2E; }
 /* vertically center content on content slides */
 .slide.vcenter { justify-content:center; }
 /* PIX card fan */
