@@ -12,13 +12,13 @@ CUSTOM_CSS = r"""
 /* vertically center content on content slides */
 .slide.vcenter { justify-content:center; }
 /* PIX card fan */
-.pix-body { display:flex; align-items:center; gap:2.5vw; margin-top:3vh; }
-.pixfan { position:relative; flex:1.4; height:56vh; min-height:340px; }
+.pix-body { display:flex; align-items:center; gap:2vw; margin-top:2.5vh; }
+.pixfan { position:relative; flex:1.7; height:62vh; min-height:380px; }
 .pcard {
-  position:absolute; left:50%; top:7%;
-  width:clamp(135px,11.5vw,195px);
-  margin-left:calc(clamp(135px,11.5vw,195px) / -2);
-  transform-origin:50% 148%;
+  position:absolute; left:50%; top:6%;
+  width:clamp(160px,13.5vw,232px);
+  margin-left:calc(clamp(160px,13.5vw,232px) / -2);
+  transform-origin:50% 150%;
   transform:rotate(var(--rot));
   opacity:0;
   animation:fanIn .85s cubic-bezier(.18,.7,.2,1) var(--d) both;
@@ -168,7 +168,7 @@ BODY = r"""
       <span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Presenters</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Who's <span class="accent">presenting.</span></h1>
+      <h1>Presenters<span class="accent">.</span></h1>
     </div>
     <div class="pres-grid reveal" data-stagger>
       <div class="pres">
@@ -180,7 +180,7 @@ BODY = r"""
           </div>
         </div>
         <p class="pres-bio">A biologist by training from the <b>University of São Paulo</b>, he was co-founder and <b>CTO of Open Co</b> (originally Geru), Brazil's first 100% digital lender, founded in 2014. Leading the company's technology for nearly nine years, he helped build one of the country's largest digital credit platforms, with over <b>USD 1 billion</b> in loans originated. In 2023 he co-founded <b>Robbin</b>, a B2B credit fintech for retail, where he remains CTO — a company that raised <b>USD 8M</b> in seed and recently announced a <b>USD 108M</b> round.</p>
-        <div class="pres-exp"><span class="lbl">ex—</span><img src="openco.svg" alt="Open Co"></div>
+        <div class="pres-exp"><span class="lbl">ex—</span><img src="openco.svg" alt="Open Co"><span class="lbl" style="margin-left:.5vw">now—</span><img src="robbin-logo-black.svg" alt="Robbin"></div>
       </div>
       <div class="pres">
         <div class="pres-top">
