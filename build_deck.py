@@ -119,7 +119,6 @@ BODY = r"""
     <div class="cover5-badge">São Paulo · 2026</div>
     <div class="cover5-center">
       <img class="cover5-logo" src="robbin-logo-black.svg" alt="Robbin">
-      <div class="cover5-tag">The financial platform for the AI era.</div>
     </div>
     <div class="cover5-meta">Confidential</div>
   </section>
