@@ -94,7 +94,7 @@ CUSTOM_CSS = r"""
 .tbd-owner { position:absolute; top:5vh; right:4vw; z-index:6; font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); border:1px solid rgba(12,12,12,.18); border-radius:100px; padding:6px 14px; }
 /* Framed SVG content (Marcos data slides) */
 .svgcard { background:#fff; border:1px solid rgba(12,12,12,.10); border-radius:18px; padding:2.6vh 2.4vw; box-shadow:0 16px 48px rgba(0,0,0,.07); margin:1vh auto 0; }
-.svgcard img { display:block; height:auto; width:auto; max-height:74vh; max-width:80vw; }
+.svgcard img { display:block; height:min(72vh,560px); width:auto; max-width:82vw; }
 
 /* Vagas */
 .vagas-grid { margin-top:4vh; display:grid; grid-template-columns:1fr 1fr; gap:1.4vw; }
