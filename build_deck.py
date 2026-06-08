@@ -333,8 +333,7 @@ BODY = r"""
     <div class="closing2-inner">
       <div class="closing2-eyebrow reveal"><span>—</span><span>Discussion</span></div>
       <h2 class="closing2-line reveal">
-        <span class="cl-row light">Questions</span>
-        <span class="cl-row hi">&amp; Answers</span>
+        <span class="cl-row hi">Q&amp;A</span>
       </h2>
       <div class="closing2-divider reveal"></div>
       <div class="closing2-logo reveal"><img src="robbin-logo-white.svg" alt="Robbin" style="height:46px;width:auto;"></div>
