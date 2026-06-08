@@ -123,10 +123,44 @@ BODY = r"""
     <div class="cover5-meta">Confidential</div>
   </section>
 
-  <!-- 2 — CARTÃO PIX -->
-  <section class="slide theme-light pix-slide vcenter" data-num="02">
+  <!-- 2 — PRESENTERS -->
+  <section class="slide theme-light vcenter" data-num="02">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">The Card</span>
+      <span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Presenters</span>
+    </div>
+    <div class="slide-head reveal">
+      <h1>Presenters<span class="accent">.</span></h1>
+    </div>
+    <div class="pres-grid reveal" data-stagger>
+      <div class="pres">
+        <div class="pres-top">
+          <img class="pres-photo" src="Tomas.jpeg" alt="Tomás Corrêa">
+          <div>
+            <div class="pres-name">Tomás Corrêa</div>
+            <div class="pres-role">CTO &amp; Co-Founder</div>
+          </div>
+        </div>
+        <p class="pres-bio">A biologist by training from the <b>University of São Paulo</b>, he was co-founder and <b>CTO of Open Co</b> (originally Geru), Brazil's first 100% digital lender, founded in 2014. Leading the company's technology for nearly nine years, he helped build one of the country's largest digital credit platforms, with over <b>USD 1 billion</b> in loans originated. In 2023 he co-founded <b>Robbin</b>, a B2B credit fintech for retail, where he remains CTO — a company that raised <b>USD 8M</b> in seed and recently announced a <b>USD 108M</b> round.</p>
+        <div class="pres-exp"><span class="lbl">ex—</span><img src="openco.svg" alt="Open Co"><span class="lbl" style="margin-left:.5vw">now—</span><img src="robbin-logo-black.svg" alt="Robbin"></div>
+      </div>
+      <div class="pres">
+        <div class="pres-top">
+          <img class="pres-photo" src="Marcos.jpeg" alt="Marcos">
+          <div>
+            <div class="pres-name">Marcos</div>
+            <div class="pres-role">Head of Data</div>
+          </div>
+        </div>
+        <p class="pres-bio">A Computer Scientist from <b>USP (IME-USP)</b>, with over a decade in data and technology across Brazil, Japan and the US. He was a <b>Business Intelligence Engineer at Amazon</b> in Tokyo and Head of Data &amp; Tech at Cedar Brands, where he built a GCP data lakehouse architecture from scratch and led initiatives that lifted the group's brand conversion rates by more than <b>50%</b>. Today he is Head of Data at Robbin.</p>
+        <div class="pres-exp"><span class="lbl">ex—</span><img src="Amazon_logo.svg.png" alt="Amazon"><img src="images.png" alt="Rakuten"><span class="lbl" style="margin-left:.5vw">now—</span><img src="robbin-logo-black.svg" alt="Robbin"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 — PIX CARD -->
+  <section class="slide theme-light pix-slide vcenter" data-num="03">
+    <div class="chapter-mark light-mark">
+      <span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">The Card</span>
     </div>
     <div class="slide-head reveal">
       <h1>The credit card <span class="accent">on PIX rails.</span></h1>
@@ -158,40 +192,6 @@ BODY = r"""
           <div class="pp-title">Co-branded with anchors</div>
           <div class="pp-desc">Cantu, Brinox, Malwee, Chilli Beans, Baterias Moura, Juntos Somos Mais (Votorantim, Tigre, Gerdau) — already live.</div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3 — APRESENTADORES -->
-  <section class="slide theme-light vcenter" data-num="03">
-    <div class="chapter-mark light-mark">
-      <span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Presenters</span>
-    </div>
-    <div class="slide-head reveal">
-      <h1>Presenters<span class="accent">.</span></h1>
-    </div>
-    <div class="pres-grid reveal" data-stagger>
-      <div class="pres">
-        <div class="pres-top">
-          <img class="pres-photo" src="Tomas.jpeg" alt="Tomás Corrêa">
-          <div>
-            <div class="pres-name">Tomás Corrêa</div>
-            <div class="pres-role">CTO &amp; Co-Founder</div>
-          </div>
-        </div>
-        <p class="pres-bio">A biologist by training from the <b>University of São Paulo</b>, he was co-founder and <b>CTO of Open Co</b> (originally Geru), Brazil's first 100% digital lender, founded in 2014. Leading the company's technology for nearly nine years, he helped build one of the country's largest digital credit platforms, with over <b>USD 1 billion</b> in loans originated. In 2023 he co-founded <b>Robbin</b>, a B2B credit fintech for retail, where he remains CTO — a company that raised <b>USD 8M</b> in seed and recently announced a <b>USD 108M</b> round.</p>
-        <div class="pres-exp"><span class="lbl">ex—</span><img src="openco.svg" alt="Open Co"><span class="lbl" style="margin-left:.5vw">now—</span><img src="robbin-logo-black.svg" alt="Robbin"></div>
-      </div>
-      <div class="pres">
-        <div class="pres-top">
-          <img class="pres-photo" src="Marcos.jpeg" alt="Marcos">
-          <div>
-            <div class="pres-name">Marcos</div>
-            <div class="pres-role">Head of Data</div>
-          </div>
-        </div>
-        <p class="pres-bio">A Computer Scientist from <b>USP (IME-USP)</b>, with over a decade in data and technology across Brazil, Japan and the US. He was a <b>Business Intelligence Engineer at Amazon</b> in Tokyo and Head of Data &amp; Tech at Cedar Brands, where he built a GCP data lakehouse architecture from scratch and led initiatives that lifted the group's brand conversion rates by more than <b>50%</b>. Today he is Head of Data at Robbin.</p>
-        <div class="pres-exp"><span class="lbl">ex—</span><img src="Amazon_logo.svg.png" alt="Amazon"><img src="images.png" alt="Rakuten"><span class="lbl" style="margin-left:.5vw">now—</span><img src="robbin-logo-black.svg" alt="Robbin"></div>
       </div>
     </div>
   </section>
