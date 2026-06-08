@@ -9,14 +9,16 @@ css = orig.split("<style>", 1)[1].split("</style>", 1)[0]
 
 CUSTOM_CSS = r"""
 /* ============ CUSTOM SLIDES (Robbin intern deck) ============ */
+/* vertically center content on content slides */
+.slide.vcenter { justify-content:center; }
 /* PIX card fan */
-.pix-body { display:flex; align-items:center; gap:3vw; flex:1; min-height:0; margin-top:1vh; }
-.pixfan { position:relative; flex:1.25; height:48vh; min-height:300px; }
+.pix-body { display:flex; align-items:center; gap:2.5vw; margin-top:3vh; }
+.pixfan { position:relative; flex:1.4; height:56vh; min-height:340px; }
 .pcard {
   position:absolute; left:50%; top:7%;
-  width:clamp(110px,9.2vw,156px);
-  margin-left:calc(clamp(110px,9.2vw,156px) / -2);
-  transform-origin:50% 150%;
+  width:clamp(135px,11.5vw,195px);
+  margin-left:calc(clamp(135px,11.5vw,195px) / -2);
+  transform-origin:50% 148%;
   transform:rotate(var(--rot));
   opacity:0;
   animation:fanIn .85s cubic-bezier(.18,.7,.2,1) var(--d) both;
@@ -34,15 +36,18 @@ CUSTOM_CSS = r"""
 .pp-desc { font-family:var(--font-sans); color:var(--muted-2); font-size:clamp(13px,1vw,16px); line-height:1.5; }
 
 /* Presenters */
-.pres-grid { display:grid; grid-template-columns:1fr 1fr; gap:4vw; flex:1; min-height:0; margin-top:4vh; align-content:start; }
-.pres { display:flex; flex-direction:column; gap:2.2vh; }
+.pres-grid { display:grid; grid-template-columns:1fr 1fr; gap:4vw; margin-top:4vh; align-content:start; }
+.pres { display:flex; flex-direction:column; gap:2vh; }
 .pres-top { display:flex; align-items:center; gap:1.4vw; }
 .pres-photo { width:clamp(74px,7vw,108px); height:clamp(74px,7vw,108px); border-radius:50%; object-fit:cover; filter:grayscale(1) contrast(1.05); flex-shrink:0; }
 .pres-name { font-family:var(--font-sans); font-weight:700; letter-spacing:-.025em; font-size:clamp(22px,2.1vw,34px); }
 .pres-role { font-family:var(--font-mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-top:.6vh; }
-.pres-bio { font-family:var(--font-sans); font-size:clamp(14px,1.05vw,18px); line-height:1.62; color:var(--muted-2); }
+.pres-bio { font-family:var(--font-sans); font-size:clamp(13px,1.02vw,17px); line-height:1.6; color:var(--muted-2); }
 .pres-bio b { color:var(--ink); font-weight:600; }
-.pres-tbd { font-family:var(--font-mono); font-size:12px; color:var(--muted); border:1px dashed rgba(12,12,12,.22); border-radius:10px; padding:1.6vh 1.2vw; letter-spacing:.04em; margin-top:auto; }
+.pres-exp { display:flex; align-items:center; gap:.8vw; margin-top:auto; padding-top:1.4vh; }
+.pres-exp .lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+.pres-exp img { height:clamp(15px,1.4vw,21px); width:auto; filter:grayscale(1) contrast(1.05); opacity:.78; }
+.pres-exp .exp-txt { font-family:var(--font-sans); font-weight:600; font-size:clamp(12px,1vw,15px); color:var(--muted-2); }
 
 /* Architecture layers */
 .layers { margin-top:3vh; border:1px solid rgba(12,12,12,.13); border-radius:14px; overflow:hidden; }
@@ -78,7 +83,7 @@ CUSTOM_CSS = r"""
 .flow-done .ic { width:34px; height:34px; border-radius:50%; background:#FAFAFA; display:grid; place-items:center; flex-shrink:0; }
 
 /* TBD */
-.tbd-wrap { flex:1; display:flex; flex-direction:column; justify-content:center; }
+.tbd-wrap { display:flex; flex-direction:column; }
 .tbd-box { border:1px dashed rgba(12,12,12,.25); border-radius:16px; padding:5vh 4vw; max-width:64ch; }
 .tbd-tag { font-family:var(--font-mono); font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
 .tbd-box p { font-family:var(--font-sans); font-size:clamp(15px,1.1vw,20px); color:var(--muted-2); margin-top:1.4vh; line-height:1.6; }
@@ -120,7 +125,7 @@ BODY = r"""
   </section>
 
   <!-- 2 — CARTÃO PIX -->
-  <section class="slide theme-light pix-slide" data-num="02">
+  <section class="slide theme-light pix-slide vcenter" data-num="02">
     <div class="chapter-mark light-mark">
       <span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">O Cartão</span>
     </div>
@@ -130,12 +135,12 @@ BODY = r"""
     </div>
     <div class="pix-body reveal">
       <div class="pixfan">
-        <div class="pcard" style="--rot:-44deg; --d:.15s; z-index:1;"><img src="Chilli.png" alt="Chilli Beans"></div>
-        <div class="pcard" style="--rot:-29deg; --d:.25s; z-index:2;"><img src="Brinox.png" alt="Grupo Brinox"></div>
-        <div class="pcard" style="--rot:-14deg; --d:.35s; z-index:3;"><img src="Malwee.png" alt="Malwee"></div>
-        <div class="pcard" style="--rot:14deg;  --d:.45s; z-index:5;"><img src="Cantu.png" alt="Cantu"></div>
-        <div class="pcard" style="--rot:29deg;  --d:.5s;  z-index:4;"><img src="Credmoura.png" alt="CredMoura"></div>
-        <div class="pcard" style="--rot:44deg;  --d:.6s;  z-index:2;"><img src="JSM.png" alt="Juntos Somos+"></div>
+        <div class="pcard" style="--rot:-40deg; --d:.15s; z-index:1;"><img src="Chilli.png" alt="Chilli Beans"></div>
+        <div class="pcard" style="--rot:-27deg; --d:.25s; z-index:2;"><img src="Brinox.png" alt="Grupo Brinox"></div>
+        <div class="pcard" style="--rot:-13deg; --d:.35s; z-index:3;"><img src="Malwee.png" alt="Malwee"></div>
+        <div class="pcard" style="--rot:13deg;  --d:.45s; z-index:5;"><img src="Cantu.png" alt="Cantu"></div>
+        <div class="pcard" style="--rot:27deg;  --d:.5s;  z-index:4;"><img src="Credmoura.png" alt="CredMoura"></div>
+        <div class="pcard" style="--rot:40deg;  --d:.6s;  z-index:2;"><img src="JSM.png" alt="Juntos Somos+"></div>
         <div class="pcard" style="--rot:0deg;   --d:.55s; z-index:10;"><img src="Robbin.png" alt="Robbin"></div>
       </div>
       <div class="pix-points" data-stagger>
@@ -159,7 +164,7 @@ BODY = r"""
   </section>
 
   <!-- 3 — APRESENTADORES -->
-  <section class="slide theme-light" data-num="03">
+  <section class="slide theme-light vcenter" data-num="03">
     <div class="chapter-mark light-mark">
       <span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Apresentadores</span>
     </div>
@@ -176,23 +181,24 @@ BODY = r"""
           </div>
         </div>
         <p class="pres-bio">Biólogo de formação, foi cofundador e <b>CTO da Open Co</b> (originalmente Geru), primeira credora 100% digital do Brasil, fundada em 2014. À frente da tecnologia da empresa entre 2014 e 2023, ajudou a construir a maior plataforma digital de crédito do país, com mais de <b>USD 1 bilhão</b> em empréstimos concedidos.</p>
+        <div class="pres-exp"><span class="lbl">ex—</span><img src="openco.svg" alt="Open Co"></div>
       </div>
       <div class="pres">
         <div class="pres-top">
           <img class="pres-photo" src="Marcos.jpeg" alt="Marcos">
           <div>
             <div class="pres-name">Marcos</div>
-            <div class="pres-role">Robbin</div>
+            <div class="pres-role">Head of Data</div>
           </div>
         </div>
-        <p class="pres-bio">Apresenta a segunda parte do conteúdo de hoje.</p>
-        <div class="pres-tbd">// Bio do Marcos — TBD</div>
+        <p class="pres-bio">Cientista da Computação pela <b>USP (IME-USP)</b>, acumula mais de uma década em dados e tecnologia entre Brasil, Japão e EUA. Foi <b>Business Intelligence Engineer na Amazon</b> em Tóquio e Head of Data &amp; Tech na Cedar Brands, onde construiu do zero uma arquitetura de data lakehouse na GCP e liderou iniciativas que elevaram em mais de <b>50%</b> as taxas de conversão das marcas do grupo. Hoje é Head of Data na Robbin.</p>
+        <div class="pres-exp"><span class="lbl">ex—</span><img src="Amazon_logo.svg.png" alt="Amazon"><img src="images.png" alt="Rakuten"><span class="exp-txt">Cedar Brands</span></div>
       </div>
     </div>
   </section>
 
   <!-- 4 — ARQUITETURA -->
-  <section class="slide theme-light" data-num="04">
+  <section class="slide theme-light vcenter" data-num="04">
     <div class="chapter-mark light-mark">
       <span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Arquitetura</span>
     </div>
@@ -241,7 +247,7 @@ BODY = r"""
   </section>
 
   <!-- 5 — ROBBIN TOOLS (dark) -->
-  <section class="slide theme-dark" data-num="05">
+  <section class="slide theme-dark vcenter" data-num="05">
     <div class="chapter-mark">
       <span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Robbin Tools</span>
     </div>
@@ -293,7 +299,7 @@ BODY = r"""
   </section>
 
   <!-- 6 — TBD MARCOS 1 -->
-  <section class="slide theme-light" data-num="06">
+  <section class="slide theme-light vcenter" data-num="06">
     <div class="tbd-owner">Marcos · 01</div>
     <div class="chapter-mark light-mark">
       <span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">A definir</span>
@@ -308,7 +314,7 @@ BODY = r"""
   </section>
 
   <!-- 7 — TBD MARCOS 2 -->
-  <section class="slide theme-light" data-num="07">
+  <section class="slide theme-light vcenter" data-num="07">
     <div class="tbd-owner">Marcos · 02</div>
     <div class="chapter-mark light-mark">
       <span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">A definir</span>
@@ -337,7 +343,7 @@ BODY = r"""
   </section>
 
   <!-- 9 — VAGAS -->
-  <section class="slide theme-light" data-num="09">
+  <section class="slide theme-light vcenter" data-num="09">
     <div class="chapter-mark light-mark">
       <span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Junte-se ao time</span>
     </div>
@@ -443,7 +449,7 @@ def datauri(path):
 
 assets = ["robbin-logo-black.svg","robbin-logo-white.svg","robbin-bird-black.svg",
           "Robbin.png","Chilli.png","Brinox.png","Malwee.png","Credmoura.png","JSM.png","Cantu.png",
-          "Tomas.jpeg","Marcos.jpeg"]
+          "Tomas.jpeg","Marcos.jpeg","openco.svg","Amazon_logo.svg.png","images.png"]
 preview = html
 for a in assets:
     preview = preview.replace('src="%s"' % a, 'src="%s"' % datauri(a))
