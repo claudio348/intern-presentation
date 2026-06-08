@@ -119,19 +119,19 @@ BODY = r"""
     <div class="cover5-badge">São Paulo · 2026</div>
     <div class="cover5-center">
       <img class="cover5-logo" src="robbin-logo-black.svg" alt="Robbin">
-      <div class="cover5-tag">A plataforma financeira da era da IA.</div>
+      <div class="cover5-tag">The financial platform for the AI era.</div>
     </div>
-    <div class="cover5-meta">Confidencial</div>
+    <div class="cover5-meta">Confidential</div>
   </section>
 
   <!-- 2 — CARTÃO PIX -->
   <section class="slide theme-light pix-slide vcenter" data-num="02">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">O Cartão</span>
+      <span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">The Card</span>
     </div>
     <div class="slide-head reveal">
-      <h1>O cartão de crédito <span class="accent">sobre o trilho do PIX.</span></h1>
-      <p class="sub">UX de cartão. Economia do PIX. Liquidação instantânea. Já no ar com âncoras co-brand.</p>
+      <h1>The credit card <span class="accent">on PIX rails.</span></h1>
+      <p class="sub">Card UX. PIX economics. Instant settlement. Already live with co-brand anchors.</p>
     </div>
     <div class="pix-body reveal">
       <div class="pixfan">
@@ -146,18 +146,18 @@ BODY = r"""
       <div class="pix-points" data-stagger>
         <div class="pix-point">
           <div class="pp-num">— 01</div>
-          <div class="pp-title">Tempo real no PIX</div>
-          <div class="pp-desc">Liquidação em segundos, 24/7. Sem interchange. Sem middleware de adquirência.</div>
+          <div class="pp-title">Real-time on PIX</div>
+          <div class="pp-desc">Settlement in seconds, 24/7. No interchange. No acquiring middleware.</div>
         </div>
         <div class="pix-point">
           <div class="pp-num">— 02</div>
-          <div class="pp-title">Insights exclusivos de PMEs</div>
-          <div class="pp-desc">Dados de sell-out das marcas âncora embasam cada transação.</div>
+          <div class="pp-title">SME behavior, unique insights</div>
+          <div class="pp-desc">Sell-out data from anchor brands underwrites every transaction.</div>
         </div>
         <div class="pix-point">
           <div class="pp-num">— 03</div>
-          <div class="pp-title">Co-branded com âncoras</div>
-          <div class="pp-desc">Cantu, Brinox, Malwee, Chilli Beans, Baterias Moura, Juntos Somos Mais (Votorantim, Tigre, Gerdau) — já no ar.</div>
+          <div class="pp-title">Co-branded with anchors</div>
+          <div class="pp-desc">Cantu, Brinox, Malwee, Chilli Beans, Baterias Moura, Juntos Somos Mais (Votorantim, Tigre, Gerdau) — already live.</div>
         </div>
       </div>
     </div>
@@ -166,10 +166,10 @@ BODY = r"""
   <!-- 3 — APRESENTADORES -->
   <section class="slide theme-light vcenter" data-num="03">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Apresentadores</span>
+      <span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Presenters</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Quem <span class="accent">apresenta.</span></h1>
+      <h1>Who's <span class="accent">presenting.</span></h1>
     </div>
     <div class="pres-grid reveal" data-stagger>
       <div class="pres">
@@ -177,10 +177,10 @@ BODY = r"""
           <img class="pres-photo" src="Tomas.jpeg" alt="Tomás Corrêa">
           <div>
             <div class="pres-name">Tomás Corrêa</div>
-            <div class="pres-role">CTO &amp; Cofundador</div>
+            <div class="pres-role">CTO &amp; Co-Founder</div>
           </div>
         </div>
-        <p class="pres-bio">Biólogo de formação, foi cofundador e <b>CTO da Open Co</b> (originalmente Geru), primeira credora 100% digital do Brasil, fundada em 2014. À frente da tecnologia da empresa entre 2014 e 2023, ajudou a construir a maior plataforma digital de crédito do país, com mais de <b>USD 1 bilhão</b> em empréstimos concedidos.</p>
+        <p class="pres-bio">A biologist by training from the <b>University of São Paulo</b>, he was co-founder and <b>CTO of Open Co</b> (originally Geru), Brazil's first 100% digital lender, founded in 2014. Leading the company's technology for nearly nine years, he helped build one of the country's largest digital credit platforms, with over <b>USD 1 billion</b> in loans originated. In 2023 he co-founded <b>Robbin</b>, a B2B credit fintech for retail, where he remains CTO — a company that raised <b>USD 8M</b> in seed and recently announced a <b>USD 108M</b> round.</p>
         <div class="pres-exp"><span class="lbl">ex—</span><img src="openco.svg" alt="Open Co"></div>
       </div>
       <div class="pres">
@@ -191,7 +191,7 @@ BODY = r"""
             <div class="pres-role">Head of Data</div>
           </div>
         </div>
-        <p class="pres-bio">Cientista da Computação pela <b>USP (IME-USP)</b>, acumula mais de uma década em dados e tecnologia entre Brasil, Japão e EUA. Foi <b>Business Intelligence Engineer na Amazon</b> em Tóquio e Head of Data &amp; Tech na Cedar Brands, onde construiu do zero uma arquitetura de data lakehouse na GCP e liderou iniciativas que elevaram em mais de <b>50%</b> as taxas de conversão das marcas do grupo. Hoje é Head of Data na Robbin.</p>
+        <p class="pres-bio">A Computer Scientist from <b>USP (IME-USP)</b>, with over a decade in data and technology across Brazil, Japan and the US. He was a <b>Business Intelligence Engineer at Amazon</b> in Tokyo and Head of Data &amp; Tech at Cedar Brands, where he built a GCP data lakehouse architecture from scratch and led initiatives that lifted the group's brand conversion rates by more than <b>50%</b>. Today he is Head of Data at Robbin.</p>
         <div class="pres-exp"><span class="lbl">ex—</span><img src="Amazon_logo.svg.png" alt="Amazon"><img src="images.png" alt="Rakuten"><span class="exp-txt">Cedar Brands</span></div>
       </div>
     </div>
@@ -200,19 +200,19 @@ BODY = r"""
   <!-- 4 — ARQUITETURA -->
   <section class="slide theme-light vcenter" data-num="04">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Arquitetura</span>
+      <span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Architecture</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Time não técnico no comando — <span class="accent">sem abrir mão de segurança.</span></h1>
-      <p class="sub">4 camadas que separam o que muda rápido do que precisa ser estável: qualquer pessoa cria, a plataforma garante.</p>
+      <h1>Non-technical team in command — <span class="accent">without giving up security.</span></h1>
+      <p class="sub">4 layers that separate what moves fast from what must stay stable: anyone builds, the platform guarantees.</p>
     </div>
     <div class="layers reveal" data-stagger>
       <div class="layer">
         <span class="layer-num">01</span>
         <div>
           <h3>Vibe code + AI tools</h3>
-          <p>Qualquer pessoa do time cria apps completos com IA. Skills e rules embutem o contexto da Robbin — a IA age como alguém do time, não como estranho.</p>
-          <div class="chips"><span>velocidade máxima</span><span>tools.robbin.com.br</span><span>skills &amp; rules</span><span>Claude · Cursor</span></div>
+          <p>Anyone on the team builds complete apps with AI. Skills and rules embed Robbin's context — the AI acts like a teammate, not a stranger.</p>
+          <div class="chips"><span>max speed</span><span>tools.robbin.com.br</span><span>skills &amp; rules</span><span>Claude · Cursor</span></div>
         </div>
         <span class="layer-badge strong">move fast</span>
       </div>
@@ -220,25 +220,25 @@ BODY = r"""
         <span class="layer-num">02</span>
         <div>
           <h3>BFF — Ops / Client / Partner</h3>
-          <p>Três backends por audiência. Vibe code consome contratos estáveis — nunca acessa lógica interna diretamente.</p>
-          <div class="chips"><span>contratos por audiência</span><span>single ALB</span></div>
+          <p>Three backends by audience. Vibe code consumes stable contracts — never touches internal logic directly.</p>
+          <div class="chips"><span>contracts by audience</span><span>single ALB</span></div>
         </div>
-        <span class="layer-badge">fronteira</span>
+        <span class="layer-badge">boundary</span>
       </div>
       <div class="layer hi">
         <span class="layer-num">03</span>
         <div>
-          <h3>Platform — transacional + gerencial</h3>
-          <p>7 micro-monólitos por fronteira de time. Data lake em 4 camadas para dados confiáveis. A estabilidade que deixa o vibe code voar.</p>
-          <div class="chips"><span>auth · crédito · pagamentos · cartões</span><span>Kafka · Temporal</span><span>Snowflake · dbt</span></div>
+          <h3>Platform — transactional + managerial</h3>
+          <p>7 micro-monoliths by team boundary. A 4-layer data lake for trustworthy data. The stability that lets vibe code fly.</p>
+          <div class="chips"><span>auth · credit · payments · cards</span><span>Kafka · Temporal</span><span>Snowflake · dbt</span></div>
         </div>
-        <span class="layer-badge">estabilidade</span>
+        <span class="layer-badge">stability</span>
       </div>
       <div class="layer">
         <span class="layer-num">04</span>
         <div>
           <h3>Knowledge system — rules, skills, Ganesha</h3>
-          <p>Contexto acumulado da Robbin disponível para qualquer IA. Sem isso, cada vibe code seria uma aposta.</p>
+          <p>Robbin's accumulated context available to any AI. Without it, every vibe code would be a gamble.</p>
           <div class="chips"><span>behavioral rules</span><span>reusable skills</span><span>Ganesha — API catalog</span></div>
         </div>
         <span class="layer-badge">guardrail</span>
@@ -252,37 +252,37 @@ BODY = r"""
       <span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Robbin Tools</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Criar uma ferramenta <span class="muted">é só pedir.</span></h1>
-      <p class="sub">O Claude cuida de todo o setup técnico. Você só descreve o que precisa. — tools.robbin.com.br</p>
+      <h1>Creating a tool <span class="muted">is just asking.</span></h1>
+      <p class="sub">Claude handles all the technical setup. You just describe what you need. — tools.robbin.com.br</p>
     </div>
     <div class="flow reveal" data-stagger>
       <div class="flow-row">
         <div class="flow-spine"><div class="flow-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="flow-line"></div></div>
         <div class="flow-card">
-          <div class="flow-label">Você</div>
-          <div class="flow-title">Pede ao Claude para criar uma ferramenta</div>
-          <div class="flow-bubble"><span class="flow-pill-inline">"Quero criar uma Robbin Tool para o time de ops"</span></div>
+          <div class="flow-label">You</div>
+          <div class="flow-title">Ask Claude to create a tool</div>
+          <div class="flow-bubble"><span class="flow-pill-inline">"I want to create a Robbin Tool for the ops team"</span></div>
         </div>
       </div>
       <div class="flow-row">
         <div class="flow-spine"><div class="flow-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div class="flow-line"></div></div>
         <div class="flow-card">
-          <div class="flow-claude"><span class="pill">Claude</span><span class="flow-title" style="font-size:clamp(13px,1.1vw,18px)">Configura o ambiente automaticamente</span></div>
+          <div class="flow-claude"><span class="pill">Claude</span><span class="flow-title" style="font-size:clamp(13px,1.1vw,18px)">Sets up the environment automatically</span></div>
           <div class="flow-steps">
-            <div class="flow-step"><b>1</b>Verifica e instala o Git</div>
-            <div class="flow-step"><b>2</b>Gera a chave SSH</div>
-            <div class="flow-step"><b>3</b>Autentica no GitHub</div>
-            <div class="flow-step"><b>4</b>Clona o repositório ai-powers</div>
-            <div class="flow-step"><b>5</b>Instala a skill create-robbin-tool</div>
+            <div class="flow-step"><b>1</b>Checks and installs Git</div>
+            <div class="flow-step"><b>2</b>Generates the SSH key</div>
+            <div class="flow-step"><b>3</b>Authenticates with GitHub</div>
+            <div class="flow-step"><b>4</b>Clones the ai-powers repo</div>
+            <div class="flow-step"><b>5</b>Installs the create-robbin-tool skill</div>
           </div>
         </div>
       </div>
       <div class="flow-row">
         <div class="flow-spine"><div class="flow-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="flow-line"></div></div>
         <div class="flow-card">
-          <div class="flow-label">Você</div>
-          <div class="flow-title">Descreve a ferramenta que quer criar</div>
-          <div class="flow-bubble">O Claude pergunta: "O que ela faz? Quem vai usar? Como deve funcionar?"</div>
+          <div class="flow-label">You</div>
+          <div class="flow-title">Describe the tool you want to build</div>
+          <div class="flow-bubble">Claude asks: "What does it do? Who will use it? How should it work?"</div>
         </div>
       </div>
       <div class="flow-row">
@@ -290,8 +290,8 @@ BODY = r"""
         <div class="flow-done">
           <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0C0C0C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
           <div>
-            <div class="flow-title">Ferramenta no ar</div>
-            <div class="flow-bubble" style="font-style:normal;margin-top:2px;">Pronta para o time usar em tools.robbin.com.br</div>
+            <div class="flow-title">Tool is live</div>
+            <div class="flow-bubble" style="font-style:normal;margin-top:2px;">Ready for the team to use at tools.robbin.com.br</div>
           </div>
         </div>
       </div>
@@ -302,13 +302,13 @@ BODY = r"""
   <section class="slide theme-light vcenter" data-num="06">
     <div class="tbd-owner">Marcos · 01</div>
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">A definir</span>
+      <span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">TBD</span>
     </div>
     <div class="tbd-wrap reveal">
-      <div class="slide-head"><h1>Conteúdo do <span class="muted">Marcos.</span></h1></div>
+      <div class="slide-head"><h1>Marcos's <span class="muted">content.</span></h1></div>
       <div class="tbd-box" style="margin-top:4vh;">
         <div class="tbd-tag">// TBD</div>
-        <p>Espaço reservado para o conteúdo que o Marcos vai apresentar. Estrutura e visual prontos — é só preencher.</p>
+        <p>Placeholder for the content Marcos will present. Structure and visuals ready — just fill it in.</p>
       </div>
     </div>
   </section>
@@ -317,13 +317,13 @@ BODY = r"""
   <section class="slide theme-light vcenter" data-num="07">
     <div class="tbd-owner">Marcos · 02</div>
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">A definir</span>
+      <span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">TBD</span>
     </div>
     <div class="tbd-wrap reveal">
-      <div class="slide-head"><h1>Conteúdo do <span class="muted">Marcos.</span></h1></div>
+      <div class="slide-head"><h1>Marcos's <span class="muted">content.</span></h1></div>
       <div class="tbd-box" style="margin-top:4vh;">
         <div class="tbd-tag">// TBD</div>
-        <p>Segundo slide reservado para o Marcos. Mesmo template — pronto para receber o conteúdo final.</p>
+        <p>Second slide reserved for Marcos. Same template — ready for the final content.</p>
       </div>
     </div>
   </section>
@@ -332,10 +332,10 @@ BODY = r"""
   <section class="slide theme-dark closing2" data-num="08">
     <div class="closing2-bg"><div class="closing2-grid"></div><div class="closing2-glow"></div></div>
     <div class="closing2-inner">
-      <div class="closing2-eyebrow reveal"><span>—</span><span>Discussão</span></div>
+      <div class="closing2-eyebrow reveal"><span>—</span><span>Discussion</span></div>
       <h2 class="closing2-line reveal">
-        <span class="cl-row light">Perguntas</span>
-        <span class="cl-row hi">&amp; Respostas</span>
+        <span class="cl-row light">Questions</span>
+        <span class="cl-row hi">&amp; Answers</span>
       </h2>
       <div class="closing2-divider reveal"></div>
       <div class="closing2-logo reveal"><img src="robbin-logo-white.svg" alt="Robbin" style="height:46px;width:auto;"></div>
@@ -345,21 +345,21 @@ BODY = r"""
   <!-- 9 — VAGAS -->
   <section class="slide theme-light vcenter" data-num="09">
     <div class="chapter-mark light-mark">
-      <span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Junte-se ao time</span>
+      <span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Join the team</span>
     </div>
     <div class="slide-head reveal">
-      <h1>Vagas em <span class="accent">aberto.</span></h1>
-      <p class="sub">Estamos construindo a plataforma financeira da era da IA — e queremos gente boa junto.</p>
+      <h1>Open <span class="accent">positions.</span></h1>
+      <p class="sub">We're building the financial platform for the AI era — and we want great people with us.</p>
     </div>
     <div class="vagas-grid reveal" data-stagger>
-      <div class="vaga"><span class="vaga-num">01</span><div><h3>Summer em Engineering</h3><div class="vaga-meta">Programa de verão · Engenharia<br>São Paulo · Híbrido</div><div class="vaga-tags"><span>Summer</span><span>AI-first</span></div></div></div>
-      <div class="vaga"><span class="vaga-num">02</span><div><h3>Summer em Data &amp; Analytics</h3><div class="vaga-meta">Programa de verão · Dados<br>São Paulo · Híbrido</div><div class="vaga-tags"><span>Summer</span><span>Analytics</span></div></div></div>
-      <div class="vaga"><span class="vaga-num">03</span><div><h3>Intern em Strategic Finance</h3><div class="vaga-meta">Estágio · Finanças estratégicas<br>São Paulo · Híbrido</div><div class="vaga-tags"><span>Intern</span><span>Finance</span></div></div></div>
-      <div class="vaga"><span class="vaga-num">04</span><div><h3>Intern em Data &amp; Analytics</h3><div class="vaga-meta">Estágio · Dados<br>São Paulo · Híbrido</div><div class="vaga-tags"><span>Intern</span><span>Analytics</span></div></div></div>
+      <div class="vaga"><span class="vaga-num">01</span><div><h3>Summer in Engineering</h3><div class="vaga-meta">Summer program · Engineering<br>São Paulo · Hybrid</div><div class="vaga-tags"><span>Summer</span><span>AI-first</span></div></div></div>
+      <div class="vaga"><span class="vaga-num">02</span><div><h3>Summer in Data &amp; Analytics</h3><div class="vaga-meta">Summer program · Data<br>São Paulo · Hybrid</div><div class="vaga-tags"><span>Summer</span><span>Analytics</span></div></div></div>
+      <div class="vaga"><span class="vaga-num">03</span><div><h3>Intern in Strategic Finance</h3><div class="vaga-meta">Internship · Strategic Finance<br>São Paulo · Hybrid</div><div class="vaga-tags"><span>Intern</span><span>Finance</span></div></div></div>
+      <div class="vaga"><span class="vaga-num">04</span><div><h3>Intern in Data &amp; Analytics</h3><div class="vaga-meta">Internship · Data<br>São Paulo · Hybrid</div><div class="vaga-tags"><span>Intern</span><span>Analytics</span></div></div></div>
     </div>
     <div class="vagas-cta reveal">
       <span class="pill">careers@robbin.com.br</span>
-      <span class="dim">— manda seu CV ou indica alguém</span>
+      <span class="dim">— send your CV or refer someone</span>
     </div>
   </section>
 
@@ -423,7 +423,7 @@ SCRIPT = r"""
 """
 
 HEAD = """<!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
