@@ -238,45 +238,62 @@ tpv_svg = tpv_chart()
 tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' for r in tpv_order) + '<span style="color:#8a8a8a">total on top · R$M</span>'
 
 
-# ---------- credit portfolio (outstanding balance) over time (real) ----------
+# ---------- credit portfolio (outstanding balance) by source over time (real) ----------
 _pm = ['2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06']
-port_vals = [0.0,0.02,0.24,0.65,1.43,2.54,6.77,10.53,14.23,16.49,17.8,19.65,23.41,24.9,27.02,29.17,30.73,33.84,40.23,42.64,43.91,43.3,41.61,39.52,38.16,34.76,32.67,33.55]
 _MON = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 port_labels = [f"{_MON[int(m.split('-')[1])-1]}/{m.split('-')[0][2:]}" for m in _pm]
+port_order = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Others"]
+PORT_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
+            "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Others":"#B5B5B5"}
+port_data = {
+    "Cantu":[0.0,0.0,0.21,0.59,1.36,2.31,6.47,9.06,10.5,10.87,11.21,11.62,11.99,12.43,13.73,15.05,15.4,15.7,17.28,17.05,15.61,14.29,13.53,12.53,11.64,10.29,10.61,10.33],
+    "Moura":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.29,0.59,0.92,1.01,1.17,2.04,2.79,4.38,6.42,9.21,10.18,12.05,13.66,13.14,12.33,10.8,9.64,8.46,8.31],
+    "Chilli Beans":[0.0,0.0,0.0,0.0,0.0,0.01,0.08,0.46,2.19,3.41,3.65,4.1,6.57,7.14,6.95,6.73,6.32,6.7,6.78,6.7,6.41,5.76,5.53,5.02,5.52,4.52,3.94,3.92],
+    "Juntos Somos Mais":[0.0,0.0,0.0,0.0,0.0,0.04,0.08,0.73,1.29,1.55,1.73,1.92,2.4,2.35,2.41,2.54,2.5,2.65,4.06,5.44,5.87,5.26,5.04,5.14,5.29,5.31,5.09,5.03],
+    "Malwee":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.07,1.01,1.44,1.77,1.87,2.08,2.17,2.06,2.12],
+    "Others":[0.0,0.02,0.04,0.06,0.07,0.18,0.14,0.27,0.24,0.37,0.62,1.08,1.45,1.82,1.9,2.05,2.12,2.38,2.9,3.21,2.96,2.9,2.59,2.63,2.83,2.83,2.52,3.83],
+}
+FIDC_FROM = "2025-12"   # month the FIDC was raised (shaded region onward)
 
-def portfolio_area():
-    WD, HD = 1040, 420; Lx, Rx, Tx, Bx = 46, 16, 26, 44
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 48; n = len(port_vals)
+def portfolio_stack():
+    WD, HD = 1040, 426; Lx, Rx, Tx, Bx = 46, 16, 30, 44
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 48; n = len(_pm)
     xs = [Lx + i/(n-1)*pw for i in range(n)]
-    ys = [Tx+ph - v/ymax*ph for v in port_vals]
-    ybase = Tx+ph
+    def Y(v): return Tx+ph - v/ymax*ph
+    ybase = Y(0)
+    di = _pm.index(FIDC_FROM); xd = xs[di]
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
-    s.append('<defs><linearGradient id="portG" x1="0" y1="0" x2="0" y2="1">'
-             '<stop offset="0" stop-color="#0C0C0C" stop-opacity="0.20"/>'
-             '<stop offset="1" stop-color="#0C0C0C" stop-opacity="0.02"/></linearGradient></defs>')
+    # FIDC-raised shaded background (from December onward)
+    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
+    # gridlines + y labels
     for t in (0,10,20,30,40):
-        y = Tx+ph - t/ymax*ph
-        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
+        y = Y(t)
+        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#E2E2E2" stroke-width="1"/>')
         s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
-    d = f"M {xs[0]:.1f},{ybase:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{ybase:.1f} Z"
-    s.append(f'<path d="{d}" fill="url(#portG)"/>')
-    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'
-             % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
-    # peak annotation
-    pk = port_vals.index(max(port_vals))
-    s.append(f'<circle cx="{xs[pk]:.1f}" cy="{ys[pk]:.1f}" r="3.2" fill="#0C0C0C"/>')
-    s.append(f'<text x="{xs[pk]:.1f}" y="{ys[pk]-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">peak · R$ {max(port_vals):.0f}M</text>')
-    # current highlight
-    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="8" fill="none" stroke="#0C0C0C" stroke-opacity="0.22"/>')
-    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="4.3" fill="#0C0C0C"/>')
-    s.append(f'<text x="{xs[-1]:.1f}" y="{ys[-1]-11:.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">R$ {port_vals[-1]:.1f}M</text>')
+    # stacked areas (bottom -> top)
+    bottoms = [0.0]*n
+    for layer in port_order:
+        tops = [bottoms[i]+port_data[layer][i] for i in range(n)]
+        top_pts = " ".join(f"{xs[i]:.1f},{Y(tops[i]):.1f}" for i in range(n))
+        bot_pts = " ".join(f"{xs[i]:.1f},{Y(bottoms[i]):.1f}" for i in range(n-1,-1,-1))
+        s.append(f'<polygon points="{top_pts} {bot_pts}" fill="{PORT_COL[layer]}" stroke="#FFFFFF" stroke-width="0.6"/>')
+        bottoms = tops
+    # total outline
+    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="1.4"/>'
+             % " ".join(f"{xs[i]:.1f},{Y(bottoms[i]):.1f}" for i in range(n)))
+    # FIDC divider + label
+    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+    # current total label
+    s.append(f'<text x="{xs[-1]:.1f}" y="{Y(bottoms[-1])-8:.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#0C0C0C">R$ {bottoms[-1]:.1f}M</text>')
     # sparse x labels (every 3 months)
     for i in range(0, n, 3):
         s.append(f'<text x="{xs[i]:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{port_labels[i]}</text>')
     s.append('</svg>')
     return "\n".join(s)
 
-port_svg = portfolio_area()
+port_svg = portfolio_stack()
+port_legend = "".join(f'<span><i style="background:{PORT_COL[g]}"></i>{g}</span>' for g in port_order)
 
 
 STYLE = """<style>
@@ -338,7 +355,8 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio</span></div>
   <div class="slide-head reveal"><h1>The credit <span class="accent">portfolio.</span></h1>
-  <p class="sub">Outstanding balance (R$M) — scaled to R$ 44M, R$ 34M on book today.</p></div>
+  <p class="sub">Outstanding balance by source (R$M) — scaled to R$ 44M; R$ 34M on book today.</p></div>
+  <div class="blegend reveal">{port_legend}</div>
   <div class="chartframe reveal">{port_svg}</div>
   <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
 </section>
