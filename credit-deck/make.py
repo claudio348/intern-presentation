@@ -61,25 +61,54 @@ cdr_svg = chart("\n".join(cdr_inner))
 cdr_legend = "".join(
     f'<span><i style="background:{c}"></i>{n}</span>' for n, c in zip(cdr.keys(), cdr_colors))
 
-# ---------- FPD 30 by month (real loan tape) ----------
+# ---------- FPD 30 by month — area + trend (real loan tape) ----------
 fpd_labels = ["may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26"]
 fpd_vals = [15.2,7.4,3.1,0.0,2.0,3.9,1.0,3.7,5.8,0.9,5.4,1.4]
-fpd_ymax = 16
-fpd_mean = sum(fpd_vals)/len(fpd_vals)
-fbars = [grid(fpd_ymax, [0,5,10,15], fpd_labels, xfont=8.5, center=True)]
-bw = PW / len(fpd_vals) * 0.5
-for i, v in enumerate(fpd_vals):
-    cx = x_at(i + 0.5, len(fpd_vals))
-    x = cx - bw/2
-    y = y_at(v, fpd_ymax); h = (T+PH) - y
-    col = "#0C0C0C" if i >= len(fpd_vals)-3 else "#AEAEAE"
-    fbars.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{max(h,0):.1f}" rx="3" fill="{col}"/>')
-    fbars.append(f'<text x="{cx:.1f}" y="{y-6:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#6A6A6A">{v:.1f}</text>')
-# mean line
-ym = y_at(fpd_mean, fpd_ymax)
-fbars.append(f'<line x1="{L}" y1="{ym:.1f}" x2="{W-R}" y2="{ym:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>')
-fbars.append(f'<text x="{W-R}" y="{ym-4:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#6A6A6A">avg {fpd_mean:.1f}%</text>')
-fpd_svg = chart("\n".join(fbars))
+
+def fpd_area():
+    ymax = 16; Lx, Rx, Tx, Bx = 46, 16, 22, 34
+    pw, ph = W-Lx-Rx, H-Tx-Bx; n = len(fpd_vals)
+    xs = [Lx + i/(n-1)*pw for i in range(n)]
+    ys = [Tx+ph - v/ymax*ph for v in fpd_vals]
+    ybase = Tx+ph
+    mean = sum(fpd_vals)/n; ymn = Tx+ph - mean/ymax*ph
+    yb5 = Tx+ph - 5/ymax*ph
+    s = [f'<svg class="chart" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg">']
+    s.append('<defs><linearGradient id="fpdG" x1="0" y1="0" x2="0" y2="1">'
+             '<stop offset="0" stop-color="#0C0C0C" stop-opacity="0.22"/>'
+             '<stop offset="1" stop-color="#0C0C0C" stop-opacity="0.015"/></linearGradient></defs>')
+    # healthy band 0–5%
+    s.append(f'<rect x="{Lx}" y="{yb5:.1f}" width="{pw:.1f}" height="{ybase-yb5:.1f}" fill="#0C0C0C" opacity="0.04"/>')
+    s.append(f'<text x="{Lx+7}" y="{ybase-7:.1f}" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">healthy zone &lt; 5%</text>')
+    # gridlines + y labels
+    for t in (0,5,10,15):
+        y = Tx+ph - t/ymax*ph
+        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{W-Rx}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
+        s.append(f'<text x="{Lx-8}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    # area + line
+    d = f"M {xs[0]:.1f},{ybase:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{ybase:.1f} Z"
+    s.append(f'<path d="{d}" fill="url(#fpdG)"/>')
+    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'
+             % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
+    # mean line
+    s.append(f'<line x1="{Lx}" y1="{ymn:.1f}" x2="{W-Rx}" y2="{ymn:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.5"/>')
+    s.append(f'<text x="{W-Rx}" y="{ymn-4:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#6A6A6A">avg {mean:.1f}%</text>')
+    # dots
+    for x,y in zip(xs,ys):
+        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.3" fill="#0C0C0C"/>')
+    # spike annotation
+    s.append(f'<text x="{xs[0]:.1f}" y="{ys[0]-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">{fpd_vals[0]:.1f}%</text>')
+    s.append(f'<text x="{xs[0]+9:.1f}" y="{ys[0]+11:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#8a8a8a">isolated cohort</text>')
+    # current point highlight
+    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="8" fill="none" stroke="#0C0C0C" stroke-opacity="0.22"/>')
+    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="4.3" fill="#0C0C0C"/>')
+    s.append(f'<text x="{xs[-1]:.1f}" y="{ys[-1]-11:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">{fpd_vals[-1]:.1f}%</text>')
+    # x labels
+    for i,lab in enumerate(fpd_labels):
+        s.append(f'<text x="{xs[i]:.1f}" y="{H-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{lab}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+fpd_svg = fpd_area()
 
 # ---------- Portfolio over90 vs smoothed trend (real loan tape) ----------
 jr_months= ["jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
@@ -273,7 +302,7 @@ SLIDES = STYLE + f"""
   <p class="sub">Value that missed the first installment ÷ total of first installments — quality at the entry of the vintage.</p></div>
   <div class="two-col reveal">
     <div class="chartframe">{fpd_svg}
-      <div class="legend"><span><i style="background:#0C0C0C"></i>last 3 months</span><span><i style="background:#B5B5B5"></i>history</span></div>
+      <div class="legend"><span><i style="background:#0C0C0C"></i>FPD 30 (monthly)</span><span style="color:#8a8a8a">shaded = healthy &lt; 5% · dashed = average</span></div>
     </div>
     <ul class="readlist">
       <li>The <b>May-25 spike (~15%)</b> was an isolated cohort; FPD normalized to <b>low single digits</b> since.</li>
