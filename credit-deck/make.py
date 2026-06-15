@@ -149,18 +149,17 @@ ANCHOR_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
               "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Brinox":"#0F8C8C","Others":"#B5B5B5"}
 anchor_legend = "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in ANCHOR_ORDER)
 
-# off-balance (FIDC) — loan tape balance by anchor (R$M), May/24–May/26
-lt_labels = ["may/24","jun/24","jul/24","aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
+# off-balance (FIDC) — loan tape balance by anchor (R$M), FIDC live from Jan/26
+lt_labels = ["jan/26","feb/26","mar/26","apr/26","may/26"]
 lt_data = {
-  "Cantu":[0,0,0,0,0,0,0.06,0.14,0.53,0.67,0.7,0.83,1.16,1.05,0.84,1.0,0.86,0.89,0.98,0.77,0.97,1.08,2.11,2.4,4.4],
-  "Moura":[0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.02,0.16,0.19,0.41,0.47,0.43,0.38,0.54,1.55,2.12,2.5,2.7],
-  "Chilli Beans":[0,0,0,0,0,0,0.23,0.61,1.05,1.79,2.63,3.15,3.35,3.8,3.77,4.31,3.79,3.57,3.22,3.12,3.18,3.62,3.93,3.7,3.41],
-  "Juntos Somos Mais":[0,0,0,0,0,0,0.04,0.05,0.15,0.13,0.35,0.42,0.47,0.46,0.49,0.57,0.87,1.44,1.4,0.96,0.88,1.01,1.31,1.95,2.22],
-  "Malwee":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.63,0.98,1.5,1.56,1.73,1.86,1.83],
-  "Brinox":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.04,0.14,0.25,0.27,0.26,0.34,0.34,0.37,0.39],
-  "Others":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.04,0.11,0.15,0.16],
+  "Cantu":[0.97,1.08,2.11,2.4,4.4],
+  "Moura":[0.54,1.55,2.12,2.5,2.7],
+  "Chilli Beans":[3.18,3.62,3.93,3.7,3.41],
+  "Juntos Somos Mais":[0.88,1.01,1.31,1.95,2.22],
+  "Malwee":[1.5,1.56,1.73,1.86,1.83],
+  "Brinox":[0.26,0.34,0.34,0.37,0.39],
+  "Others":[0,0.04,0.11,0.15,0.16],
 }
-LT_FIDC = lt_labels.index("dec/25")
 
 def _xstep(n): return 1 if n <= 14 else (2 if n <= 22 else 3)
 
@@ -171,9 +170,11 @@ def stack_rm(labels, data, ymax, yticks, fidc_idx):
     WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 44, 12, 26, 42
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.66
     def Y(v): return Tx+ph - v/ymax*ph
-    ybase = Y(0); xd = Lx+slot*fidc_idx
+    ybase = Y(0)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
-    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
+    if fidc_idx is not None:
+        xd = Lx+slot*fidc_idx
+        s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
     for t in yticks:
         s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
@@ -191,8 +192,9 @@ def stack_rm(labels, data, ymax, yticks, fidc_idx):
         if tot > 0.05:
             last = i == n-1
             s.append(f'<text x="{cx:.1f}" y="{ytop-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="8" fill="{"#0C0C0C" if last else "#6A6A6A"}">{tot:.1f}</text>')
-    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+    if fidc_idx is not None:
+        s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
+        s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
     for i in range(0, n, _xstep(n)):
         s.append(f'<text x="{Lx+slot*i+slot/2:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{labels[i]}</text>')
     s.append('</svg>'); return "\n".join(s)
@@ -201,9 +203,11 @@ def stack_pct(labels, data, fidc_idx):
     WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 38, 12, 24, 44
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.72
     def Y(v): return Tx+ph - v/100*ph
-    ybase = Y(0); xd = Lx+slot*fidc_idx
+    ybase = Y(0)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
-    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
+    if fidc_idx is not None:
+        xd = Lx+slot*fidc_idx
+        s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
     for t in (0,25,50,75,100):
         s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
@@ -221,13 +225,14 @@ def stack_pct(labels, data, fidc_idx):
         if tot > 0.05:
             s.append(f'<text x="{cx:.1f}" y="{Y(100)-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="7.4" fill="#6A6A6A">{tot:.0f}</text>')
         s.append(f'<text x="{cx:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{labels[i]}</text>')
-    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+    if fidc_idx is not None:
+        s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
+        s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
     s.append('</svg>'); return "\n".join(s)
 
-# off-balance (FIDC) charts
-lb_off_svg  = stack_rm(lt_labels, lt_data, 16, [0,4,8,12,16], LT_FIDC)
-div_off_svg = stack_pct(lt_labels, lt_data, LT_FIDC)
+# off-balance (FIDC) charts — no shading (whole window is post-FIDC)
+lb_off_svg  = stack_rm(lt_labels, lt_data, 16, [0,4,8,12,16], None)
+div_off_svg = stack_pct(lt_labels, lt_data, None)
 
 
 def metric(k, v, s, wip=False):
@@ -370,7 +375,9 @@ div_con_svg = stack_pct(port_labels, port_data, PORT_FIDC)
 
 STYLE = """<style>
 .chartframe { padding:1vh 0 0; background:transparent; border:none; }
-.chart { width:100%; height:auto; display:block; }
+.chart { width:100%; height:auto; display:block; max-height:60vh; }
+.slide.vcenter { padding-bottom:8vh; }
+.slide-head .sub { white-space:nowrap; max-width:none; }
 .legend { display:flex; gap:1.2vw; flex-wrap:wrap; margin-top:1vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
 .legend span { display:inline-flex; align-items:center; }
 .legend i { display:inline-block; width:16px; height:3px; border-radius:2px; margin-right:6px; }
@@ -431,7 +438,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio</span></div>
   <div class="slide-head reveal"><h1>The credit <span class="accent">portfolio.</span></h1>
-  <p class="sub">Total outstanding balance (R$M) — scaled to R$ 44M; R$ 34M on book today. FIDC raised in Dec-25.</p></div>
+  <p class="sub">Total outstanding balance (R$M) — peaked at R$ 44M, R$ 34M today.</p></div>
   <div class="blegend reveal">{port_total_legend}</div>
   <div class="chartframe reveal">{port_total_svg}</div>
   <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
@@ -441,7 +448,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Origination</span></div>
   <div class="slide-head reveal"><h1>Origination on the <span class="accent">PIX rail.</span></h1>
-  <p class="sub">Monthly TPV by rail (R$M) — R$ 179M since Mar-24, now scaling on PIX.</p></div>
+  <p class="sub">Monthly TPV by rail (R$M) — scaling on the PIX rail.</p></div>
   <div class="blegend reveal">{tpv_legend}</div>
   <div class="chartframe reveal">{tpv_svg}</div>
   <div class="illus">Source: monthly TPV · Mar/24–May/26 (Jun/26 partial, excluded)</div>
@@ -451,7 +458,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="03">
   <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">The edge</span></div>
   <div class="slide-head reveal"><h1>Why we perform better than <span class="accent">banks.</span></h1>
-  <p class="sub">Three structural edges, stacked — each reinforcing the one above.</p></div>
+  <p class="sub">Three structural edges — each reinforcing the one above.</p></div>
   <div class="pyr-wrap reveal">
     <div class="pyr-fig">{pyramid_svg}</div>
     <div class="pyr-right" data-stagger>
@@ -466,7 +473,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="04">
   <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Risk · vintages</span></div>
   <div class="slide-head reveal"><h1>CDR by <span class="accent">vintage.</span></h1>
-  <p class="sub">Cumulative loss (over90) over amount originated, by months on book (MOB).</p></div>
+  <p class="sub">Cumulative over90 loss ÷ originated, by months on book (MOB).</p></div>
   <div class="two-col reveal">
     <div class="chartframe">{cdr_svg}
       <div class="legend">{cdr_legend}</div>
@@ -477,14 +484,14 @@ SLIDES = STYLE + f"""
       <li>Short <b>~3.5-month tenor</b>: over90 peaks around MOB 4–6, then rolls off as the book amortizes.</li>
     </ul>
   </div>
-  <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
+  <div class="illus">Source: PIX/boleto loan tape · Jan/26–May/26 (FIDC)</div>
 </section>
 
 <!-- 5 — FPD -->
 <section class="slide theme-light vcenter" data-num="05">
   <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risk · origination</span></div>
   <div class="slide-head reveal"><h1>FPD 30 <span class="accent">by month.</span></h1>
-  <p class="sub">Value that missed the first installment ÷ total of first installments — quality at the entry of the vintage.</p></div>
+  <p class="sub">First-payment default — value late on the 1st installment ÷ total.</p></div>
   <div class="two-col reveal">
     <div class="chartframe">{fpd_svg}
       <div class="legend"><span><i style="background:#0C0C0C"></i>FPD 30 (monthly)</span><span style="color:#8a8a8a">shaded = healthy &lt; 5% · dashed = average</span></div>
@@ -502,7 +509,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Loan book · consolidated</span></div>
   <div class="slide-head reveal"><h1>Loan book by <span class="accent">anchor.</span></h1>
-  <p class="sub">Outstanding balance by anchor (R$M). FIDC raised in Dec-25 (shaded).</p>
+  <p class="sub">Outstanding balance by anchor (R$M).</p>
   <span class="tag-pill">Corporate consolidated</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
   <div class="chartframe reveal">{lb_con_svg}</div>
@@ -513,18 +520,18 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Loan book · off-balance</span></div>
   <div class="slide-head reveal"><h1>Loan book by <span class="accent">anchor.</span></h1>
-  <p class="sub">Outstanding balance by anchor (R$M) — FIDC carve-out only.</p>
+  <p class="sub">Outstanding balance by anchor (R$M) — FIDC carve-out.</p>
   <span class="tag-pill">Off-balance · FIDC</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
   <div class="chartframe reveal">{lb_off_svg}</div>
-  <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
+  <div class="illus">Source: PIX/boleto loan tape · Jan/26–May/26 (FIDC)</div>
 </section>
 
 <!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
 <section class="slide theme-light vcenter" data-num="08">
   <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · consolidated</span></div>
   <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
-  <p class="sub">Anchor as % of the credit portfolio (total on top, R$M).</p>
+  <p class="sub">Anchor as % of the credit portfolio — total R$M on top.</p>
   <span class="tag-pill">Corporate consolidated</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
   <div class="chartframe reveal">{div_con_svg}</div>
@@ -535,18 +542,18 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="09">
   <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · off-balance</span></div>
   <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
-  <p class="sub">Anchor as % of the credit portfolio (total on top, R$M) — FIDC carve-out.</p>
+  <p class="sub">Anchor as % of the credit portfolio — FIDC carve-out.</p>
   <span class="tag-pill">Off-balance · FIDC</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
   <div class="chartframe reveal">{div_off_svg}</div>
-  <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
+  <div class="illus">Source: PIX/boleto loan tape · Jan/26–May/26 (FIDC)</div>
 </section>
 
 <!-- 8 — TENOR & DURATION -->
 <section class="slide theme-light vcenter" data-num="08">
   <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · tenor</span></div>
   <div class="slide-head reveal"><h1>Average tenor and <span class="accent">duration.</span></h1>
-  <p class="sub">A short, fast-rotating book — quick recomposition and risk adjustment.</p></div>
+  <p class="sub">A short, fast-rotating book — quick recomposition.</p></div>
   <div class="metrics reveal" data-stagger>
     {metric("Avg. tenor","3.5 <span style='font-size:.5em'>months</span>","mean installments")}
     {metric("Duration","~2.1 <span style='font-size:.5em'>months</span>","balance-weighted")}
@@ -555,14 +562,14 @@ SLIDES = STYLE + f"""
     {metric("Current book","R$ 15.1M","outstanding balance")}
     {metric("Turnover","~3.4×","per year")}
   </div>
-  <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
+  <div class="illus">Source: PIX/boleto loan tape · Jan/26–May/26 (FIDC)</div>
 </section>
 
 <!-- 9 — Jr TRANCHE -->
 <section class="slide theme-light vcenter" data-num="09">
   <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · Jr tranche</span></div>
   <div class="slide-head reveal"><h1>The Jr shields the <span class="accent">seniors.</span></h1>
-  <p class="sub">Portfolio over90 is stabilizing; subordination + excess spread absorb the loss before it reaches seniors.</p></div>
+  <p class="sub">Over90 stabilizing; subordination + excess spread absorb losses before seniors.</p></div>
   <div class="two-col reveal">
     <div class="chartframe">{jr_svg}
       <div class="legend"><span><i style="background:#0C0C0C"></i>trend (smoothed)</span><span><i style="background:#C0C0C0"></i>portfolio over90 (observed)</span></div>
@@ -580,7 +587,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="10">
   <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Company</span></div>
   <div class="slide-head reveal"><h1>Corporate backing of the <span class="accent">leverage.</span></h1>
-  <p class="sub">Since this is a leverage of the subordinated tranche, the company's health underpins the structure.</p>
+  <p class="sub">Leverage of the subordinated tranche — the company underpins it.</p>
   <div class="wip wip-lg" style="margin-top:1.4vh">WIP · placeholder figures — to confirm</div></div>
   <div class="metrics reveal" data-stagger>
     {metric("Cash","R$ 32M","current position")}
