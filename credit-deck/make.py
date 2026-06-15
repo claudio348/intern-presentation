@@ -143,52 +143,87 @@ pyramid_svg = ('<svg class="pyr-svg" viewBox="0 0 300 360" preserveAspectRatio="
   '</svg>')
 
 
-# ---------- partner share over time (stacked, brand colors) ----------
-BRAND_COL = {
-    "Chilli Beans":"#E11D48", "Cantu":"#5B2E91", "Juntos Somos Mais":"#8FA31E",
-    "Moura":"#2563B0", "Malwee":"#1F7A3D", "Brinox":"#0F8C8C", "Others":"#0C2340",
-}
-div_months = ["nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25",
-              "aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
-# stack order bottom -> top
-div_order = ["Chilli Beans","Cantu","Juntos Somos Mais","Moura","Malwee","Brinox","Others"]
-div_data = {
-    "Chilli Beans":[68,76,61,69,71,72,67,71,72,71,64,55,47,48,43,39,34,29,23],
-    "Cantu":[19,17,31,26,19,19,23,20,16,17,14,14,14,12,13,12,18,19,29],
-    "Juntos Somos Mais":[13,6,8,5,9,10,9,9,9,9,15,22,20,15,12,11,11,15,15],
-    "Moura":[0,0,0,0,0,0,0,0,3,3,7,7,6,6,7,17,18,19,18],
-    "Malwee":[0,0,0,0,0,0,0,0,0,0,0,0,9,15,20,17,15,14,12],
-    "Brinox":[0,0,0,0,0,0,0,0,0,0,1,2,4,4,4,4,3,3,3],
-    "Others":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
-}
+# ---------- anchor composition: generic stacked R$M and stacked % ----------
+ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Others"]
+ANCHOR_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
+              "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Others":"#B5B5B5"}
+anchor_legend = "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in ANCHOR_ORDER)
 
-def stacked_chart():
-    WD, HD = 1040, 432
-    Lx, Rx, Tx, Bx = 38, 8, 10, 46
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx
-    n = len(div_months); slot = pw/n; bw = slot*0.74
+# off-balance (FIDC) — loan tape balance by anchor (R$M), Nov/24–May/26
+lt_labels = ["nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
+lt_data = {
+  "Cantu":[0.06,0.14,0.53,0.67,0.7,0.83,1.16,1.05,0.84,1.0,0.86,0.89,0.98,0.77,0.97,1.08,2.11,2.4,4.4],
+  "Moura":[0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.02,0.16,0.19,0.41,0.47,0.43,0.38,0.54,1.55,2.12,2.5,2.7],
+  "Chilli Beans":[0.23,0.61,1.05,1.79,2.63,3.15,3.35,3.8,3.77,4.31,3.79,3.57,3.22,3.12,3.18,3.62,3.93,3.7,3.41],
+  "Juntos Somos Mais":[0.04,0.05,0.15,0.13,0.35,0.42,0.47,0.46,0.49,0.57,0.87,1.44,1.4,0.96,0.88,1.01,1.31,1.95,2.22],
+  "Malwee":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.63,0.98,1.5,1.56,1.73,1.86,1.83],
+  "Others":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.04,0.14,0.25,0.27,0.26,0.37,0.46,0.52,0.55],
+}
+LT_FIDC = lt_labels.index("dec/25")
+
+def _xstep(n): return 1 if n <= 14 else (2 if n <= 22 else 3)
+
+def _fidc(s, xd, Tx, ybase, WD, Rx, shade_only=False):
+    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
+
+def stack_rm(labels, data, ymax, yticks, fidc_idx):
+    WD, HD = 1040, 426; Lx, Rx, Tx, Bx = 46, 16, 30, 44
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.62
+    def Y(v): return Tx+ph - v/ymax*ph
+    ybase = Y(0); xd = Lx+slot*fidc_idx
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
-    for t in (0,25,50,75,100):
-        y = Tx+ph-(t/100*ph)
-        s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">{t}</text>')
+    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
+    for t in yticks:
+        s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
-        tot = sum(div_data[b][i] for b in div_order) or 1
-        cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = Tx+ph
-        for b in div_order:
-            v = div_data[b][i]
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = ybase
+        for g in ANCHOR_ORDER:
+            v = data[g][i]
             if v <= 0: continue
-            hh = v/tot*ph; y = ytop-hh
-            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{BRAND_COL[b]}"/>')
-            if v/tot*100 >= 6.5:
-                s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="9.5" fill="#fff">{v}%</text>')
+            hh = v/ymax*ph; y = ytop-hh
+            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{ANCHOR_COL[g]}"/>')
             ytop = y
-        s.append(f'<text x="{cx:.1f}" y="{HD-16}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{div_months[i]}</text>')
-    s.append('</svg>')
-    return "\n".join(s)
+        tot = sum(data[g][i] for g in ANCHOR_ORDER)
+        if tot > 0.05:
+            last = i == n-1
+            s.append(f'<text x="{cx:.1f}" y="{ytop-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="7.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{tot:.1f}</text>')
+    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+    for i in range(0, n, _xstep(n)):
+        s.append(f'<text x="{Lx+slot*i+slot/2:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{labels[i]}</text>')
+    s.append('</svg>'); return "\n".join(s)
 
-div_svg = stacked_chart()
-div_legend = "".join(f'<span><i style="background:{BRAND_COL[b]}"></i>{b}</span>'
-                     for b in ["Chilli Beans","Cantu","Juntos Somos Mais","Moura","Malwee","Brinox","Others"])
+def stack_pct(labels, data, fidc_idx):
+    WD, HD = 1040, 420; Lx, Rx, Tx, Bx = 40, 12, 22, 46
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.7
+    def Y(v): return Tx+ph - v/100*ph
+    ybase = Y(0); xd = Lx+slot*fidc_idx
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
+    for t in (0,25,50,75,100):
+        s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    for i in range(n):
+        tot = sum(data[g][i] for g in ANCHOR_ORDER) or 1
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = ybase
+        for g in ANCHOR_ORDER:
+            v = data[g][i]
+            if v <= 0: continue
+            pct = v/tot*100; hh = pct/100*ph; y = ytop-hh
+            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{ANCHOR_COL[g]}"/>')
+            if pct >= 7:
+                tc = "#2E2E2E" if g == "Others" else "#fff"
+                s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="{tc}">{round(pct)}%</text>')
+            ytop = y
+        if tot > 0.05:
+            s.append(f'<text x="{cx:.1f}" y="{Y(100)-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="7.4" fill="#6A6A6A">{tot:.0f}</text>')
+        s.append(f'<text x="{cx:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{labels[i]}</text>')
+    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+    s.append('</svg>'); return "\n".join(s)
+
+# off-balance (FIDC) charts
+lb_off_svg  = stack_rm(lt_labels, lt_data, 16, [0,4,8,12,16], LT_FIDC)
+div_off_svg = stack_pct(lt_labels, lt_data, LT_FIDC)
 
 
 def metric(k, v, s, wip=False):
@@ -323,36 +358,10 @@ port_total_legend = ('<span><i style="background:#B9B9B9"></i>pre-FIDC</span>'
                      '<span><i style="background:#0C0C0C"></i>FIDC-funded (Dec-25 →)</span>'
                      '<span style="color:#8a8a8a">total on book · R$M</span>')
 
-def portfolio_stack_bars():
-    WD, HD = 1040, 426; Lx, Rx, Tx, Bx = 46, 16, 30, 44
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 48; n = len(_pm); slot = pw/n; bw = slot*0.62
-    def Y(v): return Tx+ph - v/ymax*ph
-    ybase = Y(0); di = _pm.index(FIDC_FROM); xd = Lx + slot*di
-    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
-    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
-    for t in (0,10,20,30,40):
-        y = Y(t)
-        s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
-    for i in range(n):
-        cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = ybase
-        for layer in port_order:
-            v = port_data[layer][i]
-            if v <= 0: continue
-            hh = v/ymax*ph; y = ytop-hh
-            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{PORT_COL[layer]}"/>')
-            ytop = y
-        total = sum(port_data[layer][i] for layer in port_order)
-        if total > 0.05:
-            last = i == n-1
-            s.append(f'<text x="{cx:.1f}" y="{ytop-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="7.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{total:.1f}</text>')
-    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
-    for i in range(0, n, 3):
-        s.append(f'<text x="{Lx+slot*i+slot/2:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{port_labels[i]}</text>')
-    s.append('</svg>')
-    return "\n".join(s)
-
-port_stack_bars_svg = portfolio_stack_bars()
+# consolidated (corporate) charts
+PORT_FIDC = _pm.index("2025-12")
+lb_con_svg  = stack_rm(port_labels, port_data, 48, [0,10,20,30,40], PORT_FIDC)
+div_con_svg = stack_pct(port_labels, port_data, PORT_FIDC)
 
 
 STYLE = """<style>
@@ -495,25 +504,47 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: PIX/boleto loan tape · MOB-1 snapshot</div>
 </section>
 
-<!-- PORTFOLIO BY ANCHOR (stacked bars R$M) -->
+<!-- LOAN BOOK — CONSOLIDATED -->
 <section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · by anchor</span></div>
-  <div class="slide-head reveal"><h1>Portfolio by <span class="accent">anchor.</span></h1>
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Loan book · consolidated</span></div>
+  <div class="slide-head reveal"><h1>Loan book by <span class="accent">anchor.</span></h1>
   <p class="sub">Outstanding balance by anchor (R$M). FIDC raised in Dec-25 (shaded).</p>
-  <span class="tag-pill">Consolidated · on + off balance</span></div>
-  <div class="blegend reveal">{port_legend}</div>
-  <div class="chartframe reveal">{port_stack_bars_svg}</div>
+  <span class="tag-pill">Corporate consolidated</span></div>
+  <div class="blegend reveal">{anchor_legend}</div>
+  <div class="chartframe reveal">{lb_con_svg}</div>
   <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
 </section>
 
-<!-- INCREASING DIVERSIFICATION -->
+<!-- LOAN BOOK — OFF-BALANCE FIDC -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · mix</span></div>
-  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
-  <p class="sub">Partner as % of credit portfolio (by outstanding balance).</p>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Loan book · off-balance</span></div>
+  <div class="slide-head reveal"><h1>Loan book by <span class="accent">anchor.</span></h1>
+  <p class="sub">Outstanding balance by anchor (R$M) — FIDC carve-out only.</p>
   <span class="tag-pill">Off-balance · FIDC</span></div>
-  <div class="blegend reveal">{div_legend}</div>
-  <div class="chartframe reveal">{div_svg}</div>
+  <div class="blegend reveal">{anchor_legend}</div>
+  <div class="chartframe reveal">{lb_off_svg}</div>
+  <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
+</section>
+
+<!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
+<section class="slide theme-light vcenter" data-num="08">
+  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · consolidated</span></div>
+  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
+  <p class="sub">Anchor as % of the credit portfolio (total on top, R$M).</p>
+  <span class="tag-pill">Corporate consolidated</span></div>
+  <div class="blegend reveal">{anchor_legend}</div>
+  <div class="chartframe reveal">{div_con_svg}</div>
+  <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
+</section>
+
+<!-- INCREASING DIVERSIFICATION — OFF-BALANCE FIDC -->
+<section class="slide theme-light vcenter" data-num="09">
+  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · off-balance</span></div>
+  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
+  <p class="sub">Anchor as % of the credit portfolio (total on top, R$M) — FIDC carve-out.</p>
+  <span class="tag-pill">Off-balance · FIDC</span></div>
+  <div class="blegend reveal">{anchor_legend}</div>
+  <div class="chartframe reveal">{div_off_svg}</div>
   <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
 </section>
 
