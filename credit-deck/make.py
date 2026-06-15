@@ -194,8 +194,9 @@ div_legend = "".join(f'<span><i style="background:{BRAND_COL[b]}"></i>{b}</span>
                      for b in ["Chilli Beans","Cantu","Juntos Somos Mais","Moura","Malwee","Brinox","Others"])
 
 
-def metric(k, v, s):
-    return f'<div class="metric"><div class="k">{k}</div><div class="v">{v}</div><div class="s">{s}</div></div>'
+def metric(k, v, s, wip=False):
+    w = '<div class="wip" style="margin-top:1vh">WIP · to confirm</div>' if wip else ''
+    return f'<div class="metric"><div class="k">{k}</div><div class="v">{v}</div><div class="s">{s}</div>{w}</div>'
 
 
 STYLE = """<style>
@@ -217,6 +218,10 @@ STYLE = """<style>
 .callout { border:1px solid rgba(12,12,12,.18); border-left:3px solid var(--ink); border-radius:10px; padding:1.6vh 1.4vw; margin-top:2vh; font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#2E2E2E; line-height:1.55; }
 .callout b { color:var(--ink); font-weight:600; }
 .illus { position:absolute; bottom:4.4vh; left:4vw; z-index:6; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
+.wip { display:inline-flex; align-items:center; gap:5px; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a5a00; border:1px dashed #C9A227; background:rgba(201,162,39,.12); border-radius:6px; padding:2px 8px; width:fit-content; }
+.wip::before { content:''; width:5px; height:5px; border-radius:50%; background:#C9A227; }
+.wip-lg { font-size:11px; border-radius:100px; padding:5px 13px; gap:7px; }
+.wip-lg::before { width:6px; height:6px; }
 .ind-row { display:grid; grid-template-columns:170px 1fr 48px; align-items:center; gap:1vw; margin-bottom:1.4vh; }
 .ind-l { font-family:var(--font-sans); font-size:clamp(13px,1vw,16px); color:var(--ink); font-weight:500; }
 .ind-track { height:12px; background:rgba(12,12,12,.06); border-radius:100px; overflow:hidden; }
@@ -365,8 +370,8 @@ SLIDES = STYLE + f"""
       <div class="legend"><span><i style="background:#0C0C0C"></i>trend (smoothed)</span><span><i style="background:#C0C0C0"></i>portfolio over90 (observed)</span></div>
     </div>
     <div style="display:flex; flex-direction:column; gap:1.2vh;">
-      {metric("Subordination","22%","structure · cushion for seniors")}
-      {metric("Excess spread","~14% <span style='font-size:.45em'>/yr</span>","structure · above senior cost")}
+      {metric("Subordination","22%","structure · cushion for seniors", wip=True)}
+      {metric("Excess spread","~14% <span style='font-size:.45em'>/yr</span>","structure · above senior cost", wip=True)}
     </div>
   </div>
   <div class="callout reveal">The over90 ramp reflects <b>book seasoning</b> and the <b>2025-Q1 cohort</b> now rolling off — over90 is <b>down from ~25% to ~18%</b> as recent vintages dominate. The Jr's subordination + excess spread absorb these losses, keeping the <b>senior shares protected</b> (ex-contributions).</div>
@@ -377,7 +382,8 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="10">
   <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Company</span></div>
   <div class="slide-head reveal"><h1>Corporate backing of the <span class="accent">leverage.</span></h1>
-  <p class="sub">Since this is a leverage of the subordinated tranche, the company's health underpins the structure.</p></div>
+  <p class="sub">Since this is a leverage of the subordinated tranche, the company's health underpins the structure.</p>
+  <div class="wip wip-lg" style="margin-top:1.4vh">WIP · placeholder figures — to confirm</div></div>
   <div class="metrics reveal" data-stagger>
     {metric("Cash","R$ 32M","current position")}
     {metric("Monthly burn","R$ 2.1M","net")}
