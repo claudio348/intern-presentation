@@ -116,6 +116,55 @@ pyramid_svg = ('<svg class="pyr-svg" viewBox="0 0 300 360" preserveAspectRatio="
   '</svg>')
 
 
+# ---------- partner share over time (stacked, brand colors) ----------
+BRAND_COL = {
+    "Chilli Beans":"#E11D48", "Cantu":"#5B2E91", "Juntos Somos Mais":"#8FA31E",
+    "Moura":"#2563B0", "Malwee":"#1F7A3D", "Brinox":"#0F8C8C", "Others":"#0C2340",
+}
+div_months = ["nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25",
+              "aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
+# stack order bottom -> top
+div_order = ["Chilli Beans","Cantu","Juntos Somos Mais","Moura","Malwee","Brinox","Others"]
+div_data = {
+    "Chilli Beans":[68,76,61,69,71,72,67,71,72,71,64,55,47,48,43,39,34,29,23],
+    "Cantu":[19,17,31,26,19,19,23,20,16,17,14,14,14,12,13,12,18,19,29],
+    "Juntos Somos Mais":[13,6,8,5,9,10,9,9,9,9,15,22,20,15,12,11,11,15,15],
+    "Moura":[0,0,0,0,0,0,0,0,3,3,7,7,6,6,7,17,18,19,18],
+    "Malwee":[0,0,0,0,0,0,0,0,0,0,0,0,9,15,20,17,15,14,12],
+    "Brinox":[0,0,0,0,0,0,0,0,0,0,1,2,4,4,4,4,3,3,3],
+    "Others":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+}
+
+def stacked_chart():
+    WD, HD = 1040, 432
+    Lx, Rx, Tx, Bx = 38, 8, 10, 46
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx
+    n = len(div_months); slot = pw/n; bw = slot*0.74
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    for t in (0,25,50,75,100):
+        y = Tx+ph-(t/100*ph)
+        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
+        s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">{t}</text>')
+    for i in range(n):
+        tot = sum(div_data[b][i] for b in div_order) or 1
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = Tx+ph
+        for b in div_order:
+            v = div_data[b][i]
+            if v <= 0: continue
+            hh = v/tot*ph; y = ytop-hh
+            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{BRAND_COL[b]}"/>')
+            if v/tot*100 >= 6.5:
+                s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="9.5" fill="#fff">{v}%</text>')
+            ytop = y
+        s.append(f'<text x="{cx:.1f}" y="{HD-16}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{div_months[i]}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+
+div_svg = stacked_chart()
+div_legend = "".join(f'<span><i style="background:{BRAND_COL[b]}"></i>{b}</span>'
+                     for b in ["Chilli Beans","Cantu","Juntos Somos Mais","Moura","Malwee","Brinox","Others"])
+
+
 def metric(k, v, s):
     return f'<div class="metric"><div class="k">{k}</div><div class="v">{v}</div><div class="s">{s}</div></div>'
 
@@ -144,6 +193,9 @@ STYLE = """<style>
 .ind-track { height:12px; background:rgba(12,12,12,.06); border-radius:100px; overflow:hidden; }
 .ind-fill { display:block; height:100%; background:var(--ink); border-radius:100px; }
 .ind-v { font-family:var(--font-mono); font-size:12px; color:#2E2E2E; text-align:right; }
+.blegend { display:flex; flex-wrap:wrap; gap:1.1vw; margin:1.2vh 0 .6vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
+.blegend span { display:inline-flex; align-items:center; }
+.blegend i { width:12px; height:12px; border-radius:3px; margin-right:6px; display:inline-block; }
 /* elegant pyramid — 3 equal bands aligned with the tier rows */
 .pyr-wrap { display:grid; grid-template-columns:auto 1fr; gap:2.6vw; height:clamp(360px,56vh,520px); align-items:stretch; margin-top:2.5vh; }
 .pyr-fig { display:flex; align-items:center; justify-content:center; }
@@ -248,9 +300,19 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: PIX/boleto loan tape · current balance (May/26)</div>
 </section>
 
-<!-- 7 — TENOR & DURATION -->
+<!-- 7 — INCREASING DIVERSIFICATION -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · tenor</span></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · mix</span></div>
+  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
+  <p class="sub">Partner as % of credit portfolio (by outstanding balance).</p></div>
+  <div class="blegend reveal">{div_legend}</div>
+  <div class="chartframe reveal">{div_svg}</div>
+  <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
+</section>
+
+<!-- 8 — TENOR & DURATION -->
+<section class="slide theme-light vcenter" data-num="08">
+  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · tenor</span></div>
   <div class="slide-head reveal"><h1>Average tenor and <span class="accent">duration.</span></h1>
   <p class="sub">A short, fast-rotating book — quick recomposition and risk adjustment.</p></div>
   <div class="metrics reveal" data-stagger>
@@ -264,9 +326,9 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
 </section>
 
-<!-- 8 — Jr TRANCHE -->
-<section class="slide theme-light vcenter" data-num="08">
-  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · Jr tranche</span></div>
+<!-- 9 — Jr TRANCHE -->
+<section class="slide theme-light vcenter" data-num="09">
+  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · Jr tranche</span></div>
   <div class="slide-head reveal"><h1>The Jr shields the <span class="accent">seniors.</span></h1>
   <p class="sub">Portfolio over90 is stabilizing; subordination + excess spread absorb the loss before it reaches seniors.</p></div>
   <div class="two-col reveal">
@@ -282,9 +344,9 @@ SLIDES = STYLE + f"""
   <div class="illus">Over90: PIX/boleto loan tape · subordination / excess spread = structure (to confirm)</div>
 </section>
 
-<!-- 9 — CORPORATE / RUNWAY -->
-<section class="slide theme-light vcenter" data-num="09">
-  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Company</span></div>
+<!-- 10 — CORPORATE / RUNWAY -->
+<section class="slide theme-light vcenter" data-num="10">
+  <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Company</span></div>
   <div class="slide-head reveal"><h1>Corporate backing of the <span class="accent">leverage.</span></h1>
   <p class="sub">Since this is a leverage of the subordinated tranche, the company's health underpins the structure.</p></div>
   <div class="metrics reveal" data-stagger>
@@ -299,8 +361,8 @@ SLIDES = STYLE + f"""
   <div class="illus">Illustrative data — replace with the company's real figures</div>
 </section>
 
-<!-- 10 — Q&A -->
-<section class="slide theme-dark closing2" data-num="10">
+<!-- 11 — Q&A -->
+<section class="slide theme-dark closing2" data-num="11">
   <div class="closing2-bg"><div class="closing2-grid"></div><div class="closing2-glow"></div></div>
   <div class="closing2-inner">
     <div class="closing2-eyebrow reveal"><span>—</span><span>Discussion</span></div>

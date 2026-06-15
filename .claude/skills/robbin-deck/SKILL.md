@@ -192,6 +192,31 @@ arrow-key navigation, progress bar, and staggered `reveal` entrance animations.
 </div>
 ```
 
+## Brand palette & logos
+
+The deck is monochrome, **but charts/segments that encode anchor brands MUST use the
+brand colours**, and brand slides use the brand **logos** (the card mockups in
+`examples/`). Always reuse these — don't invent new colours per deck.
+
+| Brand | Colour | Logo asset (card) |
+|---|---|---|
+| Cantu | `#5B2E91` | `Cantu.png` |
+| Chilli Beans | `#E11D48` | `Chilli.png` |
+| Juntos Somos Mais | `#8FA31E` | `JSM.png` |
+| Moura | `#2563B0` | — |
+| Malwee | `#1F7A3D` | `Malwee.png` |
+| Brinox | `#0F8C8C` | `Brinox.png` |
+| CredMoura | `#2B6FC0` | `Credmoura.png` |
+| Robbin (card) | `#0C0C0C` | `Robbin.png` |
+| Others / residual | `#0C2340` | — |
+
+**Stacked share-over-time** (e.g. "Increasing diversification"): build an SVG of
+stacked `<rect>` columns (one column per month, segments bottom→top in a fixed
+brand order, heights = brand ÷ total × 100), label segments ≥ ~6.5% in white, and
+pair it with a `.blegend` (brand colour chip + name). x-labels include the year
+(`nov/24 … may/26`). See `examples/`-style charts generated in Python for the
+exact geometry.
+
 ## Files in this skill
 
 - `assets/framework_css.css` — Robbin pitch-deck design system (do not edit lightly).
