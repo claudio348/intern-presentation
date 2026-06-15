@@ -108,3 +108,13 @@
 .vagas-cta { margin-top:4vh; display:flex; align-items:center; gap:1vw; font-family:var(--font-mono); font-size:clamp(13px,1vw,16px); color:var(--ink); }
 .vagas-cta .pill { background:var(--ink); color:var(--paper); padding:9px 16px; border-radius:100px; }
 .vagas-cta .dim { color:var(--muted); }
+
+/* Pyramid concept (3D pyramid on the left + tiered connectors on the right) */
+.pyr-wrap { display:grid; grid-template-columns:clamp(170px,19vw,250px) 1fr; gap:3vw; align-items:center; margin-top:2vh; }
+.pyr-svg { width:100%; height:auto; display:block; filter:drop-shadow(0 14px 28px rgba(0,0,0,.18)); }
+.pyr-right { display:flex; flex-direction:column; gap:3.2vh; }
+.pyr-tier { position:relative; border-top:2px solid var(--ink); padding-top:1.2vh; }
+.pyr-tier::before { content:''; position:absolute; left:-7px; top:-7px; width:12px; height:12px; background:var(--ink); border-radius:2px; }
+.pyr-tier h3 { font-family:var(--font-sans); font-weight:700; letter-spacing:-.02em; font-size:clamp(18px,1.9vw,30px); }
+.pyr-tier p { font-family:var(--font-sans); font-size:clamp(13px,1.05vw,17px); color:#2E2E2E; line-height:1.5; margin-top:.6vh; }
+.pyr-tier p b { color:var(--ink); font-weight:600; }

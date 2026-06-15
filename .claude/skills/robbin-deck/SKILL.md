@@ -169,6 +169,22 @@ arrow-key navigation, progress bar, and staggered `reveal` entrance animations.
 <div class="vagas-cta reveal"><span class="pill">email@robbin.com.br</span><span class="dim">— chamada</span></div>
 ```
 
+**Pyramid concept** (3D pyramid on the left + tiered connectors on the right; good for layered "why we win" / foundation stories). The pyramid is an inline SVG (3 tiers, each split into a lighter left face `#3a3a3a` and darker right `#181818`):
+```html
+<div class="pyr-wrap reveal">
+  <div><svg class="pyr-svg" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="150,10 104.89,126 150,126" fill="#3a3a3a"/><polygon points="150,10 150,126 195.11,126" fill="#181818"/>
+    <polygon points="150,134 101.78,134 58.22,246 150,246" fill="#3a3a3a"/><polygon points="150,134 150,246 241.78,246 198.22,134" fill="#181818"/>
+    <polygon points="150,254 55.11,254 10,370 150,370" fill="#3a3a3a"/><polygon points="150,254 150,370 290,370 244.89,254" fill="#181818"/>
+  </svg></div>
+  <div class="pyr-right" data-stagger>
+    <div class="pyr-tier"><h3>Tier title</h3><p>Description with <b>highlights</b>.</p></div>
+    <div class="pyr-tier"><h3>Tier title</h3><p>Description.</p></div>
+    <div class="pyr-tier"><h3>Tier title</h3><p>Description.</p></div>
+  </div>
+</div>
+```
+
 ## Files in this skill
 
 - `assets/framework_css.css` — Robbin pitch-deck design system (do not edit lightly).
