@@ -4,8 +4,8 @@ Loan-tape figures are real; structural / corporate figures are flagged WIP.
 Charts are hand-built SVG to match the deck design system."""
 import os, re
 
-W, H = 680, 300
-L, R, T, B = 54, 18, 16, 36
+W, H = 680, 344
+L, R, T, B = 46, 14, 16, 40
 PW, PH = W - L - R, H - T - B
 
 
@@ -144,20 +144,21 @@ pyramid_svg = iso_stack()
 
 
 # ---------- anchor composition: generic stacked R$M and stacked % ----------
-ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Others"]
+ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox","Others"]
 ANCHOR_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
-              "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Others":"#B5B5B5"}
+              "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Brinox":"#0F8C8C","Others":"#B5B5B5"}
 anchor_legend = "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in ANCHOR_ORDER)
 
-# off-balance (FIDC) — loan tape balance by anchor (R$M), Nov/24–May/26
-lt_labels = ["nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
+# off-balance (FIDC) — loan tape balance by anchor (R$M), May/24–May/26
+lt_labels = ["may/24","jun/24","jul/24","aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
 lt_data = {
-  "Cantu":[0.06,0.14,0.53,0.67,0.7,0.83,1.16,1.05,0.84,1.0,0.86,0.89,0.98,0.77,0.97,1.08,2.11,2.4,4.4],
-  "Moura":[0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.02,0.16,0.19,0.41,0.47,0.43,0.38,0.54,1.55,2.12,2.5,2.7],
-  "Chilli Beans":[0.23,0.61,1.05,1.79,2.63,3.15,3.35,3.8,3.77,4.31,3.79,3.57,3.22,3.12,3.18,3.62,3.93,3.7,3.41],
-  "Juntos Somos Mais":[0.04,0.05,0.15,0.13,0.35,0.42,0.47,0.46,0.49,0.57,0.87,1.44,1.4,0.96,0.88,1.01,1.31,1.95,2.22],
-  "Malwee":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.63,0.98,1.5,1.56,1.73,1.86,1.83],
-  "Others":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.04,0.14,0.25,0.27,0.26,0.37,0.46,0.52,0.55],
+  "Cantu":[0,0,0,0,0,0,0.06,0.14,0.53,0.67,0.7,0.83,1.16,1.05,0.84,1.0,0.86,0.89,0.98,0.77,0.97,1.08,2.11,2.4,4.4],
+  "Moura":[0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.02,0.16,0.19,0.41,0.47,0.43,0.38,0.54,1.55,2.12,2.5,2.7],
+  "Chilli Beans":[0,0,0,0,0,0,0.23,0.61,1.05,1.79,2.63,3.15,3.35,3.8,3.77,4.31,3.79,3.57,3.22,3.12,3.18,3.62,3.93,3.7,3.41],
+  "Juntos Somos Mais":[0,0,0,0,0,0,0.04,0.05,0.15,0.13,0.35,0.42,0.47,0.46,0.49,0.57,0.87,1.44,1.4,0.96,0.88,1.01,1.31,1.95,2.22],
+  "Malwee":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.63,0.98,1.5,1.56,1.73,1.86,1.83],
+  "Brinox":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.04,0.14,0.25,0.27,0.26,0.34,0.34,0.37,0.39],
+  "Others":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.04,0.11,0.15,0.16],
 }
 LT_FIDC = lt_labels.index("dec/25")
 
@@ -167,8 +168,8 @@ def _fidc(s, xd, Tx, ybase, WD, Rx, shade_only=False):
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
 
 def stack_rm(labels, data, ymax, yticks, fidc_idx):
-    WD, HD = 1040, 426; Lx, Rx, Tx, Bx = 46, 16, 30, 44
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.62
+    WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 44, 12, 26, 42
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.66
     def Y(v): return Tx+ph - v/ymax*ph
     ybase = Y(0); xd = Lx+slot*fidc_idx
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
@@ -177,16 +178,19 @@ def stack_rm(labels, data, ymax, yticks, fidc_idx):
         s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
         cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = ybase
+        tot = sum(data[g][i] for g in ANCHOR_ORDER)
         for g in ANCHOR_ORDER:
             v = data[g][i]
             if v <= 0: continue
             hh = v/ymax*ph; y = ytop-hh
             s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{ANCHOR_COL[g]}"/>')
+            if tot and hh >= 14 and v/tot*100 >= 9:
+                tc = "#2E2E2E" if g == "Others" else "#fff"
+                s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8" fill="{tc}">{round(v/tot*100)}%</text>')
             ytop = y
-        tot = sum(data[g][i] for g in ANCHOR_ORDER)
         if tot > 0.05:
             last = i == n-1
-            s.append(f'<text x="{cx:.1f}" y="{ytop-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="7.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{tot:.1f}</text>')
+            s.append(f'<text x="{cx:.1f}" y="{ytop-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="8" fill="{"#0C0C0C" if last else "#6A6A6A"}">{tot:.1f}</text>')
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
     s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
     for i in range(0, n, _xstep(n)):
@@ -194,8 +198,8 @@ def stack_rm(labels, data, ymax, yticks, fidc_idx):
     s.append('</svg>'); return "\n".join(s)
 
 def stack_pct(labels, data, fidc_idx):
-    WD, HD = 1040, 420; Lx, Rx, Tx, Bx = 40, 12, 22, 46
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.7
+    WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 38, 12, 24, 44
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.72
     def Y(v): return Tx+ph - v/100*ph
     ybase = Y(0); xd = Lx+slot*fidc_idx
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
@@ -232,16 +236,16 @@ def metric(k, v, s, wip=False):
 
 
 # ---------- monthly TPV / origination by rail (real) ----------
-tpv_months = ["aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
-_cartao = [1.43,4.93,4.54,3.66,3.14,2.80,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34]
-_boleto = [0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.27,1.97,1.67,2.21,3.32,4.25,3.27,2.89,2.19,1.86,3.11,2.00,1.86]
-_pix    = [0,0,0,0,0,0,0,0,0,0.01,0.02,0.05,0.60,0.27,0.34,0.47,0.25,0.38,1.31,2.39,1.46,3.83]
+tpv_months = ["may/24","jun/24","jul/24","aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
 tpv_order = ["Cartão","PIX Rails"]   # PIX Rails = Boleto + Pix
 TPV_COL = {"Cartão":"#CBCBCB","PIX Rails":"#0C0C0C"}
-tpv_data = {"Cartão":_cartao, "PIX Rails":[b+p for b,p in zip(_boleto,_pix)]}
+tpv_data = {
+  "Cartão":[0.26,0.49,0.91,1.43,4.93,4.54,3.66,3.14,2.8,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34],
+  "PIX Rails":[0.0,0.0,0.0,0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.28,1.99,1.72,2.81,3.59,4.59,3.74,3.15,2.57,3.16,5.49,3.45,5.69],
+}
 
 def tpv_chart():
-    WD, HD = 1040, 432; Lx, Rx, Tx, Bx = 40, 12, 24, 46
+    WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 40, 12, 24, 46
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 17; n = len(tpv_months); slot = pw/n; bw = slot*0.6
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     for t in (0,4,8,12,16):
@@ -270,19 +274,19 @@ tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' 
 
 
 # ---------- credit portfolio (outstanding balance) by source over time (real) ----------
-_pm = ['2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06']
+_pm = ['2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06']
 _MON = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 port_labels = [f"{_MON[int(m.split('-')[1])-1]}/{m.split('-')[0][2:]}" for m in _pm]
-port_order = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Others"]
-PORT_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
-            "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Others":"#B5B5B5"}
+port_order = ANCHOR_ORDER
+PORT_COL = ANCHOR_COL
 port_data = {
-    "Cantu":[0.0,0.0,0.21,0.59,1.36,2.31,6.47,9.06,10.5,10.87,11.21,11.62,11.99,12.43,13.73,15.05,15.4,15.7,17.28,17.05,15.61,14.29,13.53,12.53,11.64,10.29,10.61,10.33],
-    "Moura":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.29,0.59,0.92,1.01,1.17,2.04,2.79,4.38,6.42,9.21,10.18,12.05,13.66,13.14,12.33,10.8,9.64,8.46,8.31],
-    "Chilli Beans":[0.0,0.0,0.0,0.0,0.0,0.01,0.08,0.46,2.19,3.41,3.65,4.1,6.57,7.14,6.95,6.73,6.32,6.7,6.78,6.7,6.41,5.76,5.53,5.02,5.52,4.52,3.94,3.92],
-    "Juntos Somos Mais":[0.0,0.0,0.0,0.0,0.0,0.04,0.08,0.73,1.29,1.55,1.73,1.92,2.4,2.35,2.41,2.54,2.5,2.65,4.06,5.44,5.87,5.26,5.04,5.14,5.29,5.31,5.09,5.03],
-    "Malwee":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.07,1.01,1.44,1.77,1.87,2.08,2.17,2.06,2.12],
-    "Others":[0.0,0.02,0.04,0.06,0.07,0.18,0.14,0.27,0.24,0.37,0.62,1.08,1.45,1.82,1.9,2.05,2.12,2.38,2.9,3.21,2.96,2.9,2.59,2.63,2.83,2.83,2.52,3.83],
+    "Cantu":[0.21,0.59,1.36,2.31,6.47,9.06,10.5,10.87,11.21,11.62,11.99,12.43,13.73,15.05,15.4,15.7,17.28,17.05,15.61,14.29,13.53,12.53,11.64,10.29,10.61,10.33],
+    "Moura":[0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.29,0.59,0.92,1.01,1.17,2.04,2.79,4.38,6.42,9.21,10.18,12.05,13.66,13.14,12.33,10.8,9.64,8.46,8.31],
+    "Chilli Beans":[0.0,0.0,0.0,0.01,0.08,0.46,2.19,3.41,3.65,4.1,6.57,7.14,6.95,6.73,6.32,6.7,6.78,6.7,6.41,5.76,5.53,5.02,5.52,4.52,3.94,3.92],
+    "Juntos Somos Mais":[0.0,0.0,0.0,0.04,0.08,0.73,1.29,1.55,1.73,1.92,2.4,2.35,2.41,2.54,2.5,2.65,4.06,5.44,5.87,5.26,5.04,5.14,5.29,5.31,5.09,5.03],
+    "Malwee":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.07,1.01,1.44,1.77,1.87,2.08,2.17,2.06,2.12],
+    "Brinox":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.36,0.8,0.57,0.61,0.42,0.51,0.5,0.52,0.32,0.45],
+    "Others":[0.04,0.06,0.07,0.18,0.14,0.27,0.24,0.37,0.62,1.08,1.45,1.82,1.9,2.05,2.12,2.38,2.55,2.41,2.39,2.3,2.17,2.12,2.33,2.31,2.21,3.39],
 }
 FIDC_FROM = "2025-12"   # month the FIDC was raised (shaded region onward)
 
@@ -326,7 +330,7 @@ port_svg = portfolio_stack()
 port_legend = "".join(f'<span><i style="background:{PORT_COL[g]}"></i>{g}</span>' for g in port_order)
 
 def portfolio_total_bars():
-    WD, HD = 1040, 426; Lx, Rx, Tx, Bx = 46, 16, 30, 44
+    WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 46, 16, 30, 44
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 48; n = len(_pm); slot = pw/n; bw = slot*0.62
     def Y(v): return Tx+ph - v/ymax*ph
     ybase = Y(0)
@@ -370,7 +374,7 @@ STYLE = """<style>
 .legend { display:flex; gap:1.2vw; flex-wrap:wrap; margin-top:1vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
 .legend span { display:inline-flex; align-items:center; }
 .legend i { display:inline-block; width:16px; height:3px; border-radius:2px; margin-right:6px; }
-.two-col { display:grid; grid-template-columns:1.55fr 1fr; gap:2vw; align-items:center; margin-top:2vh; }
+.two-col { display:grid; grid-template-columns:1.85fr 1fr; gap:2vw; align-items:center; margin-top:2vh; }
 .readlist { list-style:none; display:flex; flex-direction:column; gap:1.4vh; }
 .readlist li { font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#2E2E2E; line-height:1.5; padding-left:1.1em; position:relative; }
 .readlist li::before { content:'—'; position:absolute; left:0; color:#8a8a8a; }
@@ -400,9 +404,12 @@ STYLE = """<style>
 .pyr-wrap { display:grid; grid-template-columns:auto 1fr; gap:2.6vw; height:clamp(360px,56vh,520px); align-items:stretch; margin-top:2.5vh; }
 .pyr-fig { display:flex; align-items:center; justify-content:center; }
 .pyr-svg { height:100%; width:auto; display:block; }
-.pyr-right { display:grid; grid-template-rows:repeat(3,1fr); height:100%; }
-.pyr-tier { position:relative; border-top:1px solid var(--ink); padding:1.4vh 0 0 1.2vw; }
-.pyr-tier::before { content:''; position:absolute; left:-6px; top:-6px; width:11px; height:11px; background:var(--ink); transform:rotate(45deg); }
+.pyr-right { display:grid; grid-template-rows:repeat(3,1fr); height:100%; position:relative; }
+.pyr-right::before { content:''; position:absolute; left:0; top:6%; bottom:6%; width:1px; background:linear-gradient(to bottom, transparent, rgba(12,12,12,.28), transparent); }
+.pyr-tier { position:relative; border-top:1px solid var(--ink); padding:1.4vh 2.6vw 0 1.4vw; }
+.pyr-tier::before { content:''; position:absolute; left:-6px; top:-6px; width:11px; height:11px; background:var(--ink); transform:rotate(45deg); z-index:1; }
+.pyr-tier::after { content:''; position:absolute; left:-3vw; top:-1px; width:3vw; height:1px; background:linear-gradient(to left, var(--ink), transparent); }
+.pyr-idx { position:absolute; right:0; top:1.2vh; font-family:var(--font-mono); font-size:12px; letter-spacing:.12em; color:#C4C4C4; }
 .pyr-tier h3 { font-family:var(--font-sans); font-weight:700; letter-spacing:-.025em; font-size:clamp(19px,2vw,31px); line-height:1.04; }
 .pyr-tier h3 small { display:block; font-family:var(--font-mono); font-weight:500; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; margin-top:.5vh; }
 .pyr-tier p { font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#3A3A3A; line-height:1.5; margin-top:.7vh; max-width:54ch; }
@@ -448,9 +455,9 @@ SLIDES = STYLE + f"""
   <div class="pyr-wrap reveal">
     <div class="pyr-fig">{pyramid_svg}</div>
     <div class="pyr-right" data-stagger>
-      <div class="pyr-tier"><h3>Data edge</h3><p>Access to the <b>Supplier–SME relationship</b> and <b>transaction data</b>, turning these relationships into better credit insights and solid unit economics.</p></div>
-      <div class="pyr-tier"><h3>Secured credit <small>Central Bank · CMN 4.734</small></h3><p>Access to SME credit-card receivables data and the ability to use it as <b>collateral</b>, enabling <b>smarter underwriting and collection</b>.</p></div>
-      <div class="pyr-tier"><h3>Willingness to pay</h3><p>Leveraging the supplier's brand, our co-branded card captures SMEs' <b>willingness to pay, rooted in loyalty and dependence</b>.</p></div>
+      <div class="pyr-tier"><span class="pyr-idx">01</span><h3>Data edge</h3><p>Access to the <b>Supplier–SME relationship</b> and <b>transaction data</b>, turning these relationships into better credit insights and solid unit economics.</p></div>
+      <div class="pyr-tier"><span class="pyr-idx">02</span><h3>Secured credit <small>Central Bank · CMN 4.734</small></h3><p>Access to SME credit-card receivables data and the ability to use it as <b>collateral</b>, enabling <b>smarter underwriting and collection</b>.</p></div>
+      <div class="pyr-tier"><span class="pyr-idx">03</span><h3>Willingness to pay</h3><p>Leveraging the supplier's brand, our co-branded card captures SMEs' <b>willingness to pay, rooted in loyalty and dependence</b>.</p></div>
     </div>
   </div>
 </section>
