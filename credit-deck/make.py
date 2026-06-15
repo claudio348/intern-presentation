@@ -308,15 +308,14 @@ def portfolio_total_bars():
         y = Y(t)
         s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#E2E2E2" stroke-width="1"/>')
         s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
-    pk = totals.index(max(totals))
     for i in range(n):
         cx = Lx+slot*i+slot/2; x = cx-bw/2; v = totals[i]
         y = Y(v); h = ybase-y
         col = "#0C0C0C" if i >= di else "#B9B9B9"
         s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{max(h,0):.1f}" rx="2" fill="{col}"/>')
-    # peak + current labels
-    s.append(f'<text x="{Lx+slot*pk+slot/2:.1f}" y="{Y(totals[pk])-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="#0C0C0C">{totals[pk]:.0f}</text>')
-    s.append(f'<text x="{Lx+slot*(n-1)+slot/2:.1f}" y="{Y(totals[-1])-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="#0C0C0C">{totals[-1]:.1f}</text>')
+        if v > 0.05:  # label every month
+            last = i == n-1
+            s.append(f'<text x="{cx:.1f}" y="{y-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="7.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{v:.1f}</text>')
     # FIDC divider + label
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
     s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
@@ -329,6 +328,34 @@ port_total_svg = portfolio_total_bars()
 port_total_legend = ('<span><i style="background:#B9B9B9"></i>pre-FIDC</span>'
                      '<span><i style="background:#0C0C0C"></i>FIDC-funded (Dec-25 →)</span>'
                      '<span style="color:#8a8a8a">total on book · R$M</span>')
+
+def portfolio_stack_bars():
+    WD, HD = 1040, 426; Lx, Rx, Tx, Bx = 46, 16, 30, 44
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 48; n = len(_pm); slot = pw/n; bw = slot*0.62
+    def Y(v): return Tx+ph - v/ymax*ph
+    ybase = Y(0); di = _pm.index(FIDC_FROM); xd = Lx + slot*di
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
+    for t in (0,10,20,30,40):
+        y = Y(t)
+        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#E2E2E2" stroke-width="1"/>')
+        s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    for i in range(n):
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = ybase
+        for layer in port_order:
+            v = port_data[layer][i]
+            if v <= 0: continue
+            hh = v/ymax*ph; y = ytop-hh
+            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{PORT_COL[layer]}"/>')
+            ytop = y
+    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+    for i in range(0, n, 3):
+        s.append(f'<text x="{Lx+slot*i+slot/2:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{port_labels[i]}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+
+port_stack_bars_svg = portfolio_stack_bars()
 
 
 STYLE = """<style>
@@ -470,29 +497,13 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: PIX/boleto loan tape · MOB-1 snapshot</div>
 </section>
 
-<!-- 6 — GRANULARITY (bars) -->
+<!-- PORTFOLIO BY ANCHOR (stacked bars R$M) -->
 <section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · granularity</span></div>
-  <div class="slide-head reveal"><h1>Granular and <span class="accent">diversified.</span></h1>
-  <p class="sub">Exposure by anchor program and portfolio concentration.</p></div>
-  <div class="two-col reveal">
-    <div class="chartframe" style="padding:3vh 2vw;">{ind_rows}</div>
-    <div style="display:flex; flex-direction:column; gap:1.4vh;">
-      {metric("Avg. ticket","R$ 2.9k","per contract")}
-      {metric("Top program","29%","Cantu — largest anchor")}
-      {metric("Active positions","6.0k","contracts with balance")}
-    </div>
-  </div>
-  <div class="illus">Source: PIX/boleto loan tape · current balance (May/26)</div>
-</section>
-
-<!-- PORTFOLIO BY ANCHOR (stacked R$M) -->
-<section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · by anchor</span></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · by anchor</span></div>
   <div class="slide-head reveal"><h1>Portfolio by <span class="accent">anchor.</span></h1>
   <p class="sub">Outstanding balance by anchor (R$M). FIDC raised in Dec-25 (shaded).</p></div>
   <div class="blegend reveal">{port_legend}</div>
-  <div class="chartframe reveal">{port_svg}</div>
+  <div class="chartframe reveal">{port_stack_bars_svg}</div>
   <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
 </section>
 
