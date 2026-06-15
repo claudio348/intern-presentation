@@ -17,7 +17,6 @@ def grid(ymax, yticks, xlabels=None, xmax=None, xfont=10.5, center=False):
     s = []
     for v in yticks:
         y = y_at(v, ymax)
-        s.append(f'<line x1="{L}" y1="{y:.1f}" x2="{W-R}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
         s.append(f'<text x="{L-8}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="11" fill="#8a8a8a">{v:g}</text>')
     if xlabels:
         n = len(xlabels)
@@ -83,7 +82,6 @@ def fpd_area():
     # gridlines + y labels
     for t in (0,5,10,15):
         y = Tx+ph - t/ymax*ph
-        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{W-Rx}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
         s.append(f'<text x="{Lx-8}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     # area + line
     d = f"M {xs[0]:.1f},{ybase:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{ybase:.1f} Z"
@@ -172,7 +170,6 @@ def stacked_chart():
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     for t in (0,25,50,75,100):
         y = Tx+ph-(t/100*ph)
-        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
         s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">{t}</text>')
     for i in range(n):
         tot = sum(div_data[b][i] for b in div_order) or 1
@@ -214,7 +211,6 @@ def tpv_chart():
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     for t in (0,4,8,12,16):
         y = Tx+ph - t/ymax*ph
-        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
         s.append(f'<text x="{Lx-6}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
         cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = Tx+ph
@@ -268,7 +264,6 @@ def portfolio_stack():
     # gridlines + y labels
     for t in (0,10,20,30,40):
         y = Y(t)
-        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#E2E2E2" stroke-width="1"/>')
         s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     # stacked areas (bottom -> top)
     bottoms = [0.0]*n
@@ -306,7 +301,6 @@ def portfolio_total_bars():
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
     for t in (0,10,20,30,40):
         y = Y(t)
-        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#E2E2E2" stroke-width="1"/>')
         s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
         cx = Lx+slot*i+slot/2; x = cx-bw/2; v = totals[i]
@@ -338,7 +332,6 @@ def portfolio_stack_bars():
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
     for t in (0,10,20,30,40):
         y = Y(t)
-        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#E2E2E2" stroke-width="1"/>')
         s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
         cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = ybase
@@ -348,6 +341,10 @@ def portfolio_stack_bars():
             hh = v/ymax*ph; y = ytop-hh
             s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{PORT_COL[layer]}"/>')
             ytop = y
+        total = sum(port_data[layer][i] for layer in port_order)
+        if total > 0.05:
+            last = i == n-1
+            s.append(f'<text x="{cx:.1f}" y="{ytop-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="7.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{total:.1f}</text>')
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
     s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
     for i in range(0, n, 3):
@@ -377,6 +374,7 @@ STYLE = """<style>
 .callout { border:1px solid rgba(12,12,12,.18); border-left:3px solid var(--ink); border-radius:10px; padding:1.6vh 1.4vw; margin-top:2vh; font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#2E2E2E; line-height:1.55; }
 .callout b { color:var(--ink); font-weight:600; }
 .illus { position:absolute; bottom:4.4vh; left:4vw; z-index:6; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
+.tag-pill { display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); border:1px solid rgba(12,12,12,.32); border-radius:100px; padding:3px 12px; margin-top:1.3vh; }
 .wip { display:inline-flex; align-items:center; gap:5px; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a5a00; border:1px dashed #C9A227; background:rgba(201,162,39,.12); border-radius:6px; padding:2px 8px; width:fit-content; }
 .wip::before { content:''; width:5px; height:5px; border-radius:50%; background:#C9A227; }
 .wip-lg { font-size:11px; border-radius:100px; padding:5px 13px; gap:7px; }
@@ -501,7 +499,8 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · by anchor</span></div>
   <div class="slide-head reveal"><h1>Portfolio by <span class="accent">anchor.</span></h1>
-  <p class="sub">Outstanding balance by anchor (R$M). FIDC raised in Dec-25 (shaded).</p></div>
+  <p class="sub">Outstanding balance by anchor (R$M). FIDC raised in Dec-25 (shaded).</p>
+  <span class="tag-pill">Consolidated · on + off balance</span></div>
   <div class="blegend reveal">{port_legend}</div>
   <div class="chartframe reveal">{port_stack_bars_svg}</div>
   <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
@@ -511,7 +510,8 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · mix</span></div>
   <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
-  <p class="sub">Partner as % of credit portfolio (by outstanding balance).</p></div>
+  <p class="sub">Partner as % of credit portfolio (by outstanding balance).</p>
+  <span class="tag-pill">Off-balance · FIDC</span></div>
   <div class="blegend reveal">{div_legend}</div>
   <div class="chartframe reveal">{div_svg}</div>
   <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
