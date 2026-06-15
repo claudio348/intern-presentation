@@ -238,6 +238,47 @@ tpv_svg = tpv_chart()
 tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' for r in tpv_order) + '<span style="color:#8a8a8a">total on top · R$M</span>'
 
 
+# ---------- credit portfolio (outstanding balance) over time (real) ----------
+_pm = ['2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06']
+port_vals = [0.0,0.02,0.24,0.65,1.43,2.54,6.77,10.53,14.23,16.49,17.8,19.65,23.41,24.9,27.02,29.17,30.73,33.84,40.23,42.64,43.91,43.3,41.61,39.52,38.16,34.76,32.67,33.55]
+_MON = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
+port_labels = [f"{_MON[int(m.split('-')[1])-1]}/{m.split('-')[0][2:]}" for m in _pm]
+
+def portfolio_area():
+    WD, HD = 1040, 420; Lx, Rx, Tx, Bx = 46, 16, 26, 44
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 48; n = len(port_vals)
+    xs = [Lx + i/(n-1)*pw for i in range(n)]
+    ys = [Tx+ph - v/ymax*ph for v in port_vals]
+    ybase = Tx+ph
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append('<defs><linearGradient id="portG" x1="0" y1="0" x2="0" y2="1">'
+             '<stop offset="0" stop-color="#0C0C0C" stop-opacity="0.20"/>'
+             '<stop offset="1" stop-color="#0C0C0C" stop-opacity="0.02"/></linearGradient></defs>')
+    for t in (0,10,20,30,40):
+        y = Tx+ph - t/ymax*ph
+        s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
+        s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    d = f"M {xs[0]:.1f},{ybase:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{ybase:.1f} Z"
+    s.append(f'<path d="{d}" fill="url(#portG)"/>')
+    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'
+             % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
+    # peak annotation
+    pk = port_vals.index(max(port_vals))
+    s.append(f'<circle cx="{xs[pk]:.1f}" cy="{ys[pk]:.1f}" r="3.2" fill="#0C0C0C"/>')
+    s.append(f'<text x="{xs[pk]:.1f}" y="{ys[pk]-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">peak · R$ {max(port_vals):.0f}M</text>')
+    # current highlight
+    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="8" fill="none" stroke="#0C0C0C" stroke-opacity="0.22"/>')
+    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="4.3" fill="#0C0C0C"/>')
+    s.append(f'<text x="{xs[-1]:.1f}" y="{ys[-1]-11:.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">R$ {port_vals[-1]:.1f}M</text>')
+    # sparse x labels (every 3 months)
+    for i in range(0, n, 3):
+        s.append(f'<text x="{xs[i]:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{port_labels[i]}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+
+port_svg = portfolio_area()
+
+
 STYLE = """<style>
 .chartframe { border:1px solid rgba(12,12,12,.13); border-radius:14px; padding:1.8vh 1.4vw; background:#fff; }
 .chart { width:100%; height:auto; display:block; }
@@ -291,6 +332,15 @@ SLIDES = STYLE + f"""
     <div class="cover5-tag">Credit performance.</div>
   </div>
   <div class="cover5-meta">Confidential · Institutional material</div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="slide theme-light vcenter" data-num="02">
+  <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio</span></div>
+  <div class="slide-head reveal"><h1>The credit <span class="accent">portfolio.</span></h1>
+  <p class="sub">Outstanding balance (R$M) — scaled to R$ 44M, R$ 34M on book today.</p></div>
+  <div class="chartframe reveal">{port_svg}</div>
+  <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
 </section>
 
 <!-- ORIGINATION -->
