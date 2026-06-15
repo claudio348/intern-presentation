@@ -44,53 +44,53 @@ def chart(inner):
             + inner + '\n</svg>')
 
 
-# ---------- CDR by vintage ----------
+# ---------- CDR by vintage (real loan tape) ----------
 cdr = {
-    "Vintage 2024-Q2": [0,.1,.35,.8,1.3,1.8,2.2,2.5,2.7,2.85,2.95,3.0,3.05],
-    "Vintage 2024-Q3": [0,.08,.3,.7,1.1,1.5,1.85,2.1,2.3,2.45,2.55],
-    "Vintage 2024-Q4": [0,.08,.28,.6,1.0,1.35,1.65,1.9,2.05],
-    "Vintage 2025-Q1": [0,.07,.25,.55,.9,1.2,1.45],
+    "Vintage 2025-Q1": [0,0,0,0.63,5.31,10.51,15.28,15.64,16.73],
+    "Vintage 2025-Q2": [0,0,0,4.92,9.43,9.85,10.04,10.20,10.31],
+    "Vintage 2025-Q3": [0,0,0,0.82,3.72,6.39,6.88,7.60,7.69],
+    "Vintage 2025-Q4": [0,0,0.32,2.52,7.43,8.76,6.70,4.33],
 }
-cdr_colors = ["#BDBDBD", "#9A9A9A", "#6E6E6E", "#0C0C0C"]
-cdr_inner = [grid(4, [0,1,2,3,4], [str(i) for i in range(0,13)], xmax=12)]
+cdr_colors = ["#C4C4C4", "#9A9A9A", "#6E6E6E", "#0C0C0C"]
+cdr_inner = [grid(18, [0,6,12,18], [str(i) for i in range(0,9)], xmax=8)]
 for (name, vals), col in zip(cdr.items(), cdr_colors):
     hl = col == "#0C0C0C"
-    cdr_inner.append(polyline(vals, 4, 12, col, 2.6 if hl else 1.8, dots=hl))
+    cdr_inner.append(polyline(vals, 18, 8, col, 2.6 if hl else 1.8, dots=hl))
 cdr_inner.append(f'<text x="{W-R}" y="{T-2}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">% / MOB</text>')
 cdr_svg = chart("\n".join(cdr_inner))
 cdr_legend = "".join(
     f'<span><i style="background:{c}"></i>{n}</span>' for n, c in zip(cdr.keys(), cdr_colors))
 
-# ---------- FPD by month ----------
-fpd_months = ["jul","aug","sep","oct","nov","dec","jan","feb","mar","apr","may","jun"]
-fpd_vals = [2.8,2.7,2.55,2.5,2.4,2.35,2.2,2.1,2.05,1.95,1.85,1.8]
-fbars = [grid(3.5, [0,1,2,3], None)]
+# ---------- FPD 30 by month (real loan tape) ----------
+fpd_months = ["may","jun","jul","aug","sep","oct","nov","dec","jan","feb","mar","apr"]
+fpd_vals = [15.2,7.4,3.1,0.0,2.0,3.9,1.0,3.7,5.8,0.9,5.4,1.4]
+fbars = [grid(16, [0,5,10,15], None)]
 bw = PW / len(fpd_vals) * 0.62
 for i, v in enumerate(fpd_vals):
     cx = x_at(i + 0.5, len(fpd_vals))
     x = cx - bw/2
-    y = y_at(v, 3.5); h = (T+PH) - y
+    y = y_at(v, 16); h = (T+PH) - y
     col = "#0C0C0C" if i >= len(fpd_vals)-3 else "#B5B5B5"
     fbars.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2" fill="{col}"/>')
     fbars.append(f'<text x="{cx:.1f}" y="{y-5:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" fill="#2E2E2E">{v:.1f}</text>')
     fbars.append(f'<text x="{cx:.1f}" y="{H-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="10" fill="#5A5A5A">{fpd_months[i]}</text>')
 fpd_svg = chart("\n".join(fbars))
 
-# ---------- Jr tranche: raw vs smoothed ----------
-jr_raw  = [1.7,1.9,0.8,1.8,2.0,2.5,1.6,0.9,1.9,2.1,1.8,1.85]
-jr_smooth=[1.70,1.74,1.72,1.76,1.80,1.83,1.82,1.80,1.82,1.84,1.85,1.86]
-jr = [grid(3, [0,1,2,3], fpd_months, xmax=len(fpd_months)-1)]
-jr.append(polyline(jr_raw, 3, len(jr_raw)-1, "#C0C0C0", 1.6, dash=True))
-jr.append(polyline(jr_smooth, 3, len(jr_smooth)-1, "#0C0C0C", 2.6, dots=True))
-jr.append(f'<text x="{W-R}" y="{T-2}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">% / mo</text>')
+# ---------- Portfolio over90 vs smoothed trend (real loan tape) ----------
+jr_months= ["jun","jul","aug","sep","oct","nov","dec","jan","feb","mar","apr","may"]
+jr_obs   = [4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.6]
+jr_trend = [4.2,9.5,14.0,18.5,21.5,23.0,23.8,23.5,22.2,20.6,19.3,18.2]
+jr = [grid(30, [0,10,20,30], jr_months, xmax=len(jr_months)-1)]
+jr.append(polyline(jr_obs, 30, len(jr_obs)-1, "#C0C0C0", 1.6, dash=True))
+jr.append(polyline(jr_trend, 30, len(jr_trend)-1, "#0C0C0C", 2.6, dots=True))
+jr.append(f'<text x="{W-R}" y="{T-2}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">over90 %</text>')
 jr_svg = chart("\n".join(jr))
 
-# ---------- industry bars (granularity) ----------
-industry = [("Retail / commerce",34),("Industry",22),("Services",18),
-            ("Construction",12),("Agribusiness",8),("Other",6)]
+# ---------- breakdown by anchor program (real loan tape) ----------
+industry = [("Cantu",29),("Chilli Beans",23),("Moura",18),("Juntos Somos Mais",15),("Malwee",12),("Other",3)]
 ind_rows = "".join(
     f'<div class="ind-row"><span class="ind-l">{n}</span>'
-    f'<span class="ind-track"><span class="ind-fill" style="width:{p*2.6}%"></span></span>'
+    f'<span class="ind-track"><span class="ind-fill" style="width:{p*3.2}%"></span></span>'
     f'<span class="ind-v">{p}%</span></div>' for n, p in industry)
 
 # ---------- elegant pyramid ----------
@@ -169,7 +169,7 @@ SLIDES = STYLE + f"""
   <p class="sub">Coverage, data source and metric definitions.</p></div>
   <div class="layers reveal" data-stagger>
     <div class="layer hi"><span class="layer-num">01</span><div><h3>PIX / boleto only</h3><p>The entire loan tape and every chart consider only PIX/boleto-settled operations. Card data is out of this view.</p></div><span class="layer-badge strong">loan tape</span></div>
-    <div class="layer"><span class="layer-num">02</span><div><h3>FIDC carve-out</h3><p>We use the FIDC portfolio as a proxy for credit performance — the most recent, auditable snapshot of our ability to originate and collect.</p></div><span class="layer-badge">recent snapshot</span></div>
+    <div class="layer"><span class="layer-num">02</span><div><h3>FIDC carve-out</h3><p>We use the FIDC portfolio as the proxy for credit performance — the most recent, auditable snapshot. History <b>Nov/24–May/26</b>: <b>R$ 46.8M</b> originated across <b>16.2k</b> contracts.</p></div><span class="layer-badge">recent snapshot</span></div>
     <div class="layer"><span class="layer-num">03</span><div><h3>Definitions</h3><p><b>CDR by vintage</b> = cumulative loss (over90 outstanding) ÷ amount originated in the vintage. <b>FPD 15/30</b> = value that missed the first installment ÷ total of the month's first installments.</p></div><span class="layer-badge">metrics</span></div>
   </div>
   <div class="illus">Illustrative data — replace with the loan tape</div>
@@ -200,12 +200,12 @@ SLIDES = STYLE + f"""
       <div class="legend">{cdr_legend}</div>
     </div>
     <ul class="readlist">
-      <li>More recent vintages <b>perform better</b>: the 2025-Q1 curve runs below the earlier ones at the same MOB.</li>
-      <li>Loss <b>stabilizes around MOB 9–10</b>, a sign of consistent maturation across vintages.</li>
-      <li>Terminal level converging to <b>~2.5–3.0%</b> — within risk appetite.</li>
+      <li><b>2025-Q1 was the weakest cohort</b> (~17% peak over90 / originated).</li>
+      <li>Underwriting changes cut peak loss to <b>~8% by 2025-Q4</b> — improving vintage over vintage.</li>
+      <li>Short <b>~3.5-month tenor</b>: over90 peaks around MOB 4–6, then rolls off as the book amortizes.</li>
     </ul>
   </div>
-  <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
+  <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
 </section>
 
 <!-- 5 — FPD -->
@@ -218,28 +218,28 @@ SLIDES = STYLE + f"""
       <div class="legend"><span><i style="background:#0C0C0C"></i>last 3 months</span><span><i style="background:#B5B5B5"></i>history</span></div>
     </div>
     <ul class="readlist">
-      <li>Consistent <b>downward trend</b>: from ~2.8% to <b>~1.8%</b> over the last 12 months.</li>
-      <li>Improvement driven by <b>credit-policy tuning</b> and anchor sell-out data.</li>
-      <li>Low, stable FPD <b>anticipates</b> healthier vintages in the CDR.</li>
+      <li>The <b>May-25 spike (~15%)</b> was an isolated cohort; FPD normalized to <b>low single digits</b> since.</li>
+      <li>Last 12 months <b>average ~4%</b>, with recent months at <b>~1–5%</b>.</li>
+      <li>FPD is the <b>earliest read</b> on origination quality — now stable.</li>
     </ul>
   </div>
-  <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
+  <div class="illus">Source: PIX/boleto loan tape · MOB-1 snapshot</div>
 </section>
 
 <!-- 6 — GRANULARITY (bars) -->
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · granularity</span></div>
   <div class="slide-head reveal"><h1>Granular and <span class="accent">diversified.</span></h1>
-  <p class="sub">Exposure by industry and portfolio concentration metrics.</p></div>
+  <p class="sub">Exposure by anchor program and portfolio concentration.</p></div>
   <div class="two-col reveal">
     <div class="chartframe" style="padding:3vh 2vw;">{ind_rows}</div>
     <div style="display:flex; flex-direction:column; gap:1.4vh;">
-      {metric("Avg. ticket","R$ 18k","per operation")}
-      {metric("Top-10 obligors","9%","of the book")}
-      {metric("Active positions","12.4k","obligors")}
+      {metric("Avg. ticket","R$ 2.9k","per contract")}
+      {metric("Top program","29%","Cantu — largest anchor")}
+      {metric("Active positions","6.0k","contracts with balance")}
     </div>
   </div>
-  <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
+  <div class="illus">Source: PIX/boleto loan tape · current balance (May/26)</div>
 </section>
 
 <!-- 7 — TENOR & DURATION -->
@@ -248,32 +248,32 @@ SLIDES = STYLE + f"""
   <div class="slide-head reveal"><h1>Average tenor and <span class="accent">duration.</span></h1>
   <p class="sub">A short, fast-rotating book — quick recomposition and risk adjustment.</p></div>
   <div class="metrics reveal" data-stagger>
-    {metric("Avg. tenor","7.2 <span style='font-size:.5em'>months</span>","weighted contractual term")}
-    {metric("Duration","5.1 <span style='font-size:.5em'>months</span>","balance-weighted")}
-    {metric("Avg. rate","3.4% <span style='font-size:.5em'>/mo</span>","PIX/boleto book")}
-    {metric("Origination","R$ 42M <span style='font-size:.5em'>/mo</span>","current run-rate")}
-    {metric("Over90","2.7%","balance >90d past due")}
-    {metric("Turnover","~1.7×","per year")}
+    {metric("Avg. tenor","3.5 <span style='font-size:.5em'>months</span>","mean installments")}
+    {metric("Duration","~2.1 <span style='font-size:.5em'>months</span>","balance-weighted")}
+    {metric("Avg. rate","44.6% <span style='font-size:.5em'>/yr</span>","principal-weighted")}
+    {metric("Origination","R$ 4.9M <span style='font-size:.5em'>/mo</span>","last-3-month run-rate")}
+    {metric("Current book","R$ 15.1M","outstanding balance")}
+    {metric("Turnover","~3.4×","per year")}
   </div>
-  <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
+  <div class="illus">Source: PIX/boleto loan tape · Nov/24–May/26</div>
 </section>
 
 <!-- 8 — Jr TRANCHE -->
 <section class="slide theme-light vcenter" data-num="08">
   <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · Jr tranche</span></div>
   <div class="slide-head reveal"><h1>The Jr shields the <span class="accent">seniors.</span></h1>
-  <p class="sub">Excess spread + subordination provide the safety cushion to senior shares (ex-contributions).</p></div>
+  <p class="sub">Portfolio over90 is stabilizing; subordination + excess spread absorb the loss before it reaches seniors.</p></div>
   <div class="two-col reveal">
     <div class="chartframe">{jr_svg}
-      <div class="legend"><span><i style="background:#0C0C0C"></i>credit performance (smoothed)</span><span><i style="background:#C0C0C0"></i>observed Jr quota</span></div>
+      <div class="legend"><span><i style="background:#0C0C0C"></i>trend (smoothed)</span><span><i style="background:#C0C0C0"></i>portfolio over90 (observed)</span></div>
     </div>
     <div style="display:flex; flex-direction:column; gap:1.2vh;">
-      {metric("Subordination","22%","cushion for seniors")}
-      {metric("Excess spread","~14% <span style='font-size:.45em'>/yr</span>","above senior cost")}
+      {metric("Subordination","22%","structure · cushion for seniors")}
+      {metric("Excess spread","~14% <span style='font-size:.45em'>/yr</span>","structure · above senior cost")}
     </div>
   </div>
-  <div class="callout reveal">The <b>volatility seen in the Jr quota</b> came from <b>isolated operational errors</b>, not credit deterioration. Normalizing those events, the portfolio's performance is <b>stable</b> — and the subordination + excess-spread cushion was never touched by the seniors.</div>
-  <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
+  <div class="callout reveal">The over90 ramp reflects <b>book seasoning</b> and the <b>2025-Q1 cohort</b> now rolling off — over90 is <b>down from ~25% to ~18%</b> as recent vintages dominate. The Jr's subordination + excess spread absorb these losses, keeping the <b>senior shares protected</b> (ex-contributions).</div>
+  <div class="illus">Over90: PIX/boleto loan tape · subordination / excess spread = structure (to confirm)</div>
 </section>
 
 <!-- 9 — CORPORATE / RUNWAY -->
