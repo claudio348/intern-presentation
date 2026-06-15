@@ -125,22 +125,22 @@ ind_rows = "".join(
     f'<span class="ind-track"><span class="ind-fill" style="width:{p*3.2}%"></span></span>'
     f'<span class="ind-v">{p}%</span></div>' for n, p in industry)
 
-# ---------- elegant pyramid (3 equal bands; aligns with tier rows) ----------
-pyramid_svg = ('<svg class="pyr-svg" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">'
-  '<defs>'
-  '<linearGradient id="pyrL" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#5c5c5c"/><stop offset="1" stop-color="#2b2b2b"/></linearGradient>'
-  '<linearGradient id="pyrR" x1="1" y1="0" x2="0.7" y2="1"><stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#0b0b0b"/></linearGradient>'
-  '<filter id="pyrSh" x="-40%" y="-20%" width="180%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>'
-  '</defs>'
-  '<ellipse cx="150" cy="356" rx="140" ry="9" fill="#000" opacity="0.12" filter="url(#pyrSh)"/>'
-  '<polygon points="150,8 102.61,119 150,119" fill="url(#pyrL)"/>'
-  '<polygon points="150,8 150,119 197.39,119" fill="url(#pyrR)"/>'
-  '<polygon points="150,125 100.05,125 53.95,233 150,233" fill="url(#pyrL)"/>'
-  '<polygon points="150,125 150,233 246.05,233 199.95,125" fill="url(#pyrR)"/>'
-  '<polygon points="150,239 51.39,239 4,350 150,350" fill="url(#pyrL)"/>'
-  '<polygon points="150,239 150,350 296,350 248.61,239" fill="url(#pyrR)"/>'
-  '<line x1="150" y1="8" x2="150" y2="350" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>'
-  '</svg>')
+# ---------- isometric stacked layers (aligns with the 3 tier rows) ----------
+def iso_stack():
+    cx, w, hh, t = 162, 96, 31, 24
+    ys = [60, 180, 300]                      # slab centers = thirds of the 360 height
+    tops = ["#5a5a5a", "#4c4c4c", "#444444"]  # top faces (top slab brightest)
+    s = ['<svg class="pyr-svg" viewBox="0 0 324 360" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">']
+    s.append('<defs><filter id="isoSh" x="-40%" y="-40%" width="180%" height="200%"><feGaussianBlur stdDeviation="6"/></filter></defs>')
+    s.append(f'<ellipse cx="{cx}" cy="346" rx="120" ry="10" fill="#000" opacity="0.12" filter="url(#isoSh)"/>')
+    for y0, topcol in zip(ys, tops):
+        s.append(f'<polygon points="{cx+w},{y0} {cx},{y0+hh} {cx},{y0+hh+t} {cx+w},{y0+t}" fill="#161616"/>')   # right face
+        s.append(f'<polygon points="{cx-w},{y0} {cx},{y0+hh} {cx},{y0+hh+t} {cx-w},{y0+t}" fill="#2c2c2c"/>')   # left face
+        s.append(f'<polygon points="{cx},{y0-hh} {cx+w},{y0} {cx},{y0+hh} {cx-w},{y0}" fill="{topcol}"/>')       # top face
+        s.append(f'<polyline points="{cx-w},{y0} {cx},{y0-hh} {cx+w},{y0}" fill="none" stroke="#7a7a7a" stroke-width="1"/>')  # top highlight
+    s.append('</svg>')
+    return "\n".join(s)
+pyramid_svg = iso_stack()
 
 
 # ---------- anchor composition: generic stacked R$M and stacked % ----------
@@ -365,7 +365,7 @@ div_con_svg = stack_pct(port_labels, port_data, PORT_FIDC)
 
 
 STYLE = """<style>
-.chartframe { border:1px solid rgba(12,12,12,.13); border-radius:14px; padding:1.8vh 1.4vw; background:#fff; }
+.chartframe { padding:1vh 0 0; background:transparent; border:none; }
 .chart { width:100%; height:auto; display:block; }
 .legend { display:flex; gap:1.2vw; flex-wrap:wrap; margin-top:1vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
 .legend span { display:inline-flex; align-items:center; }
@@ -440,20 +440,7 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: monthly TPV · Mar/24–May/26 (Jun/26 partial, excluded)</div>
 </section>
 
-<!-- SCOPE & METHOD -->
-<section class="slide theme-light vcenter" data-num="02">
-  <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Scope</span></div>
-  <div class="slide-head reveal"><h1>How to read these <span class="accent">numbers.</span></h1>
-  <p class="sub">Coverage, data source and metric definitions.</p></div>
-  <div class="layers reveal" data-stagger>
-    <div class="layer hi"><span class="layer-num">01</span><div><h3>PIX / boleto only</h3><p>The entire loan tape and every chart consider only PIX/boleto-settled operations. Card data is out of this view.</p></div><span class="layer-badge strong">loan tape</span></div>
-    <div class="layer"><span class="layer-num">02</span><div><h3>FIDC carve-out</h3><p>We use the FIDC portfolio as the proxy for credit performance — the most recent, auditable snapshot. History <b>Nov/24–May/26</b>: <b>R$ 46.8M</b> originated across <b>16.2k</b> contracts.</p></div><span class="layer-badge">recent snapshot</span></div>
-    <div class="layer"><span class="layer-num">03</span><div><h3>Definitions</h3><p><b>CDR by vintage</b> = cumulative loss (over90 outstanding) ÷ amount originated in the vintage. <b>FPD 15/30</b> = value that missed the first installment ÷ total of the month's first installments.</p></div><span class="layer-badge">metrics</span></div>
-  </div>
-  <div class="illus">Illustrative data — replace with the loan tape</div>
-</section>
-
-<!-- 3 — WHY WE PERFORM BETTER THAN BANKS (pyramid) -->
+<!-- WHY WE PERFORM BETTER THAN BANKS (iso stack) -->
 <section class="slide theme-light vcenter" data-num="03">
   <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">The edge</span></div>
   <div class="slide-head reveal"><h1>Why we perform better than <span class="accent">banks.</span></h1>
