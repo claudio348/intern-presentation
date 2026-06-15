@@ -176,6 +176,13 @@ arrow-key navigation, progress bar, and staggered `reveal` entrance animations.
 - `assets/nav.js` — keyboard/touch navigation, progress, cover flip, dark/light chrome.
 - `assets/robbin-logo-black.svg`, `robbin-logo-white.svg`, `robbin-bird-black.svg`.
 - `build.py` — assembles + inlines. Run it; don't hand-concatenate.
+- `examples/slides.html` — a full 9-slide reference deck (cover, presenters,
+  PIX card fan, architecture, Robbin Tools, two data slides, Q&A, jobs). Its
+  card/photo images live in `examples/`. Build it to see everything working:
+  ```
+  python .claude/skills/robbin-deck/build.py .claude/skills/robbin-deck/examples/slides.html
+  ```
+  Copy a `<section>` from here as a starting point for new slides.
 
 ## Notes
 - Slides are sized in `vh`/`vw`, so they scale to any screen; verify the tallest
