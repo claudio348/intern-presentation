@@ -201,37 +201,41 @@ def metric(k, v, s, wip=False):
 
 # ---------- monthly TPV / origination by rail (real) ----------
 tpv_months = ["aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
-tpv_order = ["Cartão","Boleto","Pix"]
-TPV_COL = {"Cartão":"#CBCBCB","Boleto":"#8A8A8A","Pix":"#0C0C0C"}
-tpv_data = {
-    "Cartão":[1.43,4.93,4.54,3.66,3.14,2.80,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34],
-    "Boleto":[0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.27,1.97,1.67,2.21,3.32,4.25,3.27,2.89,2.19,1.86,3.11,2.00,1.86],
-    "Pix":[0,0,0,0,0,0,0,0,0,0.01,0.02,0.05,0.60,0.27,0.34,0.47,0.25,0.38,1.31,2.39,1.46,3.83],
-}
+_cartao = [1.43,4.93,4.54,3.66,3.14,2.80,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34]
+_boleto = [0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.27,1.97,1.67,2.21,3.32,4.25,3.27,2.89,2.19,1.86,3.11,2.00,1.86]
+_pix    = [0,0,0,0,0,0,0,0,0,0.01,0.02,0.05,0.60,0.27,0.34,0.47,0.25,0.38,1.31,2.39,1.46,3.83]
+tpv_order = ["Cartão","PIX Rails"]   # PIX Rails = Boleto + Pix
+TPV_COL = {"Cartão":"#CBCBCB","PIX Rails":"#0C0C0C"}
+tpv_data = {"Cartão":_cartao, "PIX Rails":[b+p for b,p in zip(_boleto,_pix)]}
 
 def tpv_chart():
-    WD, HD = 1040, 430; Lx, Rx, Tx, Bx = 44, 10, 14, 46
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 16; n = len(tpv_months); slot = pw/n; bw = slot*0.66
+    WD, HD = 1040, 432; Lx, Rx, Tx, Bx = 40, 12, 24, 46
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 17; n = len(tpv_months); slot = pw/n; bw = slot*0.6
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
-    s.append(f'<text x="{Lx-6}" y="{Tx+2}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">R$M</text>')
     for t in (0,4,8,12,16):
         y = Tx+ph - t/ymax*ph
         s.append(f'<line x1="{Lx}" y1="{y:.1f}" x2="{WD-Rx}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
         s.append(f'<text x="{Lx-6}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
         cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = Tx+ph
+        total = sum(tpv_data[r][i] for r in tpv_order) or 0
         for rail in tpv_order:
             v = tpv_data[rail][i]
             if v <= 0: continue
             hh = v/ymax*ph; y = ytop-hh
             s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{TPV_COL[rail]}"/>')
+            if hh >= 16:
+                tcol = "#fff" if rail == "PIX Rails" else "#3A3A3A"
+                s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="{tcol}">{round(v/total*100)}%</text>')
             ytop = y
+        if total > 0:
+            s.append(f'<text x="{cx:.1f}" y="{ytop-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9.5" fill="#0C0C0C">{total:.1f}</text>')
         s.append(f'<text x="{cx:.1f}" y="{HD-16}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.8" fill="#5A5A5A">{tpv_months[i]}</text>')
     s.append('</svg>')
     return "\n".join(s)
 
 tpv_svg = tpv_chart()
-tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' for r in tpv_order)
+tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' for r in tpv_order) + '<span style="color:#8a8a8a">total on top · R$M</span>'
 
 
 STYLE = """<style>
