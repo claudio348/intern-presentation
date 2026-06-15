@@ -169,18 +169,25 @@ arrow-key navigation, progress bar, and staggered `reveal` entrance animations.
 <div class="vagas-cta reveal"><span class="pill">email@robbin.com.br</span><span class="dim">— chamada</span></div>
 ```
 
-**Pyramid concept** (3D pyramid on the left + tiered connectors on the right; good for layered "why we win" / foundation stories). The pyramid is an inline SVG (3 tiers, each split into a lighter left face `#3a3a3a` and darker right `#181818`):
+**Pyramid concept** (elegant 3D pyramid on the left + tiered connectors on the right; great for layered "why we win" / foundation stories — top tier reads first). Each face uses a gradient (`url(#pyrL)` lighter left, `url(#pyrR)` darker right) plus a soft ground shadow. Use `<small>` inside `<h3>` for a mono sub-label:
 ```html
 <div class="pyr-wrap reveal">
-  <div><svg class="pyr-svg" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="150,10 104.89,126 150,126" fill="#3a3a3a"/><polygon points="150,10 150,126 195.11,126" fill="#181818"/>
-    <polygon points="150,134 101.78,134 58.22,246 150,246" fill="#3a3a3a"/><polygon points="150,134 150,246 241.78,246 198.22,134" fill="#181818"/>
-    <polygon points="150,254 55.11,254 10,370 150,370" fill="#3a3a3a"/><polygon points="150,254 150,370 290,370 244.89,254" fill="#181818"/>
+  <div><svg class="pyr-svg" viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="pyrL" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#505050"/><stop offset="1" stop-color="#2a2a2a"/></linearGradient>
+      <linearGradient id="pyrR" x1="1" y1="0" x2="0.65" y2="1"><stop offset="0" stop-color="#242424"/><stop offset="1" stop-color="#0c0c0c"/></linearGradient>
+      <filter id="pyrSh" x="-40%" y="-20%" width="180%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>
+    </defs>
+    <ellipse cx="160" cy="386" rx="135" ry="13" fill="#000" opacity="0.13" filter="url(#pyrSh)"/>
+    <polygon points="160,18 115.1,124 160,124" fill="url(#pyrL)"/><polygon points="160,18 160,124 204.9,124" fill="url(#pyrR)"/>
+    <polygon points="160,132 111.7,132 61.7,250 160,250" fill="url(#pyrL)"/><polygon points="160,132 160,250 258.3,250 208.3,132" fill="url(#pyrR)"/>
+    <polygon points="160,258 58.3,258 10,372 160,372" fill="url(#pyrL)"/><polygon points="160,258 160,372 310,372 261.7,258" fill="url(#pyrR)"/>
+    <line x1="160" y1="18" x2="160" y2="372" stroke="#fff" stroke-opacity="0.06" stroke-width="1"/>
   </svg></div>
   <div class="pyr-right" data-stagger>
-    <div class="pyr-tier"><h3>Tier title</h3><p>Description with <b>highlights</b>.</p></div>
-    <div class="pyr-tier"><h3>Tier title</h3><p>Description.</p></div>
-    <div class="pyr-tier"><h3>Tier title</h3><p>Description.</p></div>
+    <div class="pyr-tier"><h3>Top tier</h3><p>Description with <b>highlights</b>.</p></div>
+    <div class="pyr-tier"><h3>Middle tier <small>optional sub-label</small></h3><p>Description.</p></div>
+    <div class="pyr-tier"><h3>Base tier</h3><p>Description.</p></div>
   </div>
 </div>
 ```

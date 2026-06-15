@@ -85,14 +85,29 @@ jr.append(polyline(jr_smooth, 3, len(jr_smooth)-1, "#0C0C0C", 2.6, dots=True))
 jr.append(f'<text x="{W-R}" y="{T-2}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">% / mo</text>')
 jr_svg = chart("\n".join(jr))
 
-# ---------- pyramid (granularity concept) ----------
-pyramid_svg = ('<svg class="pyr-svg" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg">'
-  '<polygon points="150,10 104.89,126 150,126" fill="#3a3a3a"/>'
-  '<polygon points="150,10 150,126 195.11,126" fill="#181818"/>'
-  '<polygon points="150,134 101.78,134 58.22,246 150,246" fill="#3a3a3a"/>'
-  '<polygon points="150,134 150,246 241.78,246 198.22,134" fill="#181818"/>'
-  '<polygon points="150,254 55.11,254 10,370 150,370" fill="#3a3a3a"/>'
-  '<polygon points="150,254 150,370 290,370 244.89,254" fill="#181818"/>'
+# ---------- industry bars (granularity) ----------
+industry = [("Retail / commerce",34),("Industry",22),("Services",18),
+            ("Construction",12),("Agribusiness",8),("Other",6)]
+ind_rows = "".join(
+    f'<div class="ind-row"><span class="ind-l">{n}</span>'
+    f'<span class="ind-track"><span class="ind-fill" style="width:{p*2.6}%"></span></span>'
+    f'<span class="ind-v">{p}%</span></div>' for n, p in industry)
+
+# ---------- elegant pyramid ----------
+pyramid_svg = ('<svg class="pyr-svg" viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg">'
+  '<defs>'
+  '<linearGradient id="pyrL" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#505050"/><stop offset="1" stop-color="#2a2a2a"/></linearGradient>'
+  '<linearGradient id="pyrR" x1="1" y1="0" x2="0.65" y2="1"><stop offset="0" stop-color="#242424"/><stop offset="1" stop-color="#0c0c0c"/></linearGradient>'
+  '<filter id="pyrSh" x="-40%" y="-20%" width="180%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>'
+  '</defs>'
+  '<ellipse cx="160" cy="386" rx="135" ry="13" fill="#000" opacity="0.13" filter="url(#pyrSh)"/>'
+  '<polygon points="160,18 115.1,124 160,124" fill="url(#pyrL)"/>'
+  '<polygon points="160,18 160,124 204.9,124" fill="url(#pyrR)"/>'
+  '<polygon points="160,132 111.7,132 61.7,250 160,250" fill="url(#pyrL)"/>'
+  '<polygon points="160,132 160,250 258.3,250 208.3,132" fill="url(#pyrR)"/>'
+  '<polygon points="160,258 58.3,258 10,372 160,372" fill="url(#pyrL)"/>'
+  '<polygon points="160,258 160,372 310,372 261.7,258" fill="url(#pyrR)"/>'
+  '<line x1="160" y1="18" x2="160" y2="372" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>'
   '</svg>')
 
 
@@ -119,14 +134,20 @@ STYLE = """<style>
 .callout { border:1px solid rgba(12,12,12,.18); border-left:3px solid var(--ink); border-radius:10px; padding:1.6vh 1.4vw; margin-top:2vh; font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#2E2E2E; line-height:1.55; }
 .callout b { color:var(--ink); font-weight:600; }
 .illus { position:absolute; bottom:4.4vh; left:4vw; z-index:6; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
-/* pyramid concept */
-.pyr-wrap { display:grid; grid-template-columns:clamp(170px,19vw,250px) 1fr; gap:3vw; align-items:center; margin-top:2vh; }
-.pyr-svg { width:100%; height:auto; display:block; filter:drop-shadow(0 14px 28px rgba(0,0,0,.18)); }
-.pyr-right { display:flex; flex-direction:column; gap:3.2vh; }
-.pyr-tier { position:relative; border-top:2px solid var(--ink); padding-top:1.2vh; }
-.pyr-tier::before { content:''; position:absolute; left:-7px; top:-7px; width:12px; height:12px; background:var(--ink); border-radius:2px; }
-.pyr-tier h3 { font-family:var(--font-sans); font-weight:700; letter-spacing:-.02em; font-size:clamp(18px,1.9vw,30px); }
-.pyr-tier p { font-family:var(--font-sans); font-size:clamp(13px,1.05vw,17px); color:#2E2E2E; line-height:1.5; margin-top:.6vh; }
+.ind-row { display:grid; grid-template-columns:170px 1fr 48px; align-items:center; gap:1vw; margin-bottom:1.4vh; }
+.ind-l { font-family:var(--font-sans); font-size:clamp(13px,1vw,16px); color:var(--ink); font-weight:500; }
+.ind-track { height:12px; background:rgba(12,12,12,.06); border-radius:100px; overflow:hidden; }
+.ind-fill { display:block; height:100%; background:var(--ink); border-radius:100px; }
+.ind-v { font-family:var(--font-mono); font-size:12px; color:#2E2E2E; text-align:right; }
+/* elegant pyramid */
+.pyr-wrap { display:grid; grid-template-columns:clamp(190px,21vw,300px) 1fr; gap:4.5vw; align-items:center; margin-top:2.5vh; }
+.pyr-svg { width:100%; height:auto; display:block; }
+.pyr-right { display:flex; flex-direction:column; gap:4.2vh; }
+.pyr-tier { position:relative; padding-top:1.5vh; border-top:1px solid rgba(12,12,12,.85); }
+.pyr-tier::before { content:''; position:absolute; left:-6px; top:-6px; width:11px; height:11px; background:var(--ink); transform:rotate(45deg); }
+.pyr-tier h3 { font-family:var(--font-sans); font-weight:700; letter-spacing:-.025em; font-size:clamp(20px,2.1vw,33px); line-height:1.04; }
+.pyr-tier h3 small { display:block; font-family:var(--font-mono); font-weight:500; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#7a7a7a; margin-top:.5vh; }
+.pyr-tier p { font-family:var(--font-sans); font-size:clamp(13px,1.05vw,17px); color:#3A3A3A; line-height:1.55; margin-top:.9vh; max-width:48ch; }
 .pyr-tier p b { color:var(--ink); font-weight:600; }
 </style>"""
 
@@ -154,9 +175,24 @@ SLIDES = STYLE + f"""
   <div class="illus">Illustrative data — replace with the loan tape</div>
 </section>
 
-<!-- 3 — CDR BY VINTAGE -->
+<!-- 3 — WHY WE PERFORM BETTER THAN BANKS (pyramid) -->
 <section class="slide theme-light vcenter" data-num="03">
-  <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Risk · vintages</span></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">The edge</span></div>
+  <div class="slide-head reveal"><h1>Why we perform better than <span class="accent">banks.</span></h1>
+  <p class="sub">Three structural edges, stacked — each reinforcing the one above.</p></div>
+  <div class="pyr-wrap reveal">
+    <div>{pyramid_svg}</div>
+    <div class="pyr-right" data-stagger>
+      <div class="pyr-tier"><h3>Data edge</h3><p>Access to the <b>Supplier–SME relationship</b> and <b>transaction data</b>, turning these relationships into better credit insights and solid unit economics.</p></div>
+      <div class="pyr-tier"><h3>Secured credit <small>Central Bank · CMN 4.734</small></h3><p>Access to SME credit-card receivables data and the ability to use it as <b>collateral</b>, enabling <b>smarter underwriting and collection</b>.</p></div>
+      <div class="pyr-tier"><h3>Willingness to pay</h3><p>Leveraging the supplier's brand, our co-branded card captures SMEs' <b>willingness to pay, rooted in loyalty and dependence</b>.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 — CDR BY VINTAGE -->
+<section class="slide theme-light vcenter" data-num="04">
+  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Risk · vintages</span></div>
   <div class="slide-head reveal"><h1>CDR by <span class="accent">vintage.</span></h1>
   <p class="sub">Cumulative loss (over90) over amount originated, by months on book (MOB).</p></div>
   <div class="two-col reveal">
@@ -172,9 +208,9 @@ SLIDES = STYLE + f"""
   <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
 </section>
 
-<!-- 4 — FPD -->
-<section class="slide theme-light vcenter" data-num="04">
-  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Risk · origination</span></div>
+<!-- 5 — FPD -->
+<section class="slide theme-light vcenter" data-num="05">
+  <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risk · origination</span></div>
   <div class="slide-head reveal"><h1>FPD 30 <span class="accent">by month.</span></h1>
   <p class="sub">Value that missed the first installment ÷ total of first installments — quality at the entry of the vintage.</p></div>
   <div class="two-col reveal">
@@ -190,25 +226,25 @@ SLIDES = STYLE + f"""
   <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
 </section>
 
-<!-- 5 — GRANULARITY (pyramid) -->
-<section class="slide theme-light vcenter" data-num="05">
-  <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · granularity</span></div>
+<!-- 6 — GRANULARITY (bars) -->
+<section class="slide theme-light vcenter" data-num="06">
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · granularity</span></div>
   <div class="slide-head reveal"><h1>Granular and <span class="accent">diversified.</span></h1>
-  <p class="sub">Why the book's risk is spread — concentration from the ground up.</p></div>
-  <div class="pyr-wrap reveal">
-    <div>{pyramid_svg}</div>
-    <div class="pyr-right" data-stagger>
-      <div class="pyr-tier"><h3>Low concentration</h3><p>Top-10 obligors are just <b>9%</b> of the book; the largest single name stays <b>under 2%</b>.</p></div>
-      <div class="pyr-tier"><h3>Diversified by industry</h3><p>Spread across <b>retail, industry, services, construction and agro</b> — no single sector dominates.</p></div>
-      <div class="pyr-tier"><h3>Highly granular</h3><p><b>12.4k active positions</b> at a ~<b>R$ 18k</b> average ticket — risk diluted across thousands of small exposures.</p></div>
+  <p class="sub">Exposure by industry and portfolio concentration metrics.</p></div>
+  <div class="two-col reveal">
+    <div class="chartframe" style="padding:3vh 2vw;">{ind_rows}</div>
+    <div style="display:flex; flex-direction:column; gap:1.4vh;">
+      {metric("Avg. ticket","R$ 18k","per operation")}
+      {metric("Top-10 obligors","9%","of the book")}
+      {metric("Active positions","12.4k","obligors")}
     </div>
   </div>
   <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
 </section>
 
-<!-- 6 — TENOR & DURATION -->
-<section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · tenor</span></div>
+<!-- 7 — TENOR & DURATION -->
+<section class="slide theme-light vcenter" data-num="07">
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · tenor</span></div>
   <div class="slide-head reveal"><h1>Average tenor and <span class="accent">duration.</span></h1>
   <p class="sub">A short, fast-rotating book — quick recomposition and risk adjustment.</p></div>
   <div class="metrics reveal" data-stagger>
@@ -222,9 +258,9 @@ SLIDES = STYLE + f"""
   <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
 </section>
 
-<!-- 7 — Jr TRANCHE -->
-<section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · Jr tranche</span></div>
+<!-- 8 — Jr TRANCHE -->
+<section class="slide theme-light vcenter" data-num="08">
+  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · Jr tranche</span></div>
   <div class="slide-head reveal"><h1>The Jr shields the <span class="accent">seniors.</span></h1>
   <p class="sub">Excess spread + subordination provide the safety cushion to senior shares (ex-contributions).</p></div>
   <div class="two-col reveal">
@@ -240,9 +276,9 @@ SLIDES = STYLE + f"""
   <div class="illus">Illustrative data — replace with the loan tape (PIX/boleto)</div>
 </section>
 
-<!-- 8 — CORPORATE / RUNWAY -->
-<section class="slide theme-light vcenter" data-num="08">
-  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Company</span></div>
+<!-- 9 — CORPORATE / RUNWAY -->
+<section class="slide theme-light vcenter" data-num="09">
+  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Company</span></div>
   <div class="slide-head reveal"><h1>Corporate backing of the <span class="accent">leverage.</span></h1>
   <p class="sub">Since this is a leverage of the subordinated tranche, the company's health underpins the structure.</p></div>
   <div class="metrics reveal" data-stagger>
@@ -257,8 +293,8 @@ SLIDES = STYLE + f"""
   <div class="illus">Illustrative data — replace with the company's real figures</div>
 </section>
 
-<!-- 9 — Q&A -->
-<section class="slide theme-dark closing2" data-num="09">
+<!-- 10 — Q&A -->
+<section class="slide theme-dark closing2" data-num="10">
   <div class="closing2-bg"><div class="closing2-grid"></div><div class="closing2-glow"></div></div>
   <div class="closing2-inner">
     <div class="closing2-eyebrow reveal"><span>—</span><span>Discussion</span></div>
