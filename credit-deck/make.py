@@ -13,17 +13,17 @@ def x_at(i, xmax): return L + (i / xmax) * PW
 def y_at(v, ymax): return T + PH - (v / ymax) * PH
 
 
-def grid(ymax, yticks, xlabels=None, xmax=None):
+def grid(ymax, yticks, xlabels=None, xmax=None, xfont=10.5, center=False):
     s = []
     for v in yticks:
         y = y_at(v, ymax)
-        s.append(f'<line x1="{L}" y1="{y:.1f}" x2="{W-R}" y2="{y:.1f}" stroke="#E6E6E6" stroke-width="1"/>')
-        s.append(f'<text x="{L-8}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="11" fill="#5A5A5A">{v:g}</text>')
+        s.append(f'<line x1="{L}" y1="{y:.1f}" x2="{W-R}" y2="{y:.1f}" stroke="#ECECEC" stroke-width="1"/>')
+        s.append(f'<text x="{L-8}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="11" fill="#8a8a8a">{v:g}</text>')
     if xlabels:
         n = len(xlabels)
         for i, lab in enumerate(xlabels):
-            x = x_at(i, xmax if xmax else (n - 1))
-            s.append(f'<text x="{x:.1f}" y="{H-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="10.5" fill="#5A5A5A">{lab}</text>')
+            x = x_at(i + (0.5 if center else 0), len(xlabels) if center else (xmax if xmax else (n - 1)))
+            s.append(f'<text x="{x:.1f}" y="{H-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="{xfont}" fill="#5A5A5A">{lab}</text>')
     return "\n".join(s)
 
 
@@ -62,25 +62,30 @@ cdr_legend = "".join(
     f'<span><i style="background:{c}"></i>{n}</span>' for n, c in zip(cdr.keys(), cdr_colors))
 
 # ---------- FPD 30 by month (real loan tape) ----------
-fpd_months = ["may","jun","jul","aug","sep","oct","nov","dec","jan","feb","mar","apr"]
+fpd_labels = ["may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26"]
 fpd_vals = [15.2,7.4,3.1,0.0,2.0,3.9,1.0,3.7,5.8,0.9,5.4,1.4]
-fbars = [grid(16, [0,5,10,15], None)]
-bw = PW / len(fpd_vals) * 0.62
+fpd_ymax = 16
+fpd_mean = sum(fpd_vals)/len(fpd_vals)
+fbars = [grid(fpd_ymax, [0,5,10,15], fpd_labels, xfont=8.5, center=True)]
+bw = PW / len(fpd_vals) * 0.5
 for i, v in enumerate(fpd_vals):
     cx = x_at(i + 0.5, len(fpd_vals))
     x = cx - bw/2
-    y = y_at(v, 16); h = (T+PH) - y
-    col = "#0C0C0C" if i >= len(fpd_vals)-3 else "#B5B5B5"
-    fbars.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2" fill="{col}"/>')
-    fbars.append(f'<text x="{cx:.1f}" y="{y-5:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" fill="#2E2E2E">{v:.1f}</text>')
-    fbars.append(f'<text x="{cx:.1f}" y="{H-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="10" fill="#5A5A5A">{fpd_months[i]}</text>')
+    y = y_at(v, fpd_ymax); h = (T+PH) - y
+    col = "#0C0C0C" if i >= len(fpd_vals)-3 else "#AEAEAE"
+    fbars.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{max(h,0):.1f}" rx="3" fill="{col}"/>')
+    fbars.append(f'<text x="{cx:.1f}" y="{y-6:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#6A6A6A">{v:.1f}</text>')
+# mean line
+ym = y_at(fpd_mean, fpd_ymax)
+fbars.append(f'<line x1="{L}" y1="{ym:.1f}" x2="{W-R}" y2="{ym:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.55"/>')
+fbars.append(f'<text x="{W-R}" y="{ym-4:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#6A6A6A">avg {fpd_mean:.1f}%</text>')
 fpd_svg = chart("\n".join(fbars))
 
 # ---------- Portfolio over90 vs smoothed trend (real loan tape) ----------
-jr_months= ["jun","jul","aug","sep","oct","nov","dec","jan","feb","mar","apr","may"]
+jr_months= ["jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
 jr_obs   = [4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.6]
 jr_trend = [4.2,9.5,14.0,18.5,21.5,23.0,23.8,23.5,22.2,20.6,19.3,18.2]
-jr = [grid(30, [0,10,20,30], jr_months, xmax=len(jr_months)-1)]
+jr = [grid(30, [0,10,20,30], jr_months, xmax=len(jr_months)-1, xfont=8.5)]
 jr.append(polyline(jr_obs, 30, len(jr_obs)-1, "#C0C0C0", 1.6, dash=True))
 jr.append(polyline(jr_trend, 30, len(jr_trend)-1, "#0C0C0C", 2.6, dots=True))
 jr.append(f'<text x="{W-R}" y="{T-2}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">over90 %</text>')
@@ -93,21 +98,21 @@ ind_rows = "".join(
     f'<span class="ind-track"><span class="ind-fill" style="width:{p*3.2}%"></span></span>'
     f'<span class="ind-v">{p}%</span></div>' for n, p in industry)
 
-# ---------- elegant pyramid ----------
-pyramid_svg = ('<svg class="pyr-svg" viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg">'
+# ---------- elegant pyramid (3 equal bands; aligns with tier rows) ----------
+pyramid_svg = ('<svg class="pyr-svg" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">'
   '<defs>'
-  '<linearGradient id="pyrL" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#505050"/><stop offset="1" stop-color="#2a2a2a"/></linearGradient>'
-  '<linearGradient id="pyrR" x1="1" y1="0" x2="0.65" y2="1"><stop offset="0" stop-color="#242424"/><stop offset="1" stop-color="#0c0c0c"/></linearGradient>'
-  '<filter id="pyrSh" x="-40%" y="-20%" width="180%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>'
+  '<linearGradient id="pyrL" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#5c5c5c"/><stop offset="1" stop-color="#2b2b2b"/></linearGradient>'
+  '<linearGradient id="pyrR" x1="1" y1="0" x2="0.7" y2="1"><stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#0b0b0b"/></linearGradient>'
+  '<filter id="pyrSh" x="-40%" y="-20%" width="180%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>'
   '</defs>'
-  '<ellipse cx="160" cy="386" rx="135" ry="13" fill="#000" opacity="0.13" filter="url(#pyrSh)"/>'
-  '<polygon points="160,18 115.1,124 160,124" fill="url(#pyrL)"/>'
-  '<polygon points="160,18 160,124 204.9,124" fill="url(#pyrR)"/>'
-  '<polygon points="160,132 111.7,132 61.7,250 160,250" fill="url(#pyrL)"/>'
-  '<polygon points="160,132 160,250 258.3,250 208.3,132" fill="url(#pyrR)"/>'
-  '<polygon points="160,258 58.3,258 10,372 160,372" fill="url(#pyrL)"/>'
-  '<polygon points="160,258 160,372 310,372 261.7,258" fill="url(#pyrR)"/>'
-  '<line x1="160" y1="18" x2="160" y2="372" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>'
+  '<ellipse cx="150" cy="356" rx="140" ry="9" fill="#000" opacity="0.12" filter="url(#pyrSh)"/>'
+  '<polygon points="150,8 102.61,119 150,119" fill="url(#pyrL)"/>'
+  '<polygon points="150,8 150,119 197.39,119" fill="url(#pyrR)"/>'
+  '<polygon points="150,125 100.05,125 53.95,233 150,233" fill="url(#pyrL)"/>'
+  '<polygon points="150,125 150,233 246.05,233 199.95,125" fill="url(#pyrR)"/>'
+  '<polygon points="150,239 51.39,239 4,350 150,350" fill="url(#pyrL)"/>'
+  '<polygon points="150,239 150,350 296,350 248.61,239" fill="url(#pyrR)"/>'
+  '<line x1="150" y1="8" x2="150" y2="350" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>'
   '</svg>')
 
 
@@ -139,15 +144,16 @@ STYLE = """<style>
 .ind-track { height:12px; background:rgba(12,12,12,.06); border-radius:100px; overflow:hidden; }
 .ind-fill { display:block; height:100%; background:var(--ink); border-radius:100px; }
 .ind-v { font-family:var(--font-mono); font-size:12px; color:#2E2E2E; text-align:right; }
-/* elegant pyramid */
-.pyr-wrap { display:grid; grid-template-columns:clamp(190px,21vw,300px) 1fr; gap:4.5vw; align-items:center; margin-top:2.5vh; }
-.pyr-svg { width:100%; height:auto; display:block; }
-.pyr-right { display:flex; flex-direction:column; gap:4.2vh; }
-.pyr-tier { position:relative; padding-top:1.5vh; border-top:1px solid rgba(12,12,12,.85); }
+/* elegant pyramid — 3 equal bands aligned with the tier rows */
+.pyr-wrap { display:grid; grid-template-columns:auto 1fr; gap:2.6vw; height:clamp(360px,56vh,520px); align-items:stretch; margin-top:2.5vh; }
+.pyr-fig { display:flex; align-items:center; justify-content:center; }
+.pyr-svg { height:100%; width:auto; display:block; }
+.pyr-right { display:grid; grid-template-rows:repeat(3,1fr); height:100%; }
+.pyr-tier { position:relative; border-top:1px solid var(--ink); padding:1.4vh 0 0 1.2vw; }
 .pyr-tier::before { content:''; position:absolute; left:-6px; top:-6px; width:11px; height:11px; background:var(--ink); transform:rotate(45deg); }
-.pyr-tier h3 { font-family:var(--font-sans); font-weight:700; letter-spacing:-.025em; font-size:clamp(20px,2.1vw,33px); line-height:1.04; }
-.pyr-tier h3 small { display:block; font-family:var(--font-mono); font-weight:500; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#7a7a7a; margin-top:.5vh; }
-.pyr-tier p { font-family:var(--font-sans); font-size:clamp(13px,1.05vw,17px); color:#3A3A3A; line-height:1.55; margin-top:.9vh; max-width:48ch; }
+.pyr-tier h3 { font-family:var(--font-sans); font-weight:700; letter-spacing:-.025em; font-size:clamp(19px,2vw,31px); line-height:1.04; }
+.pyr-tier h3 small { display:block; font-family:var(--font-mono); font-weight:500; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; margin-top:.5vh; }
+.pyr-tier p { font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#3A3A3A; line-height:1.5; margin-top:.7vh; max-width:54ch; }
 .pyr-tier p b { color:var(--ink); font-weight:600; }
 </style>"""
 
@@ -181,7 +187,7 @@ SLIDES = STYLE + f"""
   <div class="slide-head reveal"><h1>Why we perform better than <span class="accent">banks.</span></h1>
   <p class="sub">Three structural edges, stacked — each reinforcing the one above.</p></div>
   <div class="pyr-wrap reveal">
-    <div>{pyramid_svg}</div>
+    <div class="pyr-fig">{pyramid_svg}</div>
     <div class="pyr-right" data-stagger>
       <div class="pyr-tier"><h3>Data edge</h3><p>Access to the <b>Supplier–SME relationship</b> and <b>transaction data</b>, turning these relationships into better credit insights and solid unit economics.</p></div>
       <div class="pyr-tier"><h3>Secured credit <small>Central Bank · CMN 4.734</small></h3><p>Access to SME credit-card receivables data and the ability to use it as <b>collateral</b>, enabling <b>smarter underwriting and collection</b>.</p></div>
