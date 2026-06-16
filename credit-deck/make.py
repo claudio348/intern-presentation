@@ -592,6 +592,65 @@ def runoff_chart():
     return "\n".join(s)
 runoff_svg = runoff_chart()
 
+# ---------- delinquency composition: balance by days-past-due bucket (real loan tape) ----------
+ag_labels = ['nov/24','dec/24','jan/25','feb/25','mar/25','apr/25','may/25','jun/25','jul/25','aug/25','sep/25','oct/25','nov/25','dec/25','jan/26','feb/26','mar/26','apr/26','may/26']
+ag_buckets = ["Em dia","1-30","31-60","61-90","91-180","181-360","360+"]
+ag_data = {
+  "Em dia":  [0.339,0.788,1.697,2.204,3.441,3.627,3.818,4.093,3.425,4.135,3.996,4.281,4.546,3.92,4.433,6.225,7.852,9.203,11.313],
+  "1-30":    [0.0,0.015,0.012,0.368,0.21,0.55,0.585,0.198,0.529,0.326,0.408,0.61,0.6,0.329,0.56,0.299,1.112,0.777,0.611],
+  "31-60":   [0.0,0.0,0.014,0.011,0.001,0.207,0.362,0.473,0.467,0.616,0.038,0.055,0.16,0.201,0.282,0.463,0.083,0.268,0.289],
+  "61-90":   [0.0,0.0,0.0,0.014,0.011,0.001,0.208,0.348,0.268,0.151,0.244,0.022,0.035,0.419,0.203,0.146,0.353,0.084,0.242],
+  "91-180":  [0.0,0.0,0.0,0.0,0.014,0.019,0.014,0.214,0.56,0.823,1.047,0.965,0.723,0.334,0.495,0.677,0.898,0.823,0.703],
+  "181-360": [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.008,0.013,0.014,0.232,0.575,0.838,1.269,1.347,1.368,1.138,1.27,1.196],
+  "360+":    [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.008,0.01,0.011,0.223,0.5,0.751],
+}
+AG_COL = {"Em dia":"#E4E4E4","1-30":"#F6C6C2","31-60":"#EE9A90","61-90":"#E0685C",
+          "91-180":"#D11A2A","181-360":"#A01024","360+":"#6E0A1A"}
+ag_pct90 = [0.0,0.0,0.0,0.0,0.4,0.4,0.3,4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.5]
+ag_totals = [round(sum(ag_data[b][i] for b in ag_buckets),3) for i in range(len(ag_labels))]
+ag_legend = "".join(f'<span><i style="background:{AG_COL[b]};border-radius:2px;height:11px;width:14px"></i>{b}</span>' for b in ag_buckets) + '<span style="color:#8a8a8a">days past due · share of balance</span>'
+
+def aging_chart():
+    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 40, 50, 34, 44
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(ag_labels); ymax = 100
+    xs = [Lx + i/(n-1)*pw for i in range(n)]
+    def Y(v): return Tx+ph - v/ymax*ph
+    base = Y(0); di = ag_labels.index("dec/25"); xd = xs[di]
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    # FIDC-live shaded region
+    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{base-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
+    for t in (0,25,50,75,100):
+        s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    # 100% stacked areas (bottom = current, top = most severe)
+    bottoms = [0.0]*n
+    for b in ag_buckets:
+        tops = [bottoms[i] + (ag_data[b][i]/ag_totals[i]*100 if ag_totals[i] else 0) for i in range(n)]
+        top_pts = " ".join(f"{xs[i]:.1f},{Y(tops[i]):.1f}" for i in range(n))
+        bot_pts = " ".join(f"{xs[i]:.1f},{Y(bottoms[i]):.1f}" for i in range(n-1,-1,-1))
+        s.append(f'<polygon points="{top_pts} {bot_pts}" fill="{AG_COL[b]}" stroke="#FFFFFF" stroke-width="0.5"/>')
+        bottoms = tops
+    # 90+ boundary (top of the 61-90 band) — bold line delineating the 90+ region
+    bnd = " ".join(f"{xs[i]:.1f},{Y(100-ag_pct90[i]):.1f}" for i in range(n))
+    s.append(f'<polyline points="{bnd}" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round"/>')
+    # current 90+ end pill
+    ey = Y(100-ag_pct90[-1])
+    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ey:.1f}" r="3.2" fill="#0C0C0C"/>')
+    s.append(f'<rect x="{xs[-1]+5:.1f}" y="{ey-9:.1f}" width="34" height="17" rx="3" fill="#0C0C0C"/>')
+    s.append(f'<text x="{xs[-1]+22:.1f}" y="{ey+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9.5" fill="#fff">{ag_pct90[-1]:.0f}%</text>')
+    s.append(f'<text x="{xs[-1]+5:.1f}" y="{Tx+10:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#7A1020">90+ region ▲</text>')
+    # total book R$ labels along the top
+    for i in range(0, n, 3):
+        s.append(f'<text x="{xs[i]:.1f}" y="{Tx-6:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8" fill="#9a9a9a">{ag_totals[i]:.1f}</text>')
+    s.append(f'<text x="{xs[-1]:.1f}" y="{Tx-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9" fill="#0C0C0C">R${ag_totals[-1]:.1f}M</text>')
+    # FIDC divider + label
+    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
+    s.append(f'<text x="{xd+7:.1f}" y="{base-7:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC live →</text>')
+    for i in range(0, n, 3):
+        s.append(f'<text x="{xs[i]:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{ag_labels[i]}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+aging_svg = aging_chart()
+
 # ---------- credit economics waterfall ----------
 # (label, y0, y1, color, value, label_pos)
 wf_steps = [("Aggregate Yield",0,95.8,"#0C0C0C","95.8%","top"),
@@ -1044,22 +1103,14 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: PIX/boleto loan tape · book @ May/26 · 16,172 contracts</div>
 </section>
 
-<!-- 9 — Jr TRANCHE -->
+<!-- 9 — DELINQUENCY COMPOSITION (aging) -->
 <section class="slide theme-light vcenter" data-num="09">
-  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · Jr tranche</span></div>
-  <div class="slide-head reveal"><h1>The Jr shields the <span class="accent">seniors.</span></h1>
-  <p class="sub">Over90 stabilizing; subordination + excess spread absorb losses before seniors.</p></div>
-  <div class="two-col reveal">
-    <div class="chartframe">{jr_svg}
-      <div class="legend"><span><i style="background:#0C0C0C"></i>trend (smoothed)</span><span><i style="background:#C0C0C0"></i>portfolio over90 (observed)</span></div>
-    </div>
-    <div style="display:flex; flex-direction:column; gap:1.2vh;">
-      {metric("Subordination","22%","structure · cushion for seniors", wip=True)}
-      {metric("Excess spread","~14% <span style='font-size:.45em'>/yr</span>","structure · above senior cost", wip=True)}
-    </div>
-  </div>
-  <div class="callout reveal">The over90 ramp reflects <b>book seasoning</b> and the <b>2025-Q1 cohort</b> now rolling off — over90 is <b>down from ~25% to ~18%</b> as recent vintages dominate. The Jr's subordination + excess spread absorb these losses, keeping the <b>senior shares protected</b> (ex-contributions).</div>
-  <div class="illus">Over90: PIX/boleto loan tape · subordination / excess spread = structure (to confirm)</div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Risk · aging</span></div>
+  <div class="slide-head reveal"><h1>Delinquency <span class="accent">composition.</span></h1>
+  <p class="sub">Outstanding balance by days-past-due bucket — share over time, R$M on top.</p></div>
+  <div class="blegend reveal">{ag_legend}</div>
+  <div class="chartframe reveal">{aging_svg}</div>
+  <div class="illus">Source: PIX/boleto loan tape · balance by DPD bucket · monthly · 90+ region above the bold line</div>
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
