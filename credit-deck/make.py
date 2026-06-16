@@ -600,14 +600,14 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: portfolio by month/source · May/24–Jun/26</div>
 </section>
 
-<!-- INCREASING DIVERSIFICATION — OFF-BALANCE FIDC -->
+<!-- FIDC LOAN BOOK GROWTH (off-balance) -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · off-balance</span></div>
-  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
-  <p class="sub">Anchor as % of the credit portfolio — FIDC carve-out.</p>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · loan book growth</span></div>
+  <div class="slide-head reveal"><h1>FIDC loan book <span class="accent">growth.</span></h1>
+  <p class="sub">Outstanding balance by anchor (R$M) — FIDC carve-out since Dec-25.</p>
   <span class="tag-pill">Off-balance · FIDC</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
-  <div class="chartframe reveal">{div_off_svg}</div>
+  <div class="chartframe reveal">{lb_off_svg}</div>
   <div class="illus">Source: PIX/boleto loan tape · Dec/25–May/26 (FIDC)</div>
 </section>
 
