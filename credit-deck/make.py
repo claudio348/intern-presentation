@@ -482,6 +482,26 @@ conc_svg = hbar90()
 conc_legend = ('<span><i style="background:#B5B5B5"></i>% of 90+</span>'
                '<span><i style="background:#C0143C"></i>CDR (90+ ÷ principal originated)</span>')
 
+def _heat(cdr):
+    t = min(cdr/18.0, 1.0); a = (244,166,184); b = (122,10,35)
+    return "#%02X%02X%02X" % tuple(round(a[k]+(b[k]-a[k])*t) for k in range(3))
+
+def conc_rows():
+    maxsh = max(sh for _, _, sh, _ in conc90)
+    out = ['<div class="r90 head"><span>By source</span><span class="r-val">90+ (R$)</span>'
+           '<span>Share of 90+</span><span class="r-pct">%</span><span style="text-align:center">CDR</span></div>']
+    for name, saldo, sh, cdr in conc90:
+        w = sh/maxsh*100; sval = f"{saldo:,}".replace(",", ".")
+        out.append(f'<div class="r90"><span class="r-name">{name}</span><span class="r-val">{sval}</span>'
+                   f'<span class="r-track"><span class="r-fill" style="width:{w:.0f}%"></span></span>'
+                   f'<span class="r-pct">{sh:.1f}%</span>'
+                   f'<span class="r-cdr" style="background:{_heat(cdr)}">{cdr:.1f}%</span></div>')
+    out.append('<div class="r90 total"><span class="r-name">Total carteira</span><span class="r-val">2.650.209</span>'
+               '<span></span><span class="r-pct">100%</span>'
+               f'<span class="r-cdr" style="background:{_heat(5.7)}">5,7%</span></div>')
+    return "".join(out)
+conc_rows_html = conc_rows()
+
 # ---------- 90+ by vintage (origination month) ----------
 vint = [("nov/24",10090,0.4,2.9,0),("dez/24",29297,1.1,4.8,0),("jan/25",60118,2.3,5.0,0),
         ("fev/25",256352,9.7,17.6,1),("mar/25",329536,12.4,17.7,1),("abr/25",129270,4.9,7.0,0),
@@ -619,6 +639,17 @@ STYLE = """<style>
 .ctab tr.total td { font-weight:700; color:var(--ink); border-top:2px solid #0C0C0C; border-bottom:none; }
 .ctab.sm th, .ctab.sm td { padding:.42vh .7vw; font-size:clamp(9.5px,.8vw,12px); }
 .ctab tr.hi td { background:rgba(192,20,60,.08); }
+.r90 { display:grid; grid-template-columns:170px 112px 1fr 52px 72px; align-items:center; gap:1.4vw; padding:1.55vh 0; border-bottom:1px solid rgba(12,12,12,.1); }
+.r90.head { border-bottom:2px solid #0C0C0C; padding:0 0 1vh; }
+.r90.head span { font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; }
+.r90.total { border-top:2px solid #0C0C0C; border-bottom:none; }
+.r90 .r-name { font-family:var(--font-sans); font-weight:600; font-size:clamp(14px,1.25vw,20px); color:var(--ink); }
+.r90 .r-val { font-family:var(--font-mono); font-size:clamp(12px,1vw,15px); color:#2E2E2E; text-align:right; }
+.r90 .r-track { height:18px; background:rgba(12,12,12,.06); border-radius:100px; overflow:hidden; }
+.r90 .r-fill { display:block; height:100%; border-radius:100px; background:linear-gradient(90deg,#C8C8C8,#A6A6A6); }
+.r90 .r-pct { font-family:var(--font-sans); font-weight:700; font-size:clamp(12px,1vw,15px); color:#2E2E2E; text-align:right; }
+.r90 .r-cdr { font-family:var(--font-sans); font-weight:700; font-size:12.5px; color:#fff; text-align:center; padding:4px 0; border-radius:7px; }
+.r90.total .r-name, .r90.total .r-val, .r90.total .r-pct { font-weight:700; color:var(--ink); }
 .callout { border:1px solid rgba(12,12,12,.18); border-left:3px solid var(--ink); border-radius:10px; padding:1.6vh 1.4vw; margin-top:2vh; font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#2E2E2E; line-height:1.55; }
 .callout b { color:var(--ink); font-weight:600; }
 .illus { position:absolute; bottom:2.2vh; left:3vw; z-index:6; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
@@ -748,13 +779,8 @@ SLIDES = STYLE + f"""
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risk · concentration</span></div>
   <div class="slide-head reveal"><h1>Where does the <span class="accent">90+ come from?</span></h1>
   <p class="sub">Over90 by source — R$ 2.65M decomposed (May/26). CDR = 90+ ÷ principal originated.</p></div>
-  <div class="two-col reveal" style="grid-template-columns:1fr 1.2fr; align-items:center;">
-    <div>{conc_tbl}</div>
-    <div>
-      <div class="blegend" style="margin-top:0">{conc_legend}</div>
-      <div class="chartframe">{conc_svg}</div>
-    </div>
-  </div>
+  <div class="reveal" style="margin-top:2vh;">{conc_rows_html}</div>
+  <div class="blegend reveal" style="margin-top:1.6vh"><span><i style="background:#A6A6A6"></i>bar = share of the 90+ pool</span><span><i style="background:#B30E36"></i>chip = CDR · severity (darker = higher)</span></div>
   <div class="illus">Source: PIX/boleto loan tape · over90 balance May/26</div>
 </section>
 
