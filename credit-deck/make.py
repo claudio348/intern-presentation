@@ -149,16 +149,16 @@ ANCHOR_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
               "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Brinox":"#0F8C8C","Others":"#B5B5B5"}
 anchor_legend = "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in ANCHOR_ORDER)
 
-# off-balance (FIDC) — loan tape balance by anchor (R$M), FIDC live from Jan/26
-lt_labels = ["jan/26","feb/26","mar/26","apr/26","may/26"]
+# off-balance (FIDC) — loan tape balance by anchor (R$M), FIDC live from Dec/25
+lt_labels = ["dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
 lt_data = {
-  "Cantu":[0.97,1.08,2.11,2.4,4.4],
-  "Moura":[0.54,1.55,2.12,2.5,2.7],
-  "Chilli Beans":[3.18,3.62,3.93,3.7,3.41],
-  "Juntos Somos Mais":[0.88,1.01,1.31,1.95,2.22],
-  "Malwee":[1.5,1.56,1.73,1.86,1.83],
-  "Brinox":[0.26,0.34,0.34,0.37,0.39],
-  "Others":[0,0.04,0.11,0.15,0.16],
+  "Cantu":[0.77,0.97,1.08,2.11,2.4,4.4],
+  "Moura":[0.38,0.54,1.55,2.12,2.5,2.7],
+  "Chilli Beans":[3.12,3.18,3.62,3.93,3.7,3.41],
+  "Juntos Somos Mais":[0.96,0.88,1.01,1.31,1.95,2.22],
+  "Malwee":[0.98,1.5,1.56,1.73,1.86,1.83],
+  "Brinox":[0.27,0.26,0.34,0.34,0.37,0.39],
+  "Others":[0,0,0.04,0.11,0.15,0.16],
 }
 
 def _xstep(n): return 1 if n <= 14 else (2 if n <= 22 else 3)
@@ -413,11 +413,11 @@ STYLE = """<style>
 .pyr-fig { display:flex; align-items:center; justify-content:center; }
 .pyr-svg { height:100%; width:auto; display:block; }
 .pyr-right { display:grid; grid-template-rows:repeat(3,1fr); height:100%; position:relative; }
-.pyr-right::before { content:''; position:absolute; left:0; top:6%; bottom:6%; width:1px; background:linear-gradient(to bottom, transparent, rgba(12,12,12,.28), transparent); }
-.pyr-tier { position:relative; border-top:1px solid var(--ink); padding:1.4vh 2.6vw 0 1.4vw; }
-.pyr-tier::before { content:''; position:absolute; left:-6px; top:-6px; width:11px; height:11px; background:var(--ink); transform:rotate(45deg); z-index:1; }
-.pyr-tier::after { content:''; position:absolute; left:-3vw; top:-1px; width:3vw; height:1px; background:linear-gradient(to left, var(--ink), transparent); }
-.pyr-idx { position:absolute; right:0; top:1.2vh; font-family:var(--font-mono); font-size:12px; letter-spacing:.12em; color:#C4C4C4; }
+.pyr-right::before { content:''; position:absolute; left:0; top:8%; bottom:8%; width:1px; background:linear-gradient(to bottom, transparent, rgba(12,12,12,.28), transparent); }
+.pyr-tier { position:relative; display:flex; flex-direction:column; justify-content:center; padding:0 2.6vw 0 2vw; }
+.pyr-tier::before { content:''; position:absolute; left:-6px; top:50%; width:11px; height:11px; background:var(--ink); transform:translateY(-50%) rotate(45deg); z-index:1; }
+.pyr-tier::after { content:''; position:absolute; left:-3vw; top:50%; width:3vw; height:1px; background:linear-gradient(to left, var(--ink), transparent); }
+.pyr-idx { position:absolute; right:0; top:50%; transform:translateY(-50%); font-family:var(--font-mono); font-size:12px; letter-spacing:.12em; color:#C4C4C4; }
 .pyr-tier h3 { font-family:var(--font-sans); font-weight:700; letter-spacing:-.025em; font-size:clamp(19px,2vw,31px); line-height:1.04; }
 .pyr-tier h3 small { display:block; font-family:var(--font-mono); font-weight:500; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; margin-top:.5vh; }
 .pyr-tier p { font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#3A3A3A; line-height:1.5; margin-top:.7vh; max-width:54ch; }
@@ -525,28 +525,6 @@ SLIDES = STYLE + f"""
   <span class="tag-pill">Off-balance · FIDC</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
   <div class="chartframe reveal">{lb_off_svg}</div>
-  <div class="illus">Source: PIX/boleto loan tape · Jan/26–May/26 (FIDC)</div>
-</section>
-
-<!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
-<section class="slide theme-light vcenter" data-num="08">
-  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · consolidated</span></div>
-  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
-  <p class="sub">Anchor as % of the credit portfolio — total R$M on top.</p>
-  <span class="tag-pill">Corporate consolidated</span></div>
-  <div class="blegend reveal">{anchor_legend}</div>
-  <div class="chartframe reveal">{div_con_svg}</div>
-  <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
-</section>
-
-<!-- INCREASING DIVERSIFICATION — OFF-BALANCE FIDC -->
-<section class="slide theme-light vcenter" data-num="09">
-  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · off-balance</span></div>
-  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
-  <p class="sub">Anchor as % of the credit portfolio — FIDC carve-out.</p>
-  <span class="tag-pill">Off-balance · FIDC</span></div>
-  <div class="blegend reveal">{anchor_legend}</div>
-  <div class="chartframe reveal">{div_off_svg}</div>
   <div class="illus">Source: PIX/boleto loan tape · Jan/26–May/26 (FIDC)</div>
 </section>
 
