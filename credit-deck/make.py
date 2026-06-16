@@ -893,23 +893,7 @@ SLIDES = STYLE + f"""
   <div class="illus">1Q26 annualized · % of aggregate yield · NIM bridge</div>
 </section>
 
-<!-- 4 — CDR BY VINTAGE -->
-<section class="slide theme-light vcenter" data-num="04">
-  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Risk · vintages</span></div>
-  <div class="slide-head reveal"><h1>CDR by <span class="accent">vintage.</span></h1>
-  <p class="sub">Cumulative over90 loss ÷ originated, by months on book (MOB).</p></div>
-  <div class="two-col reveal">
-    <div class="chartframe">{cdr_svg}
-      <div class="legend">{cdr_legend}</div>
-    </div>
-    <ul class="readlist">
-      <li><b>2025-Q1 was the weakest cohort</b> (~17% peak over90 / originated).</li>
-      <li>Underwriting changes cut peak loss to <b>~8% by 2025-Q4</b> — improving vintage over vintage.</li>
-      <li>Short <b>~3.5-month tenor</b>: over90 peaks around MOB 4–6, then rolls off as the book amortizes.</li>
-    </ul>
-  </div>
-  <div class="illus">Source: PIX/boleto loan tape · Jan/26–May/26 (FIDC)</div>
-</section>
+<!-- 4 — CDR BY VINTAGE (removed per request) -->
 
 <!-- 5 — FPD -->
 <section class="slide theme-light vcenter" data-num="05">
