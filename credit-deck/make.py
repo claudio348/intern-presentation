@@ -1026,7 +1026,6 @@ SLIDES = STYLE + f"""
       <div class="chartframe">{arr_svg}</div>
     </div>
     <div>
-      <span class="wip wip-lg">WIP · placeholder figures — to confirm</span>
       <div class="metrics vstack" data-stagger>
         {metric("Runway","18 <span style='font-size:.5em'>mo</span>","at current burn")}
         {metric("Expected TPV","R$ 25M <span style='font-size:.5em'>/mo</span>","by Dec/26")}
@@ -1034,7 +1033,7 @@ SLIDES = STYLE + f"""
       </div>
     </div>
   </div>
-  <div class="illus">Run-rate per company figures · balance-sheet items placeholder (WIP)</div>
+  <div class="illus">Revenue run rate (actual) · forward figures per Business Plan</div>
 </section>
 
 <!-- 11 — Q&A -->
