@@ -144,9 +144,10 @@ pyramid_svg = iso_stack()
 
 
 # ---------- anchor composition: generic stacked R$M and stacked % ----------
-ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox","Others"]
+ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox","iFood","Truss","Intelbras","Others"]
 ANCHOR_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
-              "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Brinox":"#0F8C8C","Others":"#B5B5B5"}
+              "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Brinox":"#0F8C8C",
+              "iFood":"#EE6B2D","Truss":"#6E7B8B","Intelbras":"#2EA0C0","Others":"#B5B5B5"}
 anchor_legend = "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in ANCHOR_ORDER)
 
 # off-balance (FIDC) — loan tape balance by anchor (R$M), FIDC live from Dec/25
@@ -158,7 +159,10 @@ lt_data = {
   "Juntos Somos Mais":[0.96,0.88,1.01,1.31,1.95,2.22],
   "Malwee":[0.98,1.5,1.56,1.73,1.86,1.83],
   "Brinox":[0.27,0.26,0.34,0.34,0.37,0.39],
-  "Others":[0,0,0.04,0.11,0.15,0.16],
+  "iFood":[0.0,0.0,0.03,0.11,0.15,0.14],
+  "Truss":[0.0,0.0,0.0,0.0,0.0,0.01],
+  "Intelbras":[0,0,0,0,0,0],
+  "Others":[0,0,0,0,0,0],
 }
 
 def _xstep(n): return 1 if n <= 14 else (2 if n <= 22 else 3)
@@ -295,7 +299,10 @@ port_data = {
     "Juntos Somos Mais":[0.0,0.0,0.0,0.04,0.08,0.73,1.29,1.55,1.73,1.92,2.4,2.35,2.41,2.54,2.5,2.65,4.06,5.44,5.87,5.26,5.04,5.14,5.29,5.31,5.09,5.03],
     "Malwee":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.07,1.01,1.44,1.77,1.87,2.08,2.17,2.06,2.12],
     "Brinox":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.36,0.8,0.57,0.61,0.42,0.51,0.5,0.52,0.32,0.45],
-    "Others":[0.04,0.06,0.07,0.18,0.14,0.27,0.24,0.37,0.62,1.08,1.45,1.82,1.9,2.05,2.12,2.38,2.55,2.41,2.39,2.3,2.17,2.12,2.33,2.31,2.21,3.39],
+    "iFood":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.04,0.12,0.15,0.15,0.15],
+    "Truss":[0,0,0,0,0,0,0.02,0.06,0.08,0.17,0.19,0.19,0.23,0.27,0.32,0.31,0.31,0.33,0.34,0.26,0.23,0.19,0.19,0.18,0.13,0.12],
+    "Intelbras":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.05],
+    "Others":[0.04,0.06,0.07,0.18,0.14,0.27,0.21,0.31,0.53,0.91,1.26,1.62,1.67,1.79,1.8,2.07,2.23,2.08,2.05,2.04,1.94,1.89,2.02,1.99,1.92,3.06],
 }
 FIDC_FROM = "2025-12"   # month the FIDC was raised (shaded region onward)
 
