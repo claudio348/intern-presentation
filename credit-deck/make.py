@@ -428,6 +428,51 @@ def cohort_lines():
     return "\n".join(s)
 cohort_svg = cohort_lines()
 
+# ---------- delinquency (90+) by cohort & partner ----------
+dq_order = ["Moura","Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee"]
+dq_data = {
+    "Cantu":[0.0,0.0,0.0,1.9,4.5,7.4,7.8,7.9,6.5,5.7,6.1,7.5,6.8],
+    "Moura":[0.0,0.0,0.0,0.0,0.1,1.4,4.0,4.4,10.4,14.8,13.6,8.1,15.0],
+    "Chilli Beans":[0.0,0.0,0.0,0.0,0.1,2.7,1.5,14.9,16.0,21.1,15.5,16.9,13.9],
+    "Juntos Somos Mais":[0.0,0.0,0.0,0.3,3.0,4.3,3.7,7.1,11.1,10.2,8.9,11.8,12.4],
+    "Malwee":[0.0,0.0,0.0,0.0,0.0,0.1,0.0,0.2,1.6],
+    "Brinox":[0.0,0.0,0.0,4.1,17.8,14.1,15.5,18.6,0.0,0.0],
+}
+dq_legend = "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in dq_order)
+def dq_lines():
+    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 46, 46, 34, 44
+    maxm = max(len(v) for v in dq_data.values()); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 24
+    def X(j): return Lx + j/(maxm-1)*pw
+    def Y(v): return Tx+ph - v/ymax*ph
+    base = Y(0)
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    for t in (0,8,16,24):
+        s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    for j in range(maxm):
+        s.append(f'<text x="{X(j):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">M{j}</text>')
+    ends = []
+    for g in dq_order:
+        vals = dq_data[g]; col = ANCHOR_COL[g]
+        pts = " ".join(f"{X(j):.1f},{Y(v):.1f}" for j, v in enumerate(vals))
+        s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>')
+        je = len(vals)-1
+        ends.append({"x": X(je), "real": Y(vals[je]), "y": Y(vals[je]), "v": vals[je], "col": col})
+    ends.sort(key=lambda e: e["y"]); prev = -99
+    for e in ends:
+        if e["y"] < prev+15: e["y"] = prev+15
+        prev = e["y"]
+    for e in ends:
+        xe = e["x"]; col = e["col"]; ry = e["real"]; ly = e["y"]; val = f'{e["v"]:.0f}%'
+        s.append(f'<circle cx="{xe:.1f}" cy="{ry:.1f}" r="3.2" fill="{col}"/>')
+        if abs(ly-ry) > 1.5:
+            s.append(f'<line x1="{xe:.1f}" y1="{ry:.1f}" x2="{xe+6:.1f}" y2="{ly:.1f}" stroke="{col}" stroke-width="1"/>')
+        s.append(f'<rect x="{xe+6:.1f}" y="{ly-7:.1f}" width="30" height="14" rx="3" fill="{col}"/>')
+        s.append(f'<text x="{xe+21:.1f}" y="{ly+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8" fill="#fff">{val}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+dq_svg = dq_lines()
+
 # ---------- revenue run rate (ARR) ----------
 arr_labels = ["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","Apr/26"]
 arr_vals = [319,550,1427,1716,2077,2532,2976,3176]
@@ -851,6 +896,16 @@ SLIDES = STYLE + f"""
   <div class="blegend reveal">{cohort_legend}</div>
   <div class="chartframe reveal">{cohort_svg}</div>
   <div class="illus">Source: cohort — credit portfolio · balance by vintage</div>
+</section>
+
+<!-- DELINQUENCY BY COHORT & PARTNER -->
+<section class="slide theme-light vcenter" data-num="07">
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risk · cohort 90+</span></div>
+  <div class="slide-head reveal"><h1>Delinquency by <span class="accent">cohort.</span></h1>
+  <p class="sub">90+ rate by months on book, per partner (clientes-weighted).</p></div>
+  <div class="blegend reveal">{dq_legend}</div>
+  <div class="chartframe reveal">{dq_svg}</div>
+  <div class="illus">Source: cohort — 90+ delinquency by vintage</div>
 </section>
 
 <!-- WHERE DOES 90+ COME FROM -->
