@@ -12,6 +12,18 @@ PW, PH = W - L - R, H - T - B
 def x_at(i, xmax): return L + (i / xmax) * PW
 def y_at(v, ymax): return T + PH - (v / ymax) * PH
 
+# month labels in Portuguese
+_PTM = {"jan":"jan","feb":"fev","mar":"mar","apr":"abr","may":"mai","jun":"jun",
+        "jul":"jul","aug":"ago","sep":"set","oct":"out","nov":"nov","dec":"dez"}
+def ptm(lbls):
+    out = []
+    for l in lbls:
+        if "/" in l:
+            mo, yr = l.split("/"); out.append(_PTM.get(mo.lower(), mo) + "/" + yr)
+        else:
+            out.append(l)
+    return out
+
 
 def grid(ymax, yticks, xlabels=None, xmax=None, xfont=10.5, center=False):
     s = []
@@ -60,43 +72,40 @@ cdr_svg = chart("\n".join(cdr_inner))
 cdr_legend = "".join(
     f'<span><i style="background:{c}"></i>{n}</span>' for n, c in zip(cdr.keys(), cdr_colors))
 
-# ---------- FPD 30 by month — deviation-from-threshold lollipops (real loan tape) ----------
-fpd_labels = ["may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26"]
-fpd_vals = [15.2,7.4,3.1,0.0,2.0,3.9,1.0,3.7,5.8,0.9,5.4,1.4]
-FPD_THR = 5.0            # underwriting target — FPD healthy below this
-FPD_RED = "#D11A2A"      # breach accent
+# ---------- FPD 30 — faixa de calor mensal por safra (real loan tape) ----------
+fpd_labels = ["mai/25","jun/25","jul/25","ago/25","set/25","out/25","nov/25","dez/25","jan/26","fev/26","mar/26","abr/26"]
+fpd_vals   = [15.2,7.4,3.1,0.0,2.0,3.9,1.0,3.7,5.8,0.9,5.4,1.4]
+FPD_THR = 5.0
+FPD_MEAN = sum(fpd_vals)/len(fpd_vals)
 
-def fpd_area():
-    ymax = 16; Lx, Rx, Tx, Bx = 46, 18, 40, 40
-    pw, ph = W-Lx-Rx, H-Tx-Bx; n = len(fpd_vals)
-    slot = pw/n; bw = slot*0.52
-    def cx(i): return Lx + slot*i + slot/2
-    def Y(v): return Tx+ph - v/ymax*ph
-    ybase = Tx+ph; ythr = Y(FPD_THR)
-    mean = sum(fpd_vals)/n; ymn = Y(mean)
-    s = [f'<svg class="chart" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg">']
-    # y labels (no gridlines)
-    for t in (0,5,10,15):
-        s.append(f'<text x="{Lx-8}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
-    # columns — in target (ink) vs breach (red)
+def _fpd_col(v):
+    if v <= FPD_THR:
+        t = v/FPD_THR; a=(236,236,236); b=(202,202,202)               # saudável → cinza claro→médio
+    else:
+        t = min((v-FPD_THR)/10.0,1.0); a=(233,150,150); b=(176,14,54)  # breach → rampa vermelha
+    return "#%02X%02X%02X" % tuple(round(a[k]+(b[k]-a[k])*t) for k in range(3))
+
+def fpd_ribbon():
+    WD, HD = 1040, 300; Lx, Rx, Tx, Bx = 6, 6, 14, 34
+    n = len(fpd_vals); gap = 10
+    cw = (WD-Lx-Rx-gap*(n-1))/n; ch = HD-Tx-Bx
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     for i,v in enumerate(fpd_vals):
-        x = cx(i)-bw/2; yv = Y(v); breach = v > FPD_THR
-        col = FPD_RED if breach else "#0C0C0C"
-        s.append(f'<rect x="{x:.1f}" y="{yv:.1f}" width="{bw:.1f}" height="{ybase-yv:.1f}" rx="2.5" fill="{col}" opacity="{1 if (breach or i==n-1) else 0.86}"/>')
-        vc = FPD_RED if breach else ("#0C0C0C" if i==n-1 else "#6A6A6A")
-        fw = 700 if (breach or i==n-1) else 500
-        s.append(f'<text x="{cx(i):.1f}" y="{yv-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{fw}" font-size="9" fill="{vc}">{v:.1f}</text>')
-    # underwriting target line (drawn over bars) — label sits in the empty mid gap
-    s.append(f'<line x1="{Lx}" y1="{ythr:.1f}" x2="{W-Rx}" y2="{ythr:.1f}" stroke="#0C0C0C" stroke-width="1.5" stroke-dasharray="5 4"/>')
-    s.append(f'<text x="{cx(4):.1f}" y="{ythr-8:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" letter-spacing="0.04em" fill="#5A5A5A">underwriting target &le; 5%</text>')
-    # spike annotation
-    s.append(f'<text x="{cx(0)+bw/2+6:.1f}" y="{Y(fpd_vals[0])+14:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#9a9a9a">isolated cohort</text>')
-    # x labels
-    for i,lab in enumerate(fpd_labels):
-        s.append(f'<text x="{cx(i):.1f}" y="{H-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{lab}</text>')
+        x = Lx + i*(cw+gap); breach = v > FPD_THR; col = _fpd_col(v)
+        tcol = "#fff" if v > 6.5 else "#0C0C0C"
+        s.append(f'<rect x="{x:.1f}" y="{Tx}" width="{cw:.1f}" height="{ch}" rx="7" fill="{col}"/>')
+        s.append(f'<text x="{x+cw/2:.1f}" y="{Tx+ch/2+4:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="800" font-size="27" fill="{tcol}">{v:.1f}<tspan font-size="13" font-weight="600">%</tspan></text>')
+        if breach:
+            s.append(f'<circle cx="{x+cw/2:.1f}" cy="{Tx+18:.1f}" r="3" fill="{tcol}" opacity="0.85"/>')
+        s.append(f'<text x="{x+cw/2:.1f}" y="{HD-10}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="10" fill="#5A5A5A">{fpd_labels[i]}</text>')
     s.append('</svg>')
     return "\n".join(s)
-fpd_svg = fpd_area()
+fpd_svg = fpd_ribbon()
+fpd_scale = ('<span style="color:#8a8a8a">escala FPD</span>'
+             '<span><i style="background:#ECECEC"></i>0%</span>'
+             '<span><i style="background:#CACACA"></i>meta &le; 5%</span>'
+             '<span><i style="background:#E99696"></i>&gt; 5%</span>'
+             '<span><i style="background:#B00E36"></i>15%+</span>')
 
 # ---------- Portfolio over90 vs smoothed trend (real loan tape) ----------
 jr_months= ["jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
@@ -134,15 +143,15 @@ pyramid_svg = iso_stack()
 
 
 # ---------- anchor composition: generic stacked R$M and stacked % ----------
-ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox","iFood","Intelbras","Others"]
+ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox","iFood","Intelbras","Outros"]
 ANCHOR_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
               "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Brinox":"#0F8C8C",
-              "iFood":"#EA1D2C","Intelbras":"#5DB85C","Others":"#B5B5B5"}
+              "iFood":"#EA1D2C","Intelbras":"#5DB85C","Outros":"#B5B5B5"}
 anchor_legend = ("".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in ANCHOR_ORDER)
-                 + '<span style="color:#8a8a8a">Others = app / beta testers & users</span>')
+                 + '<span style="color:#8a8a8a">Outros = app / beta testers & usuários</span>')
 
 # off-balance (FIDC) — loan tape balance by anchor (R$M), FIDC live from Dec/25
-lt_labels = ["dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
+lt_labels = ptm(["dec/25","jan/26","feb/26","mar/26","apr/26","may/26"])
 lt_data = {
   "Cantu":[0.77,0.97,1.08,2.11,2.4,4.4],
   "Moura":[0.38,0.54,1.55,2.12,2.5,2.7],
@@ -152,7 +161,7 @@ lt_data = {
   "Brinox":[0.27,0.26,0.34,0.34,0.37,0.39],
   "iFood":[0.0,0.0,0.03,0.11,0.15,0.14],
   "Intelbras":[0,0,0,0,0,0],
-  "Others":[0,0,0,0,0,0.01],   # incl. Truss + app / beta users
+  "Outros":[0,0,0,0,0,0.01],   # incl. Truss + app / beta users
 }
 
 def _xstep(n): return 1 if n <= 14 else (2 if n <= 22 else 3)
@@ -180,7 +189,7 @@ def stack_rm(labels, data, ymax, yticks, fidc_idx):
             hh = v/ymax*ph; y = ytop-hh
             s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{ANCHOR_COL[g]}"/>')
             if tot and hh >= 14 and v/tot*100 >= 9:
-                tc = "#2E2E2E" if g == "Others" else "#fff"
+                tc = "#2E2E2E" if g == "Outros" else "#fff"
                 s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8" fill="{tc}">{round(v/tot*100)}%</text>')
             ytop = y
         if tot > 0.05:
@@ -188,7 +197,7 @@ def stack_rm(labels, data, ymax, yticks, fidc_idx):
             s.append(f'<text x="{cx:.1f}" y="{ytop-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="8" fill="{"#0C0C0C" if last else "#6A6A6A"}">{tot:.1f}</text>')
     if fidc_idx is not None:
         s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-        s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+        s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
     for i in range(0, n, _xstep(n)):
         s.append(f'<text x="{Lx+slot*i+slot/2:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{labels[i]}</text>')
     s.append('</svg>'); return "\n".join(s)
@@ -213,7 +222,7 @@ def stack_pct(labels, data, fidc_idx):
             pct = v/tot*100; hh = pct/100*ph; y = ytop-hh
             s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{ANCHOR_COL[g]}"/>')
             if pct >= 7:
-                tc = "#2E2E2E" if g == "Others" else "#fff"
+                tc = "#2E2E2E" if g == "Outros" else "#fff"
                 s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="{tc}">{round(pct)}%</text>')
             ytop = y
         if tot > 0.05:
@@ -221,7 +230,7 @@ def stack_pct(labels, data, fidc_idx):
         s.append(f'<text x="{cx:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{labels[i]}</text>')
     if fidc_idx is not None:
         s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-        s.append(f'<text x="{xd+7:.1f}" y="16" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC raised →</text>')
+        s.append(f'<text x="{xd+7:.1f}" y="16" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC ativo →</text>')
     s.append('</svg>'); return "\n".join(s)
 
 # off-balance (FIDC) charts — no shading (whole window is post-FIDC)
@@ -235,18 +244,18 @@ def metric(k, v, s, wip=False):
 
 
 # ---------- monthly TPV / origination by rail (real) ----------
-tpv_months = ["may/24","jun/24","jul/24","aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
-tpv_order = ["Legacy rail","PIX Rails"]   # Legacy rail = Cartão · PIX Rails = Boleto + Pix
-TPV_COL = {"Legacy rail":"#CBCBCB","PIX Rails":"#0C0C0C"}
+tpv_months = ptm(["may/24","jun/24","jul/24","aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"])
+tpv_order = ["Trilho legado","Trilhos PIX"]   # Trilho legado = Cartão · Trilhos PIX = Boleto + Pix
+TPV_COL = {"Trilho legado":"#CBCBCB","Trilhos PIX":"#0C0C0C"}
 tpv_data = {
-  "Legacy rail":[0.26,0.49,0.91,1.43,4.93,4.54,3.66,3.14,2.8,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34],
-  "PIX Rails":[0.0,0.0,0.0,0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.28,1.99,1.72,2.81,3.59,4.59,3.74,3.15,2.57,3.16,5.49,3.45,5.69],
+  "Trilho legado":[0.26,0.49,0.91,1.43,4.93,4.54,3.66,3.14,2.8,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34],
+  "Trilhos PIX":[0.0,0.0,0.0,0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.28,1.99,1.72,2.81,3.59,4.59,3.74,3.15,2.57,3.16,5.49,3.45,5.69],
 }
 
 def tpv_chart():
     WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 40, 12, 24, 46
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 17; n = len(tpv_months); slot = pw/n; bw = slot*0.6
-    base = Tx+ph; di = tpv_months.index("dec/25"); xd = Lx+slot*di
+    base = Tx+ph; di = tpv_months.index("dez/25"); xd = Lx+slot*di
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{base-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
     for t in (0,4,8,12,16):
@@ -261,24 +270,24 @@ def tpv_chart():
             hh = v/ymax*ph; y = ytop-hh
             s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{TPV_COL[rail]}"/>')
             if hh >= 16:
-                tcol = "#fff" if rail == "PIX Rails" else "#3A3A3A"
+                tcol = "#fff" if rail == "Trilhos PIX" else "#3A3A3A"
                 s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="{tcol}">{round(v/total*100)}%</text>')
             ytop = y
         if total > 0:
             s.append(f'<text x="{cx:.1f}" y="{ytop-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9.5" fill="#0C0C0C">{total:.1f}</text>')
         s.append(f'<text x="{cx:.1f}" y="{HD-16}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.8" fill="#5A5A5A">{tpv_months[i]}</text>')
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{Tx+10:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC live →</text>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx+10:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC ativo →</text>')
     s.append('</svg>')
     return "\n".join(s)
 
 tpv_svg = tpv_chart()
-tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' for r in tpv_order) + '<span style="color:#8a8a8a">total on top · R$M</span>'
+tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' for r in tpv_order) + '<span style="color:#8a8a8a">total no topo · R$M</span>'
 
 
 # ---------- credit portfolio (outstanding balance) by source over time (real) ----------
 _pm = ['2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06']
-_MON = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
+_MON = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"]
 port_labels = [f"{_MON[int(m.split('-')[1])-1]}/{m.split('-')[0][2:]}" for m in _pm]
 port_order = ANCHOR_ORDER
 PORT_COL = ANCHOR_COL
@@ -292,7 +301,7 @@ port_data = {
     "iFood":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.04,0.12,0.15,0.15,0.15],
     "Intelbras":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.05],
     # Others = Truss + app / beta users (no individual anchor)
-    "Others":[0.04,0.06,0.07,0.18,0.14,0.27,0.23,0.37,0.61,1.08,1.45,1.81,1.9,2.06,2.12,2.38,2.54,2.41,2.39,2.3,2.17,2.08,2.21,2.17,2.05,3.18],
+    "Outros":[0.04,0.06,0.07,0.18,0.14,0.27,0.23,0.37,0.61,1.08,1.45,1.81,1.9,2.06,2.12,2.38,2.54,2.41,2.39,2.3,2.17,2.08,2.21,2.17,2.05,3.18],
 }
 FIDC_FROM = "2025-12"   # month the FIDC was raised (shaded region onward)
 
@@ -323,7 +332,7 @@ def portfolio_stack():
              % " ".join(f"{xs[i]:.1f},{Y(bottoms[i]):.1f}" for i in range(n)))
     # FIDC divider + label
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
     # current total label
     s.append(f'<text x="{xs[-1]:.1f}" y="{Y(bottoms[-1])-8:.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#0C0C0C">R$ {bottoms[-1]:.1f}M</text>')
     # sparse x labels (every 3 months)
@@ -357,16 +366,16 @@ def portfolio_total_bars():
             s.append(f'<text x="{cx:.1f}" y="{y-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="7.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{v:.1f}</text>')
     # FIDC divider + label
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
     for i in range(0, n, 3):
         s.append(f'<text x="{Lx+slot*i+slot/2:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{port_labels[i]}</text>')
     s.append('</svg>')
     return "\n".join(s)
 
 port_total_svg = portfolio_total_bars()
-port_total_legend = ('<span><i style="background:#B9B9B9"></i>pre-FIDC</span>'
-                     '<span><i style="background:#0C0C0C"></i>FIDC-funded (Dec-25 →)</span>'
-                     '<span style="color:#8a8a8a">total on book · R$M</span>')
+port_total_legend = ('<span><i style="background:#B9B9B9"></i>pré-FIDC</span>'
+                     '<span><i style="background:#0C0C0C"></i>financiado por FIDC (dez/25 →)</span>'
+                     '<span style="color:#8a8a8a">total na carteira · R$M</span>')
 
 # consolidated (corporate) charts
 PORT_FIDC = _pm.index("2025-12")
@@ -374,7 +383,7 @@ lb_con_svg  = stack_rm(port_labels, port_data, 48, [0,10,20,30,40], PORT_FIDC)
 div_con_svg = stack_pct(port_labels, port_data, PORT_FIDC)
 
 # ---------- cohort loan book per partner (months on book, R$M) ----------
-cohort_order = ["Cantu","Moura","Juntos Somos Mais","Chilli Beans","Others","Malwee","Brinox"]
+cohort_order = ["Cantu","Moura","Juntos Somos Mais","Chilli Beans","Outros","Malwee","Brinox"]
 def _cohort(name):
     vals = port_data[name]; i = 0
     while i < len(vals) and vals[i] == 0: i += 1
@@ -402,10 +411,10 @@ def cohort_lines():
         while f < n and vals[f] == 0: f += 1
         pts = " ".join(f"{X(i):.1f},{Y(vals[i]):.1f}" for i in range(f, n))
         s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>')
-        ends.append({"real": Y(vals[-1]), "y": Y(vals[-1]), "v": vals[-1], "col": col, "dark": name == "Others"})
+        ends.append({"real": Y(vals[-1]), "y": Y(vals[-1]), "v": vals[-1], "col": col, "dark": name == "Outros"})
     # FIDC divider + label
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{Tx-8:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC live →</text>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx-8:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC ativo →</text>')
     # de-clutter endpoint value pills (min vertical gap)
     ends.sort(key=lambda e: e["y"]); prev = -99
     for e in ends:
@@ -427,8 +436,8 @@ cohort_svg = cohort_lines()
 
 # ---------- delinquency (90+) over time, by partner (calendar) ----------
 # Point-in-time 90+ ratio (over90 balance / total balance) per CALENDAR month.
-dq_labels = ["jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25",
-             "sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
+dq_labels = ptm(["jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25",
+             "sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"])
 dq_order = ["Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee","Moura","iFood"]
 N = None
 dq_data = {
@@ -442,8 +451,8 @@ dq_data = {
 }
 # company-wide point-in-time 90+ ratio
 dq_agg = [0.0,0.0,0.4,0.4,0.3,4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.5]
-DQ_FIDC = dq_labels.index("dec/25")  # FIDC went live Dec/25
-dq_legend = ('<span><i style="background:#0C0C0C;height:3px;border-radius:2px"></i>Company aggregate</span>'
+DQ_FIDC = dq_labels.index("dez/25")  # FIDC went live Dec/25
+dq_legend = ('<span><i style="background:#0C0C0C;height:3px;border-radius:2px"></i>Agregado da companhia</span>'
              + "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in dq_order))
 def dq_lines():
     WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 46, 60, 30, 44
@@ -505,7 +514,7 @@ def dq_lines():
 dq_svg = dq_lines()
 
 # ---------- revenue run rate (ARR) ----------
-arr_labels = ["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","Apr/26","May/26"]
+arr_labels = ["3T24","4T24","1T25","2T25","3T25","4T25","1T26","abr/26","mai/26"]
 arr_vals = [319,550,1427,1716,2077,2532,2976,3176,3721]
 def arr_chart():
     WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 30, 20, 58, 42
@@ -526,7 +535,7 @@ def arr_chart():
     # growth-multiple callout in the empty upper-left
     mult = arr_vals[-1]/arr_vals[0]
     s.append(f'<text x="{Lx+4:.1f}" y="{Tx-26:.1f}" font-family="Geist,sans-serif" font-weight="800" font-size="34" fill="#0C0C0C">{mult:.0f}×</text>')
-    s.append(f'<text x="{Lx+5:.1f}" y="{Tx-10:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#8a8a8a">ARR GROWTH SINCE 3Q24</text>')
+    s.append(f'<text x="{Lx+5:.1f}" y="{Tx-10:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#8a8a8a">CRESCIMENTO DE ARR DESDE 3T24</text>')
     # dots + value labels
     for i,(x,y,v) in enumerate(zip(xs,ys,arr_vals)):
         last = i == n-1
@@ -585,7 +594,7 @@ def runoff_chart():
 runoff_svg = runoff_chart()
 
 # ---------- KPI history: tenor / duration / rate / turnover (real loan tape) ----------
-kpi_labels = ["jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
+kpi_labels = ptm(["jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"])
 kpi_tenor = [3.19,3.45,3.44,3.62,3.52,3.46,3.40,3.33,3.18,3.11,3.05,3.12,3.33,3.38,3.42,3.42,3.45]
 kpi_dur   = [2.41,2.49,2.28,2.18,2.09,2.15,2.18,2.08,2.09,1.97,1.97,1.93,2.07,2.20,2.30,2.22,2.34]
 kpi_rate  = [41.0,41.9,41.7,44.8,47.3,46.1,46.6,46.1,46.6,47.4,48.7,47.8,46.5,45.9,45.5,45.1,44.6]
@@ -620,14 +629,14 @@ def kpi_card(k, v, sub, vals):
             f'<div class="v">{v}</div><div class="s">{sub}</div>{spark(vals)}</div>')
 
 kpi_grid = ('<div class="sparks reveal" data-stagger>'
-    + kpi_card("Avg. tenor","3.5 <span style='font-size:.5em'>months</span>","mean installments", kpi_tenor)
-    + kpi_card("Duration","~2.3 <span style='font-size:.5em'>months</span>","balance-weighted avg life", kpi_dur)
-    + kpi_card("Avg. rate","44.6% <span style='font-size:.5em'>/yr</span>","principal-weighted", kpi_rate)
-    + kpi_card("Turnover","~3.5× <span style='font-size:.5em'>/yr</span>","book recycles fast", kpi_turn)
+    + kpi_card("Prazo médio","3,5 <span style='font-size:.5em'>meses</span>","parcelas médias", kpi_tenor)
+    + kpi_card("Duration","~2,3 <span style='font-size:.5em'>meses</span>","vida média ponderada por saldo", kpi_dur)
+    + kpi_card("Taxa média","44,6% <span style='font-size:.5em'>/ano</span>","ponderada pelo principal", kpi_rate)
+    + kpi_card("Giro","~3,5× <span style='font-size:.5em'>/ano</span>","a carteira recicla rápido", kpi_turn)
     + '</div>')
 
 # ---------- delinquency composition: balance by days-past-due bucket (real loan tape) ----------
-ag_labels = ['nov/24','dec/24','jan/25','feb/25','mar/25','apr/25','may/25','jun/25','jul/25','aug/25','sep/25','oct/25','nov/25','dec/25','jan/26','feb/26','mar/26','apr/26','may/26']
+ag_labels = ptm(['nov/24','dec/24','jan/25','feb/25','mar/25','apr/25','may/25','jun/25','jul/25','aug/25','sep/25','oct/25','nov/25','dec/25','jan/26','feb/26','mar/26','apr/26','may/26'])
 ag_buckets = ["Em dia","1-30","31-60","61-90","91-180","181-360","360+"]
 ag_data = {
   "Em dia":  [0.339,0.788,1.697,2.204,3.441,3.627,3.818,4.093,3.425,4.135,3.996,4.281,4.546,3.92,4.433,6.225,7.852,9.203,11.313],
@@ -642,14 +651,14 @@ AG_COL = {"Em dia":"#E4E4E4","1-30":"#F6C6C2","31-60":"#EE9A90","61-90":"#E0685C
           "91-180":"#D11A2A","181-360":"#A01024","360+":"#6E0A1A"}
 ag_pct90 = [0.0,0.0,0.0,0.0,0.4,0.4,0.3,4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.5]
 ag_totals = [round(sum(ag_data[b][i] for b in ag_buckets),3) for i in range(len(ag_labels))]
-ag_legend = "".join(f'<span><i style="background:{AG_COL[b]};border-radius:2px;height:11px;width:14px"></i>{b}</span>' for b in ag_buckets) + '<span style="color:#8a8a8a">days past due · share of balance</span>'
+ag_legend = "".join(f'<span><i style="background:{AG_COL[b]};border-radius:2px;height:11px;width:14px"></i>{b}</span>' for b in ag_buckets) + '<span style="color:#8a8a8a">dias de atraso · participação no saldo</span>'
 
 def aging_chart():
     WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 40, 50, 34, 44
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(ag_labels); ymax = 100
     xs = [Lx + i/(n-1)*pw for i in range(n)]
     def Y(v): return Tx+ph - v/ymax*ph
-    base = Y(0); di = ag_labels.index("dec/25"); xd = xs[di]
+    base = Y(0); di = ag_labels.index("dez/25"); xd = xs[di]
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     # FIDC-live shaded region
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{base-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
@@ -671,14 +680,14 @@ def aging_chart():
     s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ey:.1f}" r="3.2" fill="#0C0C0C"/>')
     s.append(f'<rect x="{xs[-1]+5:.1f}" y="{ey-9:.1f}" width="34" height="17" rx="3" fill="#0C0C0C"/>')
     s.append(f'<text x="{xs[-1]+22:.1f}" y="{ey+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9.5" fill="#fff">{ag_pct90[-1]:.0f}%</text>')
-    s.append(f'<text x="{xs[-1]+5:.1f}" y="{Tx+10:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#7A1020">90+ region ▲</text>')
+    s.append(f'<text x="{xs[-1]+5:.1f}" y="{Tx+10:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#7A1020">região 90+ ▲</text>')
     # total book R$ labels along the top
     for i in range(0, n, 3):
         s.append(f'<text x="{xs[i]:.1f}" y="{Tx-6:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8" fill="#9a9a9a">{ag_totals[i]:.1f}</text>')
     s.append(f'<text x="{xs[-1]:.1f}" y="{Tx-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9" fill="#0C0C0C">R${ag_totals[-1]:.1f}M</text>')
     # FIDC divider + label
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{base-7:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC live →</text>')
+    s.append(f'<text x="{xd+7:.1f}" y="{base-7:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC ativo →</text>')
     for i in range(0, n, 3):
         s.append(f'<text x="{xs[i]:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{ag_labels[i]}</text>')
     s.append('</svg>')
@@ -687,12 +696,12 @@ aging_svg = aging_chart()
 
 # ---------- credit economics waterfall ----------
 # (label, y0, y1, color, value, label_pos)
-wf_steps = [("Aggregate Yield",0,95.8,"#0C0C0C","95.8%","top"),
-            ("Direct Costs",87.8,95.8,"#C0143C","−8.0%","bot"),
-            ("Funding Cost",64.8,87.8,"#C0143C","−23.0%","bot"),
-            ("NIM",0,64.8,"#0C0C0C","64.8%","top"),
-            ("Capital Losses (NPL)",39.8,64.8,"#C0143C","−25.0%","bot"),
-            ("Risk-Adjusted NIM",0,39.8,"#0C0C0C","39.8%","top")]
+wf_steps = [("Yield agregado",0,95.8,"#0C0C0C","95,8%","top"),
+            ("Custos diretos",87.8,95.8,"#C0143C","−8,0%","bot"),
+            ("Custo de funding",64.8,87.8,"#C0143C","−23,0%","bot"),
+            ("NIM",0,64.8,"#0C0C0C","64,8%","top"),
+            ("Perdas de capital (NPL)",39.8,64.8,"#C0143C","−25,0%","bot"),
+            ("NIM ajustado ao risco",0,39.8,"#0C0C0C","39,8%","top")]
 wf_levels = [95.8,87.8,64.8,64.8,39.8]   # connector level between bar i and i+1
 def waterfall():
     WD, HD = 1000, 504; Lx, Rx, Tx, Bx = 18, 18, 44, 48
@@ -789,8 +798,8 @@ def _heat(cdr):
 
 def conc_rows():
     maxsh = max(sh for _, _, sh, _ in conc90)
-    out = ['<div class="r90 head"><span>By source</span><span class="r-val">90+ (R$)</span>'
-           '<span>Share of 90+</span><span class="r-pct">%</span><span style="text-align:center">CDR</span></div>']
+    out = ['<div class="r90 head"><span>Por origem</span><span class="r-val">90+ (R$)</span>'
+           '<span>Participação no 90+</span><span class="r-pct">%</span><span style="text-align:center">CDR</span></div>']
     for name, saldo, sh, cdr in conc90:
         w = sh/maxsh*100; sval = f"{saldo:,}".replace(",", ".")
         out.append(f'<div class="r90"><span class="r-name"><i class="r-dot" style="background:{ANCHOR_COL.get(name,"#999")}"></i>{name}</span><span class="r-val">{sval}</span>'
@@ -1006,173 +1015,169 @@ SLIDES = STYLE + f"""
   <div class="cover5-badge">São Paulo · 2026</div>
   <div class="cover5-center">
     <img class="cover5-logo" src="robbin-logo-black.svg" alt="Robbin">
-    <div class="cover5-tag">Credit performance.</div>
+    <div class="cover5-tag">Performance de crédito.</div>
   </div>
-  <div class="cover5-meta">Confidential · Institutional material</div>
+  <div class="cover5-meta">Confidencial · Material institucional</div>
 </section>
 
 <!-- PORTFOLIO -->
 <section class="slide theme-light vcenter" data-num="02">
-  <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio</span></div>
-  <div class="slide-head reveal"><h1>The credit <span class="accent">portfolio.</span></h1>
-  <p class="sub">Total outstanding balance (R$M) — peaked at R$ 44M, R$ 34M today.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
+  <div class="slide-head reveal"><h1>A carteira de <span class="accent">crédito.</span></h1>
+  <p class="sub">Saldo total em aberto (R$M) — pico de R$ 44M, R$ 34M hoje.</p></div>
   <div class="blegend reveal">{port_total_legend}</div>
   <div class="chartframe reveal">{port_total_svg}</div>
-  <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
+  <div class="illus">Fonte: carteira por mês/origem · mar/24–jun/26</div>
 </section>
 
 <!-- ORIGINATION -->
 <section class="slide theme-light vcenter" data-num="02">
-  <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Origination</span></div>
-  <div class="slide-head reveal"><h1>Origination on the <span class="accent">PIX rail.</span></h1>
-  <p class="sub">Monthly TPV by rail (R$M) — migrating from the legacy rail to PIX · FIDC live Dec-25.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Originação</span></div>
+  <div class="slide-head reveal"><h1>Originação no <span class="accent">trilho PIX.</span></h1>
+  <p class="sub">TPV mensal por trilho (R$M) — migrando do trilho legado para PIX · FIDC ativo em dez/25.</p></div>
   <div class="blegend reveal">{tpv_legend}</div>
   <div class="chartframe reveal">{tpv_svg}</div>
-  <div class="illus">Source: monthly TPV · Mar/24–May/26 (Jun/26 partial, excluded)</div>
+  <div class="illus">Fonte: TPV mensal · mar/24–mai/26 (jun/26 parcial, excluído)</div>
 </section>
 
 <!-- WHY WE PERFORM BETTER THAN BANKS (iso stack) -->
 <section class="slide theme-light vcenter" data-num="03">
-  <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">The edge</span></div>
-  <div class="slide-head reveal"><h1>Why we perform better than <span class="accent">banks.</span></h1>
-  <p class="sub">Three structural edges — each reinforcing the one above.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">O diferencial</span></div>
+  <div class="slide-head reveal"><h1>Por que performamos melhor que os <span class="accent">bancos.</span></h1>
+  <p class="sub">Três vantagens estruturais — cada uma reforçando a anterior.</p></div>
   <div class="pyr-wrap reveal">
     <div class="pyr-fig">{pyramid_svg}</div>
     <div class="pyr-right" data-stagger>
-      <div class="pyr-tier"><span class="pyr-idx">01</span><h3>Data edge</h3><p>Access to the <b>Supplier–SME relationship</b> and <b>transaction data</b>, turning these relationships into better credit insights and solid unit economics.</p></div>
-      <div class="pyr-tier"><span class="pyr-idx">02</span><h3>Secured credit <small>Central Bank · CMN 4.734</small></h3><p>Access to SME credit-card receivables data and the ability to use it as <b>collateral</b>, enabling <b>smarter underwriting and collection</b>.</p></div>
-      <div class="pyr-tier"><span class="pyr-idx">03</span><h3>Willingness to pay</h3><p>Leveraging the supplier's brand, our co-branded card captures SMEs' <b>willingness to pay, rooted in loyalty and dependence</b>.</p></div>
+      <div class="pyr-tier"><span class="pyr-idx">01</span><h3>Vantagem de dados</h3><p>Acesso à <b>relação Fornecedor–PME</b> e aos <b>dados transacionais</b>, transformando essas relações em melhor leitura de crédito e unit economics sólidos.</p></div>
+      <div class="pyr-tier"><span class="pyr-idx">02</span><h3>Crédito garantido <small>Banco Central · CMN 4.734</small></h3><p>Acesso aos dados de recebíveis de cartão das PMEs e a possibilidade de usá-los como <b>garantia</b>, permitindo <b>underwriting e cobrança mais inteligentes</b>.</p></div>
+      <div class="pyr-tier"><span class="pyr-idx">03</span><h3>Disposição a pagar</h3><p>Aproveitando a marca do fornecedor, nosso cartão co-branded captura a <b>disposição a pagar das PMEs, enraizada em lealdade e dependência</b>.</p></div>
     </div>
   </div>
 </section>
 
 <!-- CREDIT ECONOMICS (yield allocation) -->
 <section class="slide theme-light vcenter" data-num="04">
-  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">1Q26</span></div>
-  <div class="slide-head reveal"><h1>Credit <span class="accent">economics.</span></h1>
-  <p class="sub">NIM bridge — 1Q26, annualized (% of aggregate yield).</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">1T26</span></div>
+  <div class="slide-head reveal"><h1>Economia do <span class="accent">crédito.</span></h1>
+  <p class="sub">Ponte de NIM — 1T26, anualizado (% do yield agregado).</p></div>
   <div class="chartframe reveal">{wf_svg}</div>
-  <div class="illus">1Q26 annualized · % of aggregate yield · NIM bridge</div>
+  <div class="illus">1T26 anualizado · % do yield agregado · ponte de NIM</div>
 </section>
 
 <!-- 4 — CDR BY VINTAGE (removed per request) -->
 
 <!-- 5 — FPD -->
 <section class="slide theme-light vcenter" data-num="05">
-  <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risk · origination</span></div>
-  <div class="slide-head reveal"><h1>FPD 30 <span class="accent">by month.</span></h1>
-  <p class="sub">First-payment default — value late on the 1st installment ÷ total.</p></div>
-  <div class="two-col reveal">
-    <div class="chartframe">{fpd_svg}
-      <div class="legend"><span><i style="background:#0C0C0C"></i>in target (&le; 5%)</span><span><i style="background:#D11A2A"></i>breach (&gt; 5%)</span><span style="color:#8a8a8a">dashed = underwriting target</span></div>
-    </div>
-    <ul class="readlist">
-      <li>The <b>May-25 spike (~15%)</b> was an isolated cohort; FPD normalized to <b>low single digits</b> since.</li>
-      <li>Last 12 months <b>average ~4%</b>, with recent months at <b>~1–5%</b>.</li>
-      <li>FPD is the <b>earliest read</b> on origination quality — now stable.</li>
-    </ul>
-  </div>
-  <div class="illus">Source: PIX/boleto loan tape · MOB-1 snapshot</div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
+  <div class="slide-head reveal"><h1>FPD 30 <span class="accent">por safra.</span></h1>
+  <p class="sub">Inadimplência da 1ª parcela (valor em atraso ÷ total) — por mês de safra.</p></div>
+  <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Média 4,1%</b></span><span style="color:#8a8a8a">Meta &le; 5%</span><span style="color:#8a8a8a">Pior safra: mai/25 · 15,2%</span></div>
+  <div class="chartframe reveal">{fpd_svg}</div>
+  <div class="blegend reveal">{fpd_scale}</div>
+  <div class="illus">Fonte: loan tape BNPL · FPD 30 por mês de safra</div>
 </section>
 
 <!-- CREDIT PORTFOLIO PER PARTNER -->
 <section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Credit portfolio · per partner</span></div>
-  <div class="slide-head reveal"><h1>Credit portfolio <span class="accent">per partner.</span></h1>
-  <p class="sub">Outstanding loan book by partner (R$M) — FIDC live from Dec-25 · total R$ 33.5M.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Carteira de crédito · por parceiro</span></div>
+  <div class="slide-head reveal"><h1>Carteira de crédito <span class="accent">por parceiro.</span></h1>
+  <p class="sub">Carteira em aberto por parceiro (R$M) — FIDC ativo desde dez/25 · total R$ 33,5M.</p></div>
   <div class="blegend reveal">{cohort_legend}</div>
   <div class="chartframe reveal">{cohort_svg}</div>
-  <div class="illus">Source: cohort — credit portfolio · balance by vintage</div>
+  <div class="illus">Fonte: coorte — carteira de crédito · saldo por safra</div>
 </section>
 
 <!-- DELINQUENCY OVER TIME, BY PARTNER -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risk · 90+ over time</span></div>
-  <div class="slide-head reveal"><h1>Delinquency <span class="accent">over time.</span></h1>
-  <p class="sub">BNPL only · point-in-time 90+ rate by calendar month, per partner — FIDC live from Dec-25.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · 90+ ao longo do tempo</span></div>
+  <div class="slide-head reveal"><h1>Inadimplência <span class="accent">ao longo do tempo.</span></h1>
+  <p class="sub">Apenas BNPL · taxa de 90+ point-in-time por mês de calendário, por parceiro — FIDC ativo desde dez/25.</p></div>
   <div class="blegend reveal">{dq_legend}</div>
   <div class="chartframe reveal">{dq_svg}</div>
-  <div class="illus">Source: BNPL loan tape only — 90+ balance ÷ outstanding balance, monthly</div>
+  <div class="illus">Fonte: apenas loan tape BNPL — saldo 90+ ÷ saldo em aberto, mensal</div>
 </section>
 
 <!-- WHERE DOES 90+ COME FROM -->
 <section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risk · concentration</span></div>
-  <div class="slide-head reveal"><h1>Where does the <span class="accent">90+ come from?</span></h1>
-  <p class="sub">Over90 by source — R$ 2.65M decomposed (May/26). CDR = 90+ ÷ principal originated.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risco · concentração</span></div>
+  <div class="slide-head reveal"><h1>De onde vem o <span class="accent">90+?</span></h1>
+  <p class="sub">Over90 por origem — R$ 2,65M decompostos (mai/26). CDR = 90+ ÷ principal originado.</p></div>
   <div class="reveal" style="margin-top:2vh;">{conc_rows_html}</div>
-  <div class="blegend reveal" style="margin-top:1.6vh"><span><i style="background:#A6A6A6"></i>bar = share of the 90+ pool</span><span><i style="background:#B30E36"></i>chip = CDR · severity (darker = higher)</span></div>
-  <div class="illus">Source: PIX/boleto loan tape · over90 balance May/26</div>
+  <div class="blegend reveal" style="margin-top:1.6vh"><span><i style="background:#A6A6A6"></i>barra = participação no pool de 90+</span><span><i style="background:#B30E36"></i>chip = CDR · severidade (mais escuro = maior)</span></div>
+  <div class="illus">Fonte: apenas loan tape BNPL · saldo over90 mai/26</div>
 </section>
 
 <!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
 <section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · consolidated</span></div>
-  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
-  <p class="sub">Anchor as % of the credit portfolio — total R$M on top.</p>
-  <span class="tag-pill">Corporate consolidated</span></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Diversificação · consolidado</span></div>
+  <div class="slide-head reveal"><h1>Diversificação <span class="accent">crescente.</span></h1>
+  <p class="sub">Âncora como % da carteira de crédito — total R$M no topo.</p>
+  <span class="tag-pill">Consolidado corporativo</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
   <div class="chartframe reveal">{div_con_svg}</div>
-  <div class="illus">Source: portfolio by month/source · May/24–Jun/26</div>
+  <div class="illus">Fonte: carteira por mês/origem · mai/24–jun/26</div>
 </section>
 
 <!-- FIDC LOAN BOOK GROWTH (off-balance) -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · loan book growth</span></div>
-  <div class="slide-head reveal"><h1>FIDC loan book <span class="accent">growth.</span></h1>
-  <p class="sub">Outstanding balance by anchor (R$M) — FIDC carve-out since Dec-25.</p>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
+  <div class="slide-head reveal"><h1>Crescimento da carteira <span class="accent">do FIDC.</span></h1>
+  <p class="sub">Saldo em aberto por âncora (R$M) — carve-out do FIDC desde dez/25.</p>
   <span class="tag-pill">Off-balance · FIDC</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
   <div class="chartframe reveal">{lb_off_svg}</div>
-  <div class="illus">Source: PIX/boleto loan tape · Dec/25–May/26 (FIDC)</div>
+  <div class="illus">Fonte: loan tape PIX/boleto · dez/25–mai/26 (FIDC)</div>
 </section>
 
 <!-- 8 — TENOR & DURATION -->
 <section class="slide theme-light vcenter" data-num="08">
-  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · tenor</span></div>
-  <div class="slide-head reveal"><h1>Tenor, rate & <span class="accent">turnover.</span></h1>
-  <p class="sub">A short, fast-rotating book — key portfolio metrics, month by month.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Carteira · prazo</span></div>
+  <div class="slide-head reveal"><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
+  <p class="sub">Uma carteira curta e de giro rápido — métricas-chave, mês a mês.</p></div>
   {kpi_grid}
-  <div class="illus">Source: PIX/boleto loan tape · monthly · Jan/25–May/26</div>
+  <div class="illus">Fonte: loan tape PIX/boleto · mensal · jan/25–mai/26</div>
 </section>
 
 <!-- 9 — DELINQUENCY COMPOSITION (aging) -->
 <section class="slide theme-light vcenter" data-num="09">
-  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Risk · aging</span></div>
-  <div class="slide-head reveal"><h1>Delinquency <span class="accent">composition.</span></h1>
-  <p class="sub">Outstanding balance by days-past-due bucket — share over time, R$M on top.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Risco · aging</span></div>
+  <div class="slide-head reveal"><h1>Composição da <span class="accent">inadimplência.</span></h1>
+  <p class="sub">Saldo em aberto por faixa de atraso — participação ao longo do tempo, R$M no topo.</p></div>
   <div class="blegend reveal">{ag_legend}</div>
   <div class="chartframe reveal">{aging_svg}</div>
-  <div class="illus">Source: BNPL loan tape only · balance by DPD bucket · monthly · 90+ region above the bold line</div>
+  <div class="illus">Fonte: apenas loan tape BNPL · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
 <section class="slide theme-light vcenter" data-num="10">
-  <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Company</span></div>
-  <div class="slide-head reveal"><h1>Corporate-backed <span class="accent">leverage.</span></h1>
-  <p class="sub">Revenue run rate (US$k) and the balance sheet behind the leverage.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Companhia</span></div>
+  <div class="slide-head reveal"><h1>Alavancagem com <span class="accent">lastro corporativo.</span></h1>
+  <p class="sub">Receita run-rate (US$k) e o balanço por trás da alavancagem.</p></div>
   <div class="two-col reveal" style="grid-template-columns:1.45fr 1fr; align-items:center;">
     <div>
-      <div class="arr-cap">Revenue run rate · US$ thousands · FX R$ 5.00/US$</div>
+      <div class="arr-cap">Receita run-rate · US$ mil · câmbio R$ 5,00/US$</div>
       <div class="chartframe">{arr_svg}</div>
     </div>
     <div>
-      <span class="bp-badge">Business Plan assumptions</span>
       <div class="metrics vstack" data-stagger>
-        {metric("Runway","18 <span style='font-size:.5em'>mo</span>","at current burn")}
-        {metric("Expected TPV","R$ 25M <span style='font-size:.5em'>/mo</span>","by Dec/26")}
-        {metric("Credit portfolio","R$ 71M","expected · Dec/26")}
+        {metric("Runway","18 <span style='font-size:.5em'>meses</span>","ao burn atual")}
+        {metric("Posição de caixa","R$ 25M","atual")}
+      </div>
+      <span class="bp-badge" style="margin-top:1.8vh">Premissas do Business Plan</span>
+      <div class="metrics vstack" data-stagger>
+        {metric("TPV esperado","R$ 25M <span style='font-size:.5em'>/mês</span>","até dez/26")}
+        {metric("Carteira de crédito","R$ 71M","esperado · dez/26")}
       </div>
     </div>
   </div>
-  <div class="illus">Revenue run rate (actual) · forward figures per Business Plan</div>
+  <div class="illus">Receita run-rate (real) · projeções conforme o Business Plan</div>
 </section>
 
 <!-- 11 — Q&A -->
 <section class="slide theme-dark closing2" data-num="11">
   <div class="closing2-bg"><div class="closing2-grid"></div><div class="closing2-glow"></div></div>
   <div class="closing2-inner">
-    <div class="closing2-eyebrow reveal"><span>—</span><span>Discussion</span></div>
+    <div class="closing2-eyebrow reveal"><span>—</span><span>Discussão</span></div>
     <h2 class="closing2-line reveal"><span class="cl-row hi">Q&amp;A</span></h2>
     <div class="closing2-divider reveal"></div>
     <div class="closing2-logo reveal"><img src="robbin-logo-white.svg" alt="Robbin" style="height:46px;width:auto;"></div>
