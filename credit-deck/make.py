@@ -435,46 +435,64 @@ def cohort_lines():
     return "\n".join(s)
 cohort_svg = cohort_lines()
 
-# ---------- delinquency (90+) by cohort & partner ----------
-dq_order = ["Chilli Beans","Truss","Moura","Juntos Somos Mais","Cantu","Brinox","Malwee","iFood","Intelbras"]
+# ---------- delinquency (90+) over time, by partner (calendar) ----------
+# Point-in-time 90+ ratio (over90 balance / total balance) per CALENDAR month.
+dq_labels = ["may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25",
+             "dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
+dq_order = ["Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee","Moura","iFood","Truss"]
+N = None
 dq_data = {
-    "Cantu":[0.0,0.0,0.0,1.9,4.5,7.4,7.8,7.9,6.5,5.7,6.1,7.5,6.8],
-    "Moura":[0.0,0.0,0.0,0.0,0.1,1.4,4.0,4.4,10.4,14.8,13.6,8.1,15.0],
-    "Chilli Beans":[0.0,0.0,0.0,0.0,0.1,2.7,1.5,14.9,16.0,21.1,15.5,16.9,13.9],
-    "Juntos Somos Mais":[0.0,0.0,0.0,0.3,3.0,4.3,3.7,7.1,11.1,10.2,8.9,11.8,12.4],
-    "Malwee":[0.0,0.0,0.0,0.0,0.0,0.1,0.0,0.2,1.6],
-    "Brinox":[0.0,0.0,0.0,4.1,17.8,14.1,15.5,18.6,0.0,0.0],
-    "Truss":[0.0,0.0,0.0,0.0,3.5,5.0,4.6,6.1,5.4,8.3,9.6,11.2,20.6],
-    "iFood":[0.0,0.0,0.0,0.0,0.0],
-    "Intelbras":[0.0,0.0],
+    "Cantu":            [0.4,3.8,12.5,14.4,21.1,26.4,25.6,33.3,40.6,37.6,17.9,16.6,8.9],
+    "Moura":            [15.7,6.9,0.8,0.7,0.3,0.3,0.3,0.4,0.3,0.5,1.2,0.9,1.3],
+    "Chilli Beans":     [0.0,2.7,9.2,9.0,20.1,27.1,30.0,31.7,34.3,30.4,28.7,36.3,41.1],
+    "Juntos Somos Mais":[1.7,16.7,24.4,53.9,38.4,23.3,24.5,37.7,41.7,52.8,52.1,37.4,32.8],
+    "Malwee":           [N,N,N,N,N,N,0.0,0.0,0.0,0.0,1.5,4.2,4.1],
+    "Brinox":           [N,N,N,N,0.0,0.0,0.0,0.0,0.0,2.7,5.8,5.5,5.1],
+    "iFood":            [N,N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0],
+    "Truss":            [N,N,N,N,N,N,N,N,N,N,N,N,0.0],
 }
-dq_agg = [0.0,0.0,0.0,0.8,2.9,4.7,5.4,7.1,8.5,9.5,8.9,9.3,10.8]
+# company-wide point-in-time 90+ ratio
+dq_agg = [0.3,4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.5]
+DQ_FIDC = dq_labels.index("dec/25")  # FIDC went live Dec/25
 dq_legend = ('<span><i style="background:#0C0C0C;height:3px;border-radius:2px"></i>Company aggregate</span>'
              + "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in dq_order))
 def dq_lines():
-    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 46, 54, 38, 44
-    maxm = max(len(v) for v in dq_data.values()); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 24
-    def X(j): return Lx + j/(maxm-1)*pw
+    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 46, 60, 30, 44
+    n = len(dq_labels); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 60
+    def X(j): return Lx + j/(n-1)*pw
     def Y(v): return Tx+ph - v/ymax*ph
     base = Y(0)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
-    for t in (0,8,16,24):
+    # FIDC-live shaded region (from Dec/25 onward)
+    fx = X(DQ_FIDC)
+    s.append(f'<rect x="{fx:.1f}" y="{Tx}" width="{WD-Rx-fx:.1f}" height="{ph:.1f}" fill="#0C0C0C" opacity="0.035"/>')
+    s.append(f'<line x1="{fx:.1f}" y1="{Tx}" x2="{fx:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="3 3" stroke-opacity="0.4"/>')
+    s.append(f'<text x="{fx+5:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#6A6A6A">FIDC live</text>')
+    for t in (0,20,40,60):
         s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
-    for j in range(maxm):
-        s.append(f'<text x="{X(j):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">M{j}</text>')
-    # partner lines (muted context)
+    for j in range(n):
+        s.append(f'<text x="{X(j):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8" fill="#5A5A5A">{dq_labels[j]}</text>')
+    # partner lines (muted context) — break across None gaps
     ends = []
     for g in dq_order:
         vals = dq_data[g]; col = ANCHOR_COL[g]
-        pts = " ".join(f"{X(j):.1f},{Y(v):.1f}" for j, v in enumerate(vals))
-        s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="1.7" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="round"/>')
-        je = len(vals)-1
+        seg = []
+        for j, v in enumerate(vals):
+            if v is None:
+                if len(seg) >= 2:
+                    s.append(f'<polyline points="{" ".join(seg)}" fill="none" stroke="{col}" stroke-width="1.7" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="round"/>')
+                seg = []
+            else:
+                seg.append(f"{X(j):.1f},{Y(v):.1f}")
+        if len(seg) >= 2:
+            s.append(f'<polyline points="{" ".join(seg)}" fill="none" stroke="{col}" stroke-width="1.7" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="round"/>')
+        je = max(j for j, v in enumerate(vals) if v is not None)
         ends.append({"x": X(je), "real": Y(vals[je]), "y": Y(vals[je]), "v": vals[je], "col": col, "hero": False})
     # company aggregate (hero)
     apts = " ".join(f"{X(j):.1f},{Y(v):.1f}" for j, v in enumerate(dq_agg))
     s.append(f'<polyline points="{apts}" fill="none" stroke="#0C0C0C" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>')
-    for j in (3,6,9,12):
+    for j in (0,4,8,12):
         s.append(f'<circle cx="{X(j):.1f}" cy="{Y(dq_agg[j]):.1f}" r="3.6" fill="#0C0C0C"/>')
         s.append(f'<text x="{X(j):.1f}" y="{Y(dq_agg[j])-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#0C0C0C">{dq_agg[j]:.0f}%</text>')
     ends.append({"x": X(12), "real": Y(dq_agg[12]), "y": Y(dq_agg[12]), "v": dq_agg[12], "col": "#0C0C0C", "hero": True})
@@ -921,14 +939,14 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: cohort — credit portfolio · balance by vintage</div>
 </section>
 
-<!-- DELINQUENCY BY COHORT & PARTNER -->
+<!-- DELINQUENCY OVER TIME, BY PARTNER -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risk · cohort 90+</span></div>
-  <div class="slide-head reveal"><h1>Delinquency by <span class="accent">cohort.</span></h1>
-  <p class="sub">90+ rate by months on book, per partner (clientes-weighted).</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risk · 90+ over time</span></div>
+  <div class="slide-head reveal"><h1>Delinquency <span class="accent">over time.</span></h1>
+  <p class="sub">Point-in-time 90+ rate by calendar month, per partner — FIDC live from Dec-25.</p></div>
   <div class="blegend reveal">{dq_legend}</div>
   <div class="chartframe reveal">{dq_svg}</div>
-  <div class="illus">Source: cohort — 90+ delinquency by vintage</div>
+  <div class="illus">Source: loan tape — 90+ balance ÷ outstanding balance, monthly</div>
 </section>
 
 <!-- WHERE DOES 90+ COME FROM -->
