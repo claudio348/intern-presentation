@@ -60,47 +60,49 @@ cdr_svg = chart("\n".join(cdr_inner))
 cdr_legend = "".join(
     f'<span><i style="background:{c}"></i>{n}</span>' for n, c in zip(cdr.keys(), cdr_colors))
 
-# ---------- FPD 30 by month — area + trend (real loan tape) ----------
+# ---------- FPD 30 by month — deviation-from-threshold lollipops (real loan tape) ----------
 fpd_labels = ["may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26"]
 fpd_vals = [15.2,7.4,3.1,0.0,2.0,3.9,1.0,3.7,5.8,0.9,5.4,1.4]
+FPD_THR = 5.0            # underwriting target — FPD healthy below this
+FPD_RED = "#D11A2A"      # breach accent
 
 def fpd_area():
-    ymax = 16; Lx, Rx, Tx, Bx = 46, 16, 22, 34
+    ymax = 16; Lx, Rx, Tx, Bx = 46, 18, 44, 40
     pw, ph = W-Lx-Rx, H-Tx-Bx; n = len(fpd_vals)
     xs = [Lx + i/(n-1)*pw for i in range(n)]
-    ys = [Tx+ph - v/ymax*ph for v in fpd_vals]
-    ybase = Tx+ph
-    mean = sum(fpd_vals)/n; ymn = Tx+ph - mean/ymax*ph
-    yb5 = Tx+ph - 5/ymax*ph
+    def Y(v): return Tx+ph - v/ymax*ph
+    ybase = Tx+ph; ythr = Y(FPD_THR)
+    mean = sum(fpd_vals)/n; ymn = Y(mean)
     s = [f'<svg class="chart" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg">']
-    s.append('<defs><linearGradient id="fpdG" x1="0" y1="0" x2="0" y2="1">'
-             '<stop offset="0" stop-color="#0C0C0C" stop-opacity="0.22"/>'
-             '<stop offset="1" stop-color="#0C0C0C" stop-opacity="0.015"/></linearGradient></defs>')
-    # healthy band 0–5%
-    s.append(f'<rect x="{Lx}" y="{yb5:.1f}" width="{pw:.1f}" height="{ybase-yb5:.1f}" fill="#0C0C0C" opacity="0.04"/>')
-    s.append(f'<text x="{Lx+7}" y="{ybase-7:.1f}" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">healthy zone &lt; 5%</text>')
-    # gridlines + y labels
+    # faint in-target band (0 → threshold)
+    s.append(f'<rect x="{Lx}" y="{ythr:.1f}" width="{pw:.1f}" height="{ybase-ythr:.1f}" fill="#0C0C0C" opacity="0.035"/>')
+    # y labels (no gridlines)
     for t in (0,5,10,15):
-        y = Tx+ph - t/ymax*ph
-        s.append(f'<text x="{Lx-8}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
-    # area + line
-    d = f"M {xs[0]:.1f},{ybase:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{ybase:.1f} Z"
-    s.append(f'<path d="{d}" fill="url(#fpdG)"/>')
-    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'
-             % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
-    # mean line
-    s.append(f'<line x1="{Lx}" y1="{ymn:.1f}" x2="{W-Rx}" y2="{ymn:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.5"/>')
-    s.append(f'<text x="{W-Rx}" y="{ymn-4:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#6A6A6A">avg {mean:.1f}%</text>')
-    # dots
-    for x,y in zip(xs,ys):
-        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.3" fill="#0C0C0C"/>')
+        s.append(f'<text x="{Lx-8}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    # average reference
+    s.append(f'<line x1="{Lx}" y1="{ymn:.1f}" x2="{W-Rx}" y2="{ymn:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.42"/>')
+    s.append(f'<text x="{W-Rx}" y="{ymn-4:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#7A7A7A">avg {mean:.1f}%</text>')
+    # threshold baseline — the reference line everything is measured against
+    s.append(f'<line x1="{Lx}" y1="{ythr:.1f}" x2="{W-Rx}" y2="{ythr:.1f}" stroke="#0C0C0C" stroke-width="1.6"/>')
+    s.append(f'<text x="{Lx+5}" y="{ythr-6:.1f}" font-family="Geist Mono,monospace" font-size="9" letter-spacing="0.04em" fill="#5A5A5A">underwriting target · FPD &le; 5%</text>')
+    # lollipops: stem from the 5% line to the value; above = breach (red), below = in target (ink)
+    for i,(x,v) in enumerate(zip(xs,fpd_vals)):
+        yv = Y(v); breach = v > FPD_THR
+        col = FPD_RED if breach else "#0C0C0C"
+        scol = FPD_RED if breach else "#C2C2C2"
+        s.append(f'<line x1="{x:.1f}" y1="{ythr:.1f}" x2="{x:.1f}" y2="{yv:.1f}" stroke="{scol}" stroke-width="{2.4 if breach else 1.8}" stroke-linecap="round" opacity="{0.9 if breach else 0.8}"/>')
+        r = 3.0
+        last = i == n-1
+        if i == 0: r = 4.4                       # the spike
+        elif last: r = 4.2                        # current
+        elif breach: r = 3.6
+        s.append(f'<circle cx="{x:.1f}" cy="{yv:.1f}" r="{r:.1f}" fill="{col}"/>')
     # spike annotation
-    s.append(f'<text x="{xs[0]:.1f}" y="{ys[0]-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">{fpd_vals[0]:.1f}%</text>')
-    s.append(f'<text x="{xs[0]+9:.1f}" y="{ys[0]+11:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#8a8a8a">isolated cohort</text>')
+    s.append(f'<text x="{xs[0]:.1f}" y="{Y(fpd_vals[0])-10:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="{FPD_RED}">{fpd_vals[0]:.1f}%</text>')
+    s.append(f'<text x="{xs[0]+10:.1f}" y="{Y(fpd_vals[0])+12:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#9a9a9a">isolated cohort</text>')
     # current point highlight
-    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="8" fill="none" stroke="#0C0C0C" stroke-opacity="0.22"/>')
-    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="4.3" fill="#0C0C0C"/>')
-    s.append(f'<text x="{xs[-1]:.1f}" y="{ys[-1]-11:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">{fpd_vals[-1]:.1f}%</text>')
+    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{Y(fpd_vals[-1]):.1f}" r="8" fill="none" stroke="#0C0C0C" stroke-opacity="0.22"/>')
+    s.append(f'<text x="{xs[-1]:.1f}" y="{Y(fpd_vals[-1])+18:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#0C0C0C">{fpd_vals[-1]:.1f}%</text>')
     # x labels
     for i,lab in enumerate(fpd_labels):
         s.append(f'<text x="{xs[i]:.1f}" y="{H-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{lab}</text>')
@@ -902,7 +904,7 @@ SLIDES = STYLE + f"""
   <p class="sub">First-payment default — value late on the 1st installment ÷ total.</p></div>
   <div class="two-col reveal">
     <div class="chartframe">{fpd_svg}
-      <div class="legend"><span><i style="background:#0C0C0C"></i>FPD 30 (monthly)</span><span style="color:#8a8a8a">shaded = healthy &lt; 5% · dashed = average</span></div>
+      <div class="legend"><span><i style="background:#0C0C0C"></i>in target (&le; 5%)</span><span><i style="background:#D11A2A"></i>breach (&gt; 5%)</span><span style="color:#8a8a8a">measured vs underwriting target · dashed = avg</span></div>
     </div>
     <ul class="readlist">
       <li>The <b>May-25 spike (~15%)</b> was an isolated cohort; FPD normalized to <b>low single digits</b> since.</li>
