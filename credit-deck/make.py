@@ -672,6 +672,7 @@ STYLE = """<style>
 .slide { padding-left:3vw; padding-right:3vw; }
 .slide.vcenter { padding-bottom:6.5vh; }
 .slide-head .sub { white-space:nowrap; max-width:none; }
+.slide-head h1 { max-width:86%; }
 .legend { display:flex; gap:1.2vw; flex-wrap:wrap; margin-top:1vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
 .legend span { display:inline-flex; align-items:center; }
 .legend i { display:inline-block; width:16px; height:3px; border-radius:2px; margin-right:6px; }
@@ -795,8 +796,8 @@ SLIDES = STYLE + f"""
 
 <!-- CREDIT ECONOMICS (yield allocation) -->
 <section class="slide theme-light vcenter" data-num="04">
-  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Credit economics · 1Q26</span></div>
-  <div class="slide-head reveal"><h1>From gross yield to <span class="accent">risk-adjusted NIM.</span></h1>
+  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">1Q26</span></div>
+  <div class="slide-head reveal"><h1>Credit <span class="accent">economics.</span></h1>
   <p class="sub">NIM bridge — 1Q26, annualized (% of aggregate yield).</p></div>
   <div class="chartframe reveal">{wf_svg}</div>
   <div class="illus">1Q26 annualized · % of aggregate yield · NIM bridge</div>
