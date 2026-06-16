@@ -144,11 +144,12 @@ pyramid_svg = iso_stack()
 
 
 # ---------- anchor composition: generic stacked R$M and stacked % ----------
-ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox","iFood","Truss","Intelbras","Others"]
+ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox","iFood","Intelbras","Others"]
 ANCHOR_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
               "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Brinox":"#0F8C8C",
-              "iFood":"#EE6B2D","Truss":"#6E7B8B","Intelbras":"#2EA0C0","Others":"#B5B5B5"}
-anchor_legend = "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in ANCHOR_ORDER)
+              "iFood":"#EA1D2C","Intelbras":"#5DB85C","Others":"#B5B5B5"}
+anchor_legend = ("".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in ANCHOR_ORDER)
+                 + '<span style="color:#8a8a8a">Others = app / beta testers & users</span>')
 
 # off-balance (FIDC) — loan tape balance by anchor (R$M), FIDC live from Dec/25
 lt_labels = ["dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
@@ -160,9 +161,8 @@ lt_data = {
   "Malwee":[0.98,1.5,1.56,1.73,1.86,1.83],
   "Brinox":[0.27,0.26,0.34,0.34,0.37,0.39],
   "iFood":[0.0,0.0,0.03,0.11,0.15,0.14],
-  "Truss":[0.0,0.0,0.0,0.0,0.0,0.01],
   "Intelbras":[0,0,0,0,0,0],
-  "Others":[0,0,0,0,0,0],
+  "Others":[0,0,0,0,0,0.01],   # incl. Truss + app / beta users
 }
 
 def _xstep(n): return 1 if n <= 14 else (2 if n <= 22 else 3)
@@ -300,9 +300,9 @@ port_data = {
     "Malwee":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.07,1.01,1.44,1.77,1.87,2.08,2.17,2.06,2.12],
     "Brinox":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.36,0.8,0.57,0.61,0.42,0.51,0.5,0.52,0.32,0.45],
     "iFood":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.04,0.12,0.15,0.15,0.15],
-    "Truss":[0,0,0,0,0,0,0.02,0.06,0.08,0.17,0.19,0.19,0.23,0.27,0.32,0.31,0.31,0.33,0.34,0.26,0.23,0.19,0.19,0.18,0.13,0.12],
     "Intelbras":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.05],
-    "Others":[0.04,0.06,0.07,0.18,0.14,0.27,0.21,0.31,0.53,0.91,1.26,1.62,1.67,1.79,1.8,2.07,2.23,2.08,2.05,2.04,1.94,1.89,2.02,1.99,1.92,3.06],
+    # Others = Truss + app / beta users (no individual anchor)
+    "Others":[0.04,0.06,0.07,0.18,0.14,0.27,0.23,0.37,0.61,1.08,1.45,1.81,1.9,2.06,2.12,2.38,2.54,2.41,2.39,2.3,2.17,2.08,2.21,2.17,2.05,3.18],
 }
 FIDC_FROM = "2025-12"   # month the FIDC was raised (shaded region onward)
 
@@ -439,7 +439,7 @@ cohort_svg = cohort_lines()
 # Point-in-time 90+ ratio (over90 balance / total balance) per CALENDAR month.
 dq_labels = ["jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25",
              "sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
-dq_order = ["Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee","Moura","iFood","Truss"]
+dq_order = ["Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee","Moura","iFood"]
 N = None
 dq_data = {
     "Cantu":            [0.0,0.0,0.0,0.6,0.4,3.8,12.5,14.4,21.1,26.4,25.6,33.3,40.6,37.6,17.9,16.6,8.9],
@@ -449,7 +449,6 @@ dq_data = {
     "Malwee":           [N,N,N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0,1.5,4.2,4.1],
     "Brinox":           [N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0,0.0,2.7,5.8,5.5,5.1],
     "iFood":            [N,N,N,N,N,N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0],
-    "Truss":            [N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,0.0],
 }
 # company-wide point-in-time 90+ ratio
 dq_agg = [0.0,0.0,0.4,0.4,0.3,4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.5]
