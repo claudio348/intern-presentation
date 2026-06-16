@@ -437,22 +437,22 @@ cohort_svg = cohort_lines()
 
 # ---------- delinquency (90+) over time, by partner (calendar) ----------
 # Point-in-time 90+ ratio (over90 balance / total balance) per CALENDAR month.
-dq_labels = ["may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25",
-             "dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
+dq_labels = ["jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25",
+             "sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
 dq_order = ["Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee","Moura","iFood","Truss"]
 N = None
 dq_data = {
-    "Cantu":            [0.4,3.8,12.5,14.4,21.1,26.4,25.6,33.3,40.6,37.6,17.9,16.6,8.9],
-    "Moura":            [15.7,6.9,0.8,0.7,0.3,0.3,0.3,0.4,0.3,0.5,1.2,0.9,1.3],
-    "Chilli Beans":     [0.0,2.7,9.2,9.0,20.1,27.1,30.0,31.7,34.3,30.4,28.7,36.3,41.1],
-    "Juntos Somos Mais":[1.7,16.7,24.4,53.9,38.4,23.3,24.5,37.7,41.7,52.8,52.1,37.4,32.8],
-    "Malwee":           [N,N,N,N,N,N,0.0,0.0,0.0,0.0,1.5,4.2,4.1],
-    "Brinox":           [N,N,N,N,0.0,0.0,0.0,0.0,0.0,2.7,5.8,5.5,5.1],
-    "iFood":            [N,N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0],
-    "Truss":            [N,N,N,N,N,N,N,N,N,N,N,N,0.0],
+    "Cantu":            [0.0,0.0,0.0,0.6,0.4,3.8,12.5,14.4,21.1,26.4,25.6,33.3,40.6,37.6,17.9,16.6,8.9],
+    "Moura":            [N,N,N,N,15.7,6.9,0.8,0.7,0.3,0.3,0.3,0.4,0.3,0.5,1.2,0.9,1.3],
+    "Chilli Beans":     [0.0,0.0,0.0,0.2,0.0,2.7,9.2,9.0,20.1,27.1,30.0,31.7,34.3,30.4,28.7,36.3,41.1],
+    "Juntos Somos Mais":[0.0,0.0,3.9,1.9,1.7,16.7,24.4,53.9,38.4,23.3,24.5,37.7,41.7,52.8,52.1,37.4,32.8],
+    "Malwee":           [N,N,N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0,1.5,4.2,4.1],
+    "Brinox":           [N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0,0.0,2.7,5.8,5.5,5.1],
+    "iFood":            [N,N,N,N,N,N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0],
+    "Truss":            [N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,0.0],
 }
 # company-wide point-in-time 90+ ratio
-dq_agg = [0.3,4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.5]
+dq_agg = [0.0,0.0,0.4,0.4,0.3,4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.5]
 DQ_FIDC = dq_labels.index("dec/25")  # FIDC went live Dec/25
 dq_legend = ('<span><i style="background:#0C0C0C;height:3px;border-radius:2px"></i>Company aggregate</span>'
              + "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in dq_order))
@@ -492,10 +492,11 @@ def dq_lines():
     # company aggregate (hero)
     apts = " ".join(f"{X(j):.1f},{Y(v):.1f}" for j, v in enumerate(dq_agg))
     s.append(f'<polyline points="{apts}" fill="none" stroke="#0C0C0C" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>')
-    for j in (0,4,8,12):
+    last = len(dq_agg)-1
+    for j in (4,8,12,last):
         s.append(f'<circle cx="{X(j):.1f}" cy="{Y(dq_agg[j]):.1f}" r="3.6" fill="#0C0C0C"/>')
         s.append(f'<text x="{X(j):.1f}" y="{Y(dq_agg[j])-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#0C0C0C">{dq_agg[j]:.0f}%</text>')
-    ends.append({"x": X(12), "real": Y(dq_agg[12]), "y": Y(dq_agg[12]), "v": dq_agg[12], "col": "#0C0C0C", "hero": True})
+    ends.append({"x": X(last), "real": Y(dq_agg[last]), "y": Y(dq_agg[last]), "v": dq_agg[last], "col": "#0C0C0C", "hero": True})
     # de-clutter end labels
     ends.sort(key=lambda e: e["y"]); prev = -99
     for e in ends:
