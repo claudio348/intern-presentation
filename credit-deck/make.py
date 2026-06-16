@@ -383,26 +383,43 @@ cohort_legend = "".join(
     f'<span><i style="background:{ANCHOR_COL[n]}"></i>{n} ({port_labels[cohort[n][0]]})</span>' for n in cohort_order)
 
 def cohort_lines():
-    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 26, 30, 40, 40
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx
-    maxm = max(len(v) for _, v in cohort.values()); ymax = 18
-    def X(j): return Lx + j/(maxm-1)*pw
+    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 30, 44, 34, 40
+    n = len(port_labels); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 18
+    def X(i): return Lx + i/(n-1)*pw
     def Y(v): return Tx+ph - v/ymax*ph
-    base = Tx+ph
+    base = Tx+ph; di = PORT_FIDC; xd = X(di)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    # FIDC-live shaded region
+    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{base-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
-    s.append(f'<text x="{WD-Rx}" y="{Tx-12:.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="700" font-size="13" fill="#0C0C0C">Total carteira · R$ 33,5M</text>')
-    for j in range(0, maxm, 3):
-        s.append(f'<text x="{X(j):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">M{j}</text>')
-    for n in cohort_order:
-        _, vals = cohort[n]; col = ANCHOR_COL[n]
-        pts = " ".join(f"{X(j):.1f},{Y(v):.1f}" for j, v in enumerate(vals))
+    for i in range(0, n, 3):
+        s.append(f'<text x="{X(i):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{port_labels[i]}</text>')
+    ends = []
+    for name in cohort_order:
+        vals = port_data[name]; col = ANCHOR_COL[name]
+        f = 0
+        while f < n and vals[f] == 0: f += 1
+        pts = " ".join(f"{X(i):.1f},{Y(vals[i]):.1f}" for i in range(f, n))
         s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>')
-        je = len(vals)-1; xe = X(je); ye = Y(vals[je]); txt = f"{vals[je]:.1f}".replace(".", ",")
-        tc = "#2E2E2E" if n == "Others" else "#fff"
-        s.append(f'<circle cx="{xe:.1f}" cy="{ye:.1f}" r="3.3" fill="{col}"/>')
-        s.append(f'<rect x="{xe-13:.1f}" y="{ye-21:.1f}" width="26" height="14" rx="3" fill="{col}"/>')
-        s.append(f'<text x="{xe:.1f}" y="{ye-11:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8" fill="{tc}">{txt}</text>')
+        ends.append({"real": Y(vals[-1]), "y": Y(vals[-1]), "v": vals[-1], "col": col, "dark": name == "Others"})
+    # FIDC divider + label
+    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx-8:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC live →</text>')
+    # de-clutter endpoint value pills (min vertical gap)
+    ends.sort(key=lambda e: e["y"]); prev = -99
+    for e in ends:
+        if e["y"] < prev + 15: e["y"] = prev + 15
+        prev = e["y"]
+    xe = X(n-1)
+    for e in ends:
+        col = e["col"]; ry = e["real"]; ly = e["y"]
+        val = f'{e["v"]:.1f}'.replace(".", ",")
+        tc = "#2E2E2E" if e["dark"] else "#fff"
+        s.append(f'<circle cx="{xe:.1f}" cy="{ry:.1f}" r="3.2" fill="{col}"/>')
+        if abs(ly-ry) > 1.5:
+            s.append(f'<line x1="{xe:.1f}" y1="{ry:.1f}" x2="{xe+6:.1f}" y2="{ly:.1f}" stroke="{col}" stroke-width="1"/>')
+        s.append(f'<rect x="{xe+6:.1f}" y="{ly-7:.1f}" width="30" height="14" rx="3" fill="{col}"/>')
+        s.append(f'<text x="{xe+21:.1f}" y="{ly+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8" fill="{tc}">{val}</text>')
     s.append('</svg>')
     return "\n".join(s)
 cohort_svg = cohort_lines()
@@ -541,11 +558,11 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: PIX/boleto loan tape · MOB-1 snapshot</div>
 </section>
 
-<!-- COHORT CREDIT PORTFOLIO -->
+<!-- CREDIT PORTFOLIO PER PARTNER -->
 <section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Credit portfolio · cohort</span></div>
-  <div class="slide-head reveal"><h1>Cohort credit <span class="accent">portfolio.</span></h1>
-  <p class="sub">Loan book per partner by months on book (R$M) — total carteira R$ 33.5M.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Credit portfolio · per partner</span></div>
+  <div class="slide-head reveal"><h1>Credit portfolio <span class="accent">per partner.</span></h1>
+  <p class="sub">Outstanding loan book by partner (R$M) — FIDC live from Dec-25 · total R$ 33.5M.</p></div>
   <div class="blegend reveal">{cohort_legend}</div>
   <div class="chartframe reveal">{cohort_svg}</div>
   <div class="illus">Source: cohort — credit portfolio · balance by vintage</div>
