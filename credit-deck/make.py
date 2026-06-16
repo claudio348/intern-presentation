@@ -372,6 +372,41 @@ PORT_FIDC = _pm.index("2025-12")
 lb_con_svg  = stack_rm(port_labels, port_data, 48, [0,10,20,30,40], PORT_FIDC)
 div_con_svg = stack_pct(port_labels, port_data, PORT_FIDC)
 
+# ---------- cohort loan book per partner (months on book, R$M) ----------
+cohort_order = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox"]
+def _cohort(name):
+    vals = port_data[name]; i = 0
+    while i < len(vals) and vals[i] == 0: i += 1
+    return i, vals[i:]
+cohort = {n: _cohort(n) for n in cohort_order}
+cohort_legend = "".join(
+    f'<span><i style="background:{ANCHOR_COL[n]}"></i>{n} ({port_labels[cohort[n][0]]})</span>' for n in cohort_order)
+
+def cohort_lines():
+    WD, HD = 1040, 444; Lx, Rx, Tx, Bx = 22, 30, 22, 38
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx
+    maxm = max(len(v) for _, v in cohort.values()); ymax = 19
+    def X(j): return Lx + j/(maxm-1)*pw
+    def Y(v): return Tx+ph - v/ymax*ph
+    base = Tx+ph
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    for j in range(0, maxm, 2):
+        s.append(f'<text x="{X(j):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">M{j}</text>')
+    for n in cohort_order:
+        _, vals = cohort[n]; col = ANCHOR_COL[n]
+        pts = " ".join(f"{X(j):.1f},{Y(v):.1f}" for j, v in enumerate(vals))
+        s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"/>')
+        for j, v in enumerate(vals):
+            if j % 2 and j != len(vals)-1: continue
+            x = X(j); y = Y(v); txt = f"{v:.1f}".replace(".", ",")
+            tc = "#2E2E2E" if n == "Others" else "#fff"
+            s.append(f'<rect x="{x-12:.1f}" y="{y-7:.1f}" width="24" height="14" rx="3" fill="{col}"/>')
+            s.append(f'<text x="{x:.1f}" y="{y+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="7.6" fill="{tc}">{txt}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+cohort_svg = cohort_lines()
+
 
 STYLE = """<style>
 .chartframe { padding:1vh 0 0; background:transparent; border:none; }
@@ -504,6 +539,16 @@ SLIDES = STYLE + f"""
     </ul>
   </div>
   <div class="illus">Source: PIX/boleto loan tape · MOB-1 snapshot</div>
+</section>
+
+<!-- COHORT CREDIT PORTFOLIO -->
+<section class="slide theme-light vcenter" data-num="06">
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Credit portfolio · cohort</span></div>
+  <div class="slide-head reveal"><h1>Cohort credit <span class="accent">portfolio.</span></h1>
+  <p class="sub">Loan book per partner by months on book (R$M) — total carteira R$ 30.9M, peak R$ 42.8M.</p></div>
+  <div class="blegend reveal">{cohort_legend}</div>
+  <div class="chartframe reveal">{cohort_svg}</div>
+  <div class="illus">Source: cohort — credit portfolio · balance by vintage</div>
 </section>
 
 <!-- LOAN BOOK — CONSOLIDATED -->
