@@ -562,24 +562,17 @@ def runoff_chart():
              '<stop offset="1" stop-color="#0C0C0C" stop-opacity="0.02"/></linearGradient></defs>')
     for t in (0,25,50,75,100):
         s.append(f'<text x="{Lx-8}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    s.append(f'<text x="{Lx-7:.1f}" y="{Tx-6:.1f}" text-anchor="start" font-family="Geist Mono,monospace" font-size="8.5" fill="#9a9a9a">% of principal outstanding</text>')
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
     # area + curve
     d = f"M {xs[0]:.1f},{base:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{base:.1f} Z"
     s.append(f'<path d="{d}" fill="url(#roG)"/>')
     s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>'
              % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
-    # duration marker (balance-weighted center of mass)
-    xd = Xv(RO_DUR)
-    s.append(f'<line x1="{xd:.1f}" y1="{Tx-2:.1f}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.5"/>')
-    s.append(f'<text x="{xd+6:.1f}" y="{Tx+8:.1f}" font-family="Geist Mono,monospace" font-size="10" fill="#3A3A3A">duration ~{RO_DUR} mo</text>')
-    # tenor marker (avg installments)
-    xt = Xv(RO_TENOR)
-    s.append(f'<line x1="{xt:.1f}" y1="{Tx+24:.1f}" x2="{xt:.1f}" y2="{base:.1f}" stroke="#8a8a8a" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>')
-    s.append(f'<text x="{xt+6:.1f}" y="{Tx+34:.1f}" font-family="Geist Mono,monospace" font-size="10" fill="#7A7A7A">avg tenor {RO_TENOR} mo</text>')
-    # repaid callout at MOB 2 (58% repaid)
+    # single headline callout
     rp = 100-ro_out[2]
-    s.append(f'<text x="{X(3.4):.1f}" y="{Y(70):.1f}" font-family="Geist,sans-serif" font-weight="800" font-size="26" fill="#0C0C0C">~{rp:.0f}%</text>')
-    s.append(f'<text x="{X(3.4):.1f}" y="{Y(70)+16:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.04em" fill="#8a8a8a">of principal repaid by month 2</text>')
+    s.append(f'<text x="{X(4):.1f}" y="{Y(66):.1f}" font-family="Geist,sans-serif" font-weight="800" font-size="32" fill="#0C0C0C">~{rp:.0f}%</text>')
+    s.append(f'<text x="{X(4):.1f}" y="{Y(66)+18:.1f}" font-family="Geist Mono,monospace" font-size="10.5" letter-spacing="0.03em" fill="#8a8a8a">repaid by month 2</text>')
     # points + value labels
     for i,(x,y,v) in enumerate(zip(xs,ys,ro_out)):
         s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="#0C0C0C"/>')
@@ -587,7 +580,6 @@ def runoff_chart():
     # x labels
     for i,m in enumerate(ro_mob):
         s.append(f'<text x="{X(i):.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" fill="#5A5A5A">M{m}</text>')
-    s.append(f'<text x="{(Lx+WD-Rx)/2:.1f}" y="{HD-2}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" letter-spacing="0.1em" fill="#9a9a9a">MONTHS ON BOOK · % OF ORIGINAL PRINCIPAL OUTSTANDING</text>')
     s.append('</svg>')
     return "\n".join(s)
 runoff_svg = runoff_chart()
@@ -896,6 +888,8 @@ STYLE = """<style>
 .metrics.compact .metric { padding:1.5vh 1vw; border-radius:12px; }
 .metrics.compact .k { font-size:9px; }
 .metrics.compact .v { font-size:clamp(18px,1.7vw,28px); }
+.bp-badge { display:inline-flex; align-items:center; gap:.5em; background:#0C0C0C; color:#FAFAFA; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; padding:.9vh 1vw; border-radius:8px; margin-bottom:1.4vh; }
+.bp-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:#FAFAFA; }
 .metrics.vstack { grid-template-columns:1fr; gap:0; margin-top:1.2vh; }
 .metrics.vstack .metric { border:none; border-radius:0; padding:1.9vh 0; border-top:1px solid rgba(12,12,12,.12); }
 .metrics.vstack .metric:first-child { border-top:none; }
@@ -1124,6 +1118,7 @@ SLIDES = STYLE + f"""
       <div class="chartframe">{arr_svg}</div>
     </div>
     <div>
+      <span class="bp-badge">Business Plan assumptions</span>
       <div class="metrics vstack" data-stagger>
         {metric("Runway","18 <span style='font-size:.5em'>mo</span>","at current burn")}
         {metric("Expected TPV","R$ 25M <span style='font-size:.5em'>/mo</span>","by Dec/26")}
