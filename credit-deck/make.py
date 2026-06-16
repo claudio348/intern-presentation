@@ -492,7 +492,7 @@ def conc_rows():
            '<span>Share of 90+</span><span class="r-pct">%</span><span style="text-align:center">CDR</span></div>']
     for name, saldo, sh, cdr in conc90:
         w = sh/maxsh*100; sval = f"{saldo:,}".replace(",", ".")
-        out.append(f'<div class="r90"><span class="r-name">{name}</span><span class="r-val">{sval}</span>'
+        out.append(f'<div class="r90"><span class="r-name"><i class="r-dot" style="background:{ANCHOR_COL.get(name,"#999")}"></i>{name}</span><span class="r-val">{sval}</span>'
                    f'<span class="r-track"><span class="r-fill" style="width:{w:.0f}%"></span></span>'
                    f'<span class="r-pct">{sh:.1f}%</span>'
                    f'<span class="r-cdr" style="background:{_heat(cdr)}">{cdr:.1f}%</span></div>')
@@ -643,7 +643,8 @@ STYLE = """<style>
 .r90.head { border-bottom:2px solid #0C0C0C; padding:0 0 1vh; }
 .r90.head span { font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; }
 .r90.total { border-top:2px solid #0C0C0C; border-bottom:none; }
-.r90 .r-name { font-family:var(--font-sans); font-weight:600; font-size:clamp(14px,1.25vw,20px); color:var(--ink); }
+.r90 .r-name { display:flex; align-items:center; gap:.8vw; font-family:var(--font-sans); font-weight:600; font-size:clamp(14px,1.25vw,20px); color:var(--ink); }
+.r90 .r-dot { width:16px; height:16px; border-radius:5px; flex-shrink:0; }
 .r90 .r-val { font-family:var(--font-mono); font-size:clamp(12px,1vw,15px); color:#2E2E2E; text-align:right; }
 .r90 .r-track { height:18px; background:rgba(12,12,12,.06); border-radius:100px; overflow:hidden; }
 .r90 .r-fill { display:block; height:100%; border-radius:100px; background:linear-gradient(90deg,#C8C8C8,#A6A6A6); }
