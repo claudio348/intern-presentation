@@ -67,45 +67,36 @@ FPD_THR = 5.0            # underwriting target — FPD healthy below this
 FPD_RED = "#D11A2A"      # breach accent
 
 def fpd_area():
-    ymax = 16; Lx, Rx, Tx, Bx = 46, 18, 44, 40
+    ymax = 16; Lx, Rx, Tx, Bx = 46, 18, 40, 40
     pw, ph = W-Lx-Rx, H-Tx-Bx; n = len(fpd_vals)
-    xs = [Lx + i/(n-1)*pw for i in range(n)]
+    slot = pw/n; bw = slot*0.52
+    def cx(i): return Lx + slot*i + slot/2
     def Y(v): return Tx+ph - v/ymax*ph
     ybase = Tx+ph; ythr = Y(FPD_THR)
     mean = sum(fpd_vals)/n; ymn = Y(mean)
     s = [f'<svg class="chart" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg">']
-    # faint in-target band (0 → threshold)
-    s.append(f'<rect x="{Lx}" y="{ythr:.1f}" width="{pw:.1f}" height="{ybase-ythr:.1f}" fill="#0C0C0C" opacity="0.035"/>')
     # y labels (no gridlines)
     for t in (0,5,10,15):
         s.append(f'<text x="{Lx-8}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
-    # average reference
-    s.append(f'<line x1="{Lx}" y1="{ymn:.1f}" x2="{W-Rx}" y2="{ymn:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.42"/>')
-    s.append(f'<text x="{W-Rx}" y="{ymn-4:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#7A7A7A">avg {mean:.1f}%</text>')
-    # threshold baseline — the reference line everything is measured against
-    s.append(f'<line x1="{Lx}" y1="{ythr:.1f}" x2="{W-Rx}" y2="{ythr:.1f}" stroke="#0C0C0C" stroke-width="1.6"/>')
-    s.append(f'<text x="{Lx+5}" y="{ythr-6:.1f}" font-family="Geist Mono,monospace" font-size="9" letter-spacing="0.04em" fill="#5A5A5A">underwriting target · FPD &le; 5%</text>')
-    # lollipops: stem from the 5% line to the value; above = breach (red), below = in target (ink)
-    for i,(x,v) in enumerate(zip(xs,fpd_vals)):
-        yv = Y(v); breach = v > FPD_THR
+    # columns — in target (ink) vs breach (red)
+    for i,v in enumerate(fpd_vals):
+        x = cx(i)-bw/2; yv = Y(v); breach = v > FPD_THR
         col = FPD_RED if breach else "#0C0C0C"
-        scol = FPD_RED if breach else "#C2C2C2"
-        s.append(f'<line x1="{x:.1f}" y1="{ythr:.1f}" x2="{x:.1f}" y2="{yv:.1f}" stroke="{scol}" stroke-width="{2.4 if breach else 1.8}" stroke-linecap="round" opacity="{0.9 if breach else 0.8}"/>')
-        r = 3.0
-        last = i == n-1
-        if i == 0: r = 4.4                       # the spike
-        elif last: r = 4.2                        # current
-        elif breach: r = 3.6
-        s.append(f'<circle cx="{x:.1f}" cy="{yv:.1f}" r="{r:.1f}" fill="{col}"/>')
+        s.append(f'<rect x="{x:.1f}" y="{yv:.1f}" width="{bw:.1f}" height="{ybase-yv:.1f}" rx="2.5" fill="{col}" opacity="{1 if (breach or i==n-1) else 0.86}"/>')
+        vc = FPD_RED if breach else ("#0C0C0C" if i==n-1 else "#6A6A6A")
+        fw = 700 if (breach or i==n-1) else 500
+        s.append(f'<text x="{cx(i):.1f}" y="{yv-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{fw}" font-size="9" fill="{vc}">{v:.1f}</text>')
+    # underwriting target line (drawn over bars)
+    s.append(f'<line x1="{Lx}" y1="{ythr:.1f}" x2="{W-Rx}" y2="{ythr:.1f}" stroke="#0C0C0C" stroke-width="1.5" stroke-dasharray="5 4"/>')
+    s.append(f'<text x="{W-Rx}" y="{ythr-6:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" letter-spacing="0.04em" fill="#5A5A5A">underwriting target &le; 5%</text>')
+    # average reference
+    s.append(f'<line x1="{Lx}" y1="{ymn:.1f}" x2="{W-Rx}" y2="{ymn:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.4"/>')
+    s.append(f'<text x="{Lx}" y="{ymn-5:.1f}" font-family="Geist Mono,monospace" font-size="9" fill="#7A7A7A">avg {mean:.1f}%</text>')
     # spike annotation
-    s.append(f'<text x="{xs[0]:.1f}" y="{Y(fpd_vals[0])-10:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="{FPD_RED}">{fpd_vals[0]:.1f}%</text>')
-    s.append(f'<text x="{xs[0]+10:.1f}" y="{Y(fpd_vals[0])+12:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#9a9a9a">isolated cohort</text>')
-    # current point highlight
-    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{Y(fpd_vals[-1]):.1f}" r="8" fill="none" stroke="#0C0C0C" stroke-opacity="0.22"/>')
-    s.append(f'<text x="{xs[-1]:.1f}" y="{Y(fpd_vals[-1])+18:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#0C0C0C">{fpd_vals[-1]:.1f}%</text>')
+    s.append(f'<text x="{cx(0)+bw/2+5:.1f}" y="{Y(fpd_vals[0])+12:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#9a9a9a">isolated cohort</text>')
     # x labels
     for i,lab in enumerate(fpd_labels):
-        s.append(f'<text x="{xs[i]:.1f}" y="{H-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{lab}</text>')
+        s.append(f'<text x="{cx(i):.1f}" y="{H-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{lab}</text>')
     s.append('</svg>')
     return "\n".join(s)
 fpd_svg = fpd_area()
