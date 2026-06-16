@@ -480,6 +480,43 @@ conc_svg = hbar90()
 conc_legend = ('<span><i style="background:#B5B5B5"></i>% of 90+</span>'
                '<span><i style="background:#C0143C"></i>CDR (90+ ÷ principal originated)</span>')
 
+# ---------- 90+ by vintage (origination month) ----------
+vint = [("nov/24",10090,0.4,2.9,0),("dez/24",29297,1.1,4.8,0),("jan/25",60118,2.3,5.0,0),
+        ("fev/25",256352,9.7,17.6,1),("mar/25",329536,12.4,17.7,1),("abr/25",129270,4.9,7.0,0),
+        ("mai/25",293097,11.1,15.2,1),("jun/25",150226,5.7,8.2,0),("jul/25",66312,2.5,4.6,0),
+        ("ago/25",208840,7.9,9.2,0),("set/25",160934,6.1,7.2,0),("out/25",333655,12.6,13.1,1),
+        ("nov/25",184933,7.0,7.5,0),("dez/25",193652,7.3,7.2,0),("jan/26",210343,7.9,6.2,0),
+        ("fev/26",33555,1.3,0.9,0),("mar/26",None,0.0,0.0,0),("abr/26",None,0.0,0.0,0),("mai/26",None,0.0,0.0,0)]
+def vint_table():
+    rows = ""
+    for m, saldo, sh, cdr, hi in vint:
+        sval = f"{saldo:,}".replace(",", ".") if saldo else "–"
+        cls = ' class="hi"' if hi else ''
+        rows += f'<tr{cls}><td>{m}</td><td>{sval}</td><td>{sh:.1f}%</td><td class="cdr">{cdr:.1f}%</td></tr>'
+    rows += '<tr class="total"><td>Total</td><td>2.650.209</td><td>100,0%</td><td class="cdr">5,7%</td></tr>'
+    return (f'<table class="ctab sm"><thead><tr><th>By vintage</th><th>90+ (R$)</th>'
+            f'<th>% of 90+</th><th>CDR</th></tr></thead><tbody>{rows}</tbody></table>')
+vint_tbl = vint_table()
+def cdr_vintage_chart():
+    WD, HD = 1040, 458; Lx, Rx, Tx, Bx = 40, 10, 22, 46
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 20; n = len(vint); slot = pw/n; bw = slot*0.56
+    def Y(v): return Tx+ph - v/ymax*ph
+    base = Y(0)
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    for t in (0,5,10,15,20):
+        s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    for i, (m, saldo, sh, cdr, hi) in enumerate(vint):
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; y = Y(cdr); h = base-y
+        col = "#8E0E2E" if hi else "#C0143C"
+        if cdr > 0:
+            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2" fill="{col}"/>')
+            s.append(f'<text x="{cx:.1f}" y="{y-5:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.5" fill="#6A6A6A">{cdr:.0f}</text>')
+        s.append(f'<text x="{cx:.1f}" y="{HD-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.5" fill="#5A5A5A">{m}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+cdr_vint_svg = cdr_vintage_chart()
+
 
 STYLE = """<style>
 .chartframe { padding:1vh 0 0; background:transparent; border:none; }
@@ -513,6 +550,8 @@ STYLE = """<style>
 .ctab td:first-child { text-align:left; font-weight:600; color:var(--ink); }
 .ctab .cdr { color:#C0143C; font-weight:600; }
 .ctab tr.total td { font-weight:700; color:var(--ink); border-top:2px solid #0C0C0C; border-bottom:none; }
+.ctab.sm th, .ctab.sm td { padding:.42vh .7vw; font-size:clamp(9.5px,.8vw,12px); }
+.ctab tr.hi td { background:rgba(192,20,60,.08); }
 .callout { border:1px solid rgba(12,12,12,.18); border-left:3px solid var(--ink); border-radius:10px; padding:1.6vh 1.4vw; margin-top:2vh; font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#2E2E2E; line-height:1.55; }
 .callout b { color:var(--ink); font-weight:600; }
 .illus { position:absolute; bottom:2.2vh; left:3vw; z-index:6; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
@@ -650,6 +689,18 @@ SLIDES = STYLE + f"""
     </div>
   </div>
   <div class="illus">Source: PIX/boleto loan tape · over90 balance May/26</div>
+</section>
+
+<!-- 90+ BY VINTAGE -->
+<section class="slide theme-light vcenter" data-num="06">
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risk · 90+ by vintage</span></div>
+  <div class="slide-head reveal"><h1>90+ by <span class="accent">vintage.</span></h1>
+  <p class="sub">CDR by origination month (90+ ÷ principal originated) — no amortization bias.</p></div>
+  <div class="two-col reveal" style="grid-template-columns:1fr 1.3fr; align-items:center;">
+    <div>{vint_tbl}</div>
+    <div class="chartframe">{cdr_vint_svg}</div>
+  </div>
+  <div class="illus">Source: PIX/boleto loan tape · over90 ÷ principal originated</div>
 </section>
 
 <!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
