@@ -1048,10 +1048,10 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risk · 90+ over time</span></div>
   <div class="slide-head reveal"><h1>Delinquency <span class="accent">over time.</span></h1>
-  <p class="sub">Point-in-time 90+ rate by calendar month, per partner — FIDC live from Dec-25.</p></div>
+  <p class="sub">BNPL only · point-in-time 90+ rate by calendar month, per partner — FIDC live from Dec-25.</p></div>
   <div class="blegend reveal">{dq_legend}</div>
   <div class="chartframe reveal">{dq_svg}</div>
-  <div class="illus">Source: loan tape — 90+ balance ÷ outstanding balance, monthly</div>
+  <div class="illus">Source: BNPL loan tape only — 90+ balance ÷ outstanding balance, monthly</div>
 </section>
 
 <!-- WHERE DOES 90+ COME FROM -->
@@ -1110,7 +1110,7 @@ SLIDES = STYLE + f"""
   <p class="sub">Outstanding balance by days-past-due bucket — share over time, R$M on top.</p></div>
   <div class="blegend reveal">{ag_legend}</div>
   <div class="chartframe reveal">{aging_svg}</div>
-  <div class="illus">Source: PIX/boleto loan tape · balance by DPD bucket · monthly · 90+ region above the bold line</div>
+  <div class="illus">Source: BNPL loan tape only · balance by DPD bucket · monthly · 90+ region above the bold line</div>
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
