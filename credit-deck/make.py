@@ -447,16 +447,16 @@ arr_svg = arr_chart()
 
 # ---------- credit economics waterfall ----------
 # (label, y0, y1, color, value, label_pos)
-wf_steps = [("Aggregate Yield",0,74,"#0C0C0C","74%","top"),
-            ("Direct Costs",63,74,"#C0143C","−11%","bot"),
-            ("Funding Cost All-in",40,63,"#C0143C","−23%","bot"),
-            ("NIM",0,41,"#0C0C0C","41%","top"),
-            ("Capital Losses",32,41,"#C0143C","−9%","bot"),
-            ("Risk-Adjusted NIM",0,32,"#0C0C0C","32%","top")]
-wf_levels = [74,63,40,41,32]   # connector level between bar i and i+1
+wf_steps = [("Aggregate Yield",0,95.8,"#0C0C0C","95.8%","top"),
+            ("Direct Costs",87.8,95.8,"#C0143C","−8.0%","bot"),
+            ("Funding Cost",64.8,87.8,"#C0143C","−23.0%","bot"),
+            ("NIM",0,64.8,"#0C0C0C","64.8%","top"),
+            ("Capital Losses (NPL)",39.8,64.8,"#C0143C","−25.0%","bot"),
+            ("Risk-Adjusted NIM",0,39.8,"#0C0C0C","39.8%","top")]
+wf_levels = [95.8,87.8,64.8,64.8,39.8]   # connector level between bar i and i+1
 def waterfall():
-    WD, HD = 940, 500; Lx, Rx, Tx, Bx = 16, 16, 40, 44
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 82; n = len(wf_steps); slot = pw/n; bw = slot*0.56
+    WD, HD = 1000, 504; Lx, Rx, Tx, Bx = 18, 18, 44, 48
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 104; n = len(wf_steps); slot = pw/n; bw = slot*0.54
     def Y(v): return Tx+ph - v/ymax*ph
     def Cx(i): return Lx+slot*i+slot/2
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
@@ -797,8 +797,8 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="04">
   <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Credit economics · 1Q26</span></div>
   <div class="slide-head reveal"><h1>From gross yield to <span class="accent">risk-adjusted NIM.</span></h1>
-  <p class="sub">Where the 95.8% aggregate yield goes — 1Q26, annualized (% of gross yield).</p></div>
-  <div class="chartframe reveal">{econ_svg}</div>
+  <p class="sub">NIM bridge — 1Q26, annualized (% of aggregate yield).</p></div>
+  <div class="chartframe reveal">{wf_svg}</div>
   <div class="illus">1Q26 annualized · % of aggregate yield · NIM bridge</div>
 </section>
 
