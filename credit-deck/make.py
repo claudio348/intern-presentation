@@ -480,10 +480,10 @@ wf_svg = waterfall()
 def econ_bar():
     WD, HD = 1040, 340; Lx, Rx, Tx, Bx = 22, 22, 74, 96
     pw = WD-Lx-Rx; barH = 66; y = Tx
-    segs = [("Risk-adjusted NIM", 32, "#0C0C0C", "32%"),
-            ("Capital losses", 9, "#C0143C", "−9%"),
-            ("Funding cost", 23, "#8E1024", "−23%"),
-            ("Direct costs", 11, "#C98B96", "−11%")]
+    segs = [("Risk-adjusted NIM", 39.8, "#0C0C0C", "39.8%"),
+            ("Capital losses (NPL)", 25.0, "#C0143C", "−25.0%"),
+            ("Funding cost", 23.0, "#8E1024", "−23.0%"),
+            ("Direct costs", 8.0, "#C98B96", "−8.0%")]
     total = sum(v for _, v, _, _ in segs)
     def X(v): return Lx + v/total*pw
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
@@ -499,9 +499,9 @@ def econ_bar():
         ya = by+12+lvl*30; xa = X(a); xb = X(b)
         return (f'<path d="M {xa:.1f} {ya:.1f} L {xa:.1f} {ya+6:.1f} L {xb:.1f} {ya+6:.1f} L {xb:.1f} {ya:.1f}" fill="none" stroke="#0C0C0C" stroke-width="1.2"/>'
                 f'<text x="{(xa+xb)/2:.1f}" y="{ya+22:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="13" fill="#0C0C0C">{lab}</text>')
-    s.append(bracket(0, 32, "Risk-adjusted NIM · 32%", 0))
-    s.append(bracket(0, 41, "NIM · 41%", 1))
-    s.append(f'<text x="{Lx}" y="{y-40:.1f}" font-family="Geist Mono,monospace" font-size="11" letter-spacing="0.12em" fill="#8a8a8a">GROSS YIELD · 74%</text>')
+    s.append(bracket(0, 39.8, "Risk-adjusted NIM · 39.8%", 0))
+    s.append(bracket(0, 64.8, "NIM · 64.8%", 1))
+    s.append(f'<text x="{Lx}" y="{y-40:.1f}" font-family="Geist Mono,monospace" font-size="11" letter-spacing="0.12em" fill="#8a8a8a">GROSS YIELD · 95.8%</text>')
     s.append('</svg>')
     return "\n".join(s)
 econ_svg = econ_bar()
@@ -795,11 +795,11 @@ SLIDES = STYLE + f"""
 
 <!-- CREDIT ECONOMICS (yield allocation) -->
 <section class="slide theme-light vcenter" data-num="04">
-  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Credit economics · 9M25</span></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Credit economics · 1Q26</span></div>
   <div class="slide-head reveal"><h1>From gross yield to <span class="accent">risk-adjusted NIM.</span></h1>
-  <p class="sub">Where the 74% aggregate yield goes — 9M25 (% of gross yield).</p></div>
+  <p class="sub">Where the 95.8% aggregate yield goes — 1Q26, annualized (% of gross yield).</p></div>
   <div class="chartframe reveal">{econ_svg}</div>
-  <div class="illus">9M25 · % of aggregate yield · NIM bridge</div>
+  <div class="illus">1Q26 annualized · % of aggregate yield · NIM bridge</div>
 </section>
 
 <!-- 4 — CDR BY VINTAGE -->
