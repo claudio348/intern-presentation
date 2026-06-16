@@ -465,6 +465,12 @@ STYLE = """<style>
 .metric .k { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#5A5A5A; }
 .metric .v { font-family:var(--font-sans); font-weight:700; font-size:clamp(26px,2.8vw,42px); letter-spacing:-.02em; margin-top:.6vh; line-height:1; }
 .metric .s { font-family:var(--font-sans); font-size:12.5px; color:#2E2E2E; margin-top:.8vh; line-height:1.4; }
+.metrics.compact { grid-template-columns:1fr 1fr; gap:1vw; margin-top:1.4vh; }
+.metrics.compact .metric { padding:1.5vh 1vw; border-radius:12px; }
+.metrics.compact .k { font-size:9px; }
+.metrics.compact .v { font-size:clamp(18px,1.7vw,28px); }
+.metrics.compact .s { font-size:11px; margin-top:.4vh; }
+.arr-cap { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; margin-bottom:.6vh; }
 .callout { border:1px solid rgba(12,12,12,.18); border-left:3px solid var(--ink); border-radius:10px; padding:1.6vh 1.4vw; margin-top:2vh; font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#2E2E2E; line-height:1.55; }
 .callout b { color:var(--ink); font-weight:600; }
 .illus { position:absolute; bottom:2.2vh; left:3vw; z-index:6; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
@@ -645,31 +651,29 @@ SLIDES = STYLE + f"""
   <div class="illus">Over90: PIX/boleto loan tape · subordination / excess spread = structure (to confirm)</div>
 </section>
 
-<!-- 10 — CORPORATE / RUNWAY -->
+<!-- COMPANY — RUN RATE + CORPORATE BACKING -->
 <section class="slide theme-light vcenter" data-num="10">
   <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Company</span></div>
   <div class="slide-head reveal"><h1>Corporate backing of the <span class="accent">leverage.</span></h1>
-  <p class="sub">Leverage of the subordinated tranche — the company underpins it.</p>
-  <div class="wip wip-lg" style="margin-top:1.4vh">WIP · placeholder figures — to confirm</div></div>
-  <div class="metrics reveal" data-stagger>
-    {metric("Cash","R$ 32M","current position")}
-    {metric("Monthly burn","R$ 2.1M","net")}
-    {metric("Runway","15+ <span style='font-size:.5em'>months</span>","at current burn")}
-    {metric("Origination target","R$ 80M <span style='font-size:.5em'>/mo</span>","year exit")}
-    {metric("FIDC capacity","R$ 500M","senior share")}
-    {metric("Target subordination","≥ 20%","structural floor")}
+  <p class="sub">Revenue run rate (US$k) and the balance sheet behind the leverage.</p></div>
+  <div class="two-col reveal" style="grid-template-columns:1.45fr 1fr; align-items:center;">
+    <div>
+      <div class="arr-cap">Revenue run rate · US$ thousands · FX R$ 5.00/US$</div>
+      <div class="chartframe">{arr_svg}</div>
+    </div>
+    <div>
+      <span class="wip wip-lg">WIP · placeholder figures — to confirm</span>
+      <div class="metrics compact" data-stagger>
+        {metric("Cash","R$ 32M","current position")}
+        {metric("Monthly burn","R$ 2.1M","net")}
+        {metric("Runway","15+ <span style='font-size:.5em'>mo</span>","at current burn")}
+        {metric("Origination","R$ 80M <span style='font-size:.5em'>/mo</span>","target · year exit")}
+        {metric("FIDC capacity","R$ 500M","senior share")}
+        {metric("Target subord.","≥ 20%","structural floor")}
+      </div>
+    </div>
   </div>
-  <div class="callout reveal">Corporate targets, cash and runway sized to <b>sustain the subordinated share</b> through the cycle — aligning shareholder risk with the senior shareholders'.</div>
-  <div class="illus">Illustrative data — replace with the company's real figures</div>
-</section>
-
-<!-- REVENUE RUN RATE -->
-<section class="slide theme-light vcenter" data-num="11">
-  <div class="chapter-mark light-mark"><span class="chapter-num">10</span><span class="chapter-divider"></span><span class="chapter-year">Company · ARR</span></div>
-  <div class="slide-head reveal"><h1>Revenue run <span class="accent">rate.</span></h1>
-  <p class="sub">Revenue run rate in US$ thousands · FX R$ 5.00 / US$.</p></div>
-  <div class="chartframe reveal">{arr_svg}</div>
-  <div class="illus">Source: company figures · revenue run-rate</div>
+  <div class="illus">Run-rate per company figures · balance-sheet items placeholder (WIP)</div>
 </section>
 
 <!-- 11 — Q&A -->
