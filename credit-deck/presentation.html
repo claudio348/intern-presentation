@@ -8318,6 +8318,11 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 .metrics.compact .metric { padding:1.5vh 1vw; border-radius:12px; }
 .metrics.compact .k { font-size:9px; }
 .metrics.compact .v { font-size:clamp(18px,1.7vw,28px); }
+.metrics.vstack { grid-template-columns:1fr; gap:0; margin-top:1.2vh; }
+.metrics.vstack .metric { border:none; border-radius:0; padding:1.9vh 0; border-top:1px solid rgba(12,12,12,.12); }
+.metrics.vstack .metric:first-child { border-top:none; }
+.metrics.vstack .v { font-size:clamp(24px,2.4vw,38px); margin-top:.4vh; }
+.metrics.vstack .s { margin-top:.5vh; }
 .metrics.compact .s { font-size:11px; margin-top:.4vh; }
 .arr-cap { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; margin-bottom:.6vh; }
 .wf-wrap { display:grid; grid-template-columns:1fr 1.55fr; align-items:center; gap:3vw; margin-top:2vh; }
@@ -9405,12 +9410,10 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
     </div>
     <div>
       <span class="wip wip-lg">WIP · placeholder figures — to confirm</span>
-      <div class="metrics compact" data-stagger>
+      <div class="metrics vstack" data-stagger>
         <div class="metric"><div class="k">Runway</div><div class="v">18 <span style='font-size:.5em'>mo</span></div><div class="s">at current burn</div></div>
         <div class="metric"><div class="k">Expected TPV</div><div class="v">R$ 25M <span style='font-size:.5em'>/mo</span></div><div class="s">by Dec/26</div></div>
-        <div class="metric"><div class="k">Credit portfolio</div><div class="v">R$ 71M</div><div class="s">target book</div></div>
-        <div class="metric"><div class="k">FIDC capacity</div><div class="v">R$ 500M</div><div class="s">senior share</div></div>
-        <div class="metric"><div class="k">Target subord.</div><div class="v">≥ 20%</div><div class="s">structural floor</div></div>
+        <div class="metric"><div class="k">Credit portfolio</div><div class="v">R$ 71M</div><div class="s">expected · Dec/26</div></div>
       </div>
     </div>
   </div>

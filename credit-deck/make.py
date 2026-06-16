@@ -791,6 +791,11 @@ STYLE = """<style>
 .metrics.compact .metric { padding:1.5vh 1vw; border-radius:12px; }
 .metrics.compact .k { font-size:9px; }
 .metrics.compact .v { font-size:clamp(18px,1.7vw,28px); }
+.metrics.vstack { grid-template-columns:1fr; gap:0; margin-top:1.2vh; }
+.metrics.vstack .metric { border:none; border-radius:0; padding:1.9vh 0; border-top:1px solid rgba(12,12,12,.12); }
+.metrics.vstack .metric:first-child { border-top:none; }
+.metrics.vstack .v { font-size:clamp(24px,2.4vw,38px); margin-top:.4vh; }
+.metrics.vstack .s { margin-top:.5vh; }
 .metrics.compact .s { font-size:11px; margin-top:.4vh; }
 .arr-cap { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; margin-bottom:.6vh; }
 .wf-wrap { display:grid; grid-template-columns:1fr 1.55fr; align-items:center; gap:3vw; margin-top:2vh; }
@@ -1022,12 +1027,10 @@ SLIDES = STYLE + f"""
     </div>
     <div>
       <span class="wip wip-lg">WIP · placeholder figures — to confirm</span>
-      <div class="metrics compact" data-stagger>
+      <div class="metrics vstack" data-stagger>
         {metric("Runway","18 <span style='font-size:.5em'>mo</span>","at current burn")}
         {metric("Expected TPV","R$ 25M <span style='font-size:.5em'>/mo</span>","by Dec/26")}
-        {metric("Credit portfolio","R$ 71M","target book")}
-        {metric("FIDC capacity","R$ 500M","senior share")}
-        {metric("Target subord.","≥ 20%","structural floor")}
+        {metric("Credit portfolio","R$ 71M","expected · Dec/26")}
       </div>
     </div>
   </div>
