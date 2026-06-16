@@ -86,14 +86,11 @@ def fpd_area():
         vc = FPD_RED if breach else ("#0C0C0C" if i==n-1 else "#6A6A6A")
         fw = 700 if (breach or i==n-1) else 500
         s.append(f'<text x="{cx(i):.1f}" y="{yv-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{fw}" font-size="9" fill="{vc}">{v:.1f}</text>')
-    # underwriting target line (drawn over bars)
+    # underwriting target line (drawn over bars) — label sits in the empty mid gap
     s.append(f'<line x1="{Lx}" y1="{ythr:.1f}" x2="{W-Rx}" y2="{ythr:.1f}" stroke="#0C0C0C" stroke-width="1.5" stroke-dasharray="5 4"/>')
-    s.append(f'<text x="{W-Rx}" y="{ythr-6:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" letter-spacing="0.04em" fill="#5A5A5A">underwriting target &le; 5%</text>')
-    # average reference
-    s.append(f'<line x1="{Lx}" y1="{ymn:.1f}" x2="{W-Rx}" y2="{ymn:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.4"/>')
-    s.append(f'<text x="{Lx}" y="{ymn-5:.1f}" font-family="Geist Mono,monospace" font-size="9" fill="#7A7A7A">avg {mean:.1f}%</text>')
+    s.append(f'<text x="{cx(4):.1f}" y="{ythr-8:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" letter-spacing="0.04em" fill="#5A5A5A">underwriting target &le; 5%</text>')
     # spike annotation
-    s.append(f'<text x="{cx(0)+bw/2+5:.1f}" y="{Y(fpd_vals[0])+12:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#9a9a9a">isolated cohort</text>')
+    s.append(f'<text x="{cx(0)+bw/2+6:.1f}" y="{Y(fpd_vals[0])+14:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#9a9a9a">isolated cohort</text>')
     # x labels
     for i,lab in enumerate(fpd_labels):
         s.append(f'<text x="{cx(i):.1f}" y="{H-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{lab}</text>')
@@ -967,7 +964,7 @@ SLIDES = STYLE + f"""
   <p class="sub">First-payment default — value late on the 1st installment ÷ total.</p></div>
   <div class="two-col reveal">
     <div class="chartframe">{fpd_svg}
-      <div class="legend"><span><i style="background:#0C0C0C"></i>in target (&le; 5%)</span><span><i style="background:#D11A2A"></i>breach (&gt; 5%)</span><span style="color:#8a8a8a">measured vs underwriting target · dashed = avg</span></div>
+      <div class="legend"><span><i style="background:#0C0C0C"></i>in target (&le; 5%)</span><span><i style="background:#D11A2A"></i>breach (&gt; 5%)</span><span style="color:#8a8a8a">dashed = underwriting target</span></div>
     </div>
     <ul class="readlist">
       <li>The <b>May-25 spike (~15%)</b> was an isolated cohort; FPD normalized to <b>low single digits</b> since.</li>
