@@ -992,9 +992,9 @@ SLIDES = STYLE + f"""
     {metric("Avg. rate","44.6% <span style='font-size:.5em'>/yr</span>","principal-weighted")}
     {metric("Origination","R$ 4.9M <span style='font-size:.5em'>/mo</span>","last-3-month run-rate")}
     {metric("Current book","R$ 15.1M","outstanding balance")}
-    {metric("Turnover","~3.4×","per year")}
+    {metric("Turnover","~3.5×","per year")}
   </div>
-  <div class="illus">Source: PIX/boleto loan tape · Jan/26–May/26 (FIDC)</div>
+  <div class="illus">Source: PIX/boleto loan tape · book @ May/26 · 16,172 contracts</div>
 </section>
 
 <!-- 9 — Jr TRANCHE -->
