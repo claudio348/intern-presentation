@@ -242,17 +242,19 @@ def metric(k, v, s, wip=False):
 
 # ---------- monthly TPV / origination by rail (real) ----------
 tpv_months = ["may/24","jun/24","jul/24","aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
-tpv_order = ["Cartão","PIX Rails"]   # PIX Rails = Boleto + Pix
-TPV_COL = {"Cartão":"#CBCBCB","PIX Rails":"#0C0C0C"}
+tpv_order = ["Legacy rail","PIX Rails"]   # Legacy rail = Cartão · PIX Rails = Boleto + Pix
+TPV_COL = {"Legacy rail":"#CBCBCB","PIX Rails":"#0C0C0C"}
 tpv_data = {
-  "Cartão":[0.26,0.49,0.91,1.43,4.93,4.54,3.66,3.14,2.8,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34],
+  "Legacy rail":[0.26,0.49,0.91,1.43,4.93,4.54,3.66,3.14,2.8,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34],
   "PIX Rails":[0.0,0.0,0.0,0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.28,1.99,1.72,2.81,3.59,4.59,3.74,3.15,2.57,3.16,5.49,3.45,5.69],
 }
 
 def tpv_chart():
     WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 40, 12, 24, 46
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 17; n = len(tpv_months); slot = pw/n; bw = slot*0.6
+    base = Tx+ph; di = tpv_months.index("dec/25"); xd = Lx+slot*di
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{base-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
     for t in (0,4,8,12,16):
         y = Tx+ph - t/ymax*ph
         s.append(f'<text x="{Lx-6}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
@@ -271,6 +273,8 @@ def tpv_chart():
         if total > 0:
             s.append(f'<text x="{cx:.1f}" y="{ytop-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9.5" fill="#0C0C0C">{total:.1f}</text>')
         s.append(f'<text x="{cx:.1f}" y="{HD-16}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.8" fill="#5A5A5A">{tpv_months[i]}</text>')
+    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
+    s.append(f'<text x="{xd+7:.1f}" y="{Tx+10:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC live →</text>')
     s.append('</svg>')
     return "\n".join(s)
 
@@ -773,7 +777,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Origination</span></div>
   <div class="slide-head reveal"><h1>Origination on the <span class="accent">PIX rail.</span></h1>
-  <p class="sub">Monthly TPV by rail (R$M) — scaling on the PIX rail.</p></div>
+  <p class="sub">Monthly TPV by rail (R$M) — migrating from the legacy rail to PIX · FIDC live Dec-25.</p></div>
   <div class="blegend reveal">{tpv_legend}</div>
   <div class="chartframe reveal">{tpv_svg}</div>
   <div class="illus">Source: monthly TPV · Mar/24–May/26 (Jun/26 partial, excluded)</div>
