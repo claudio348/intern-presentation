@@ -438,9 +438,11 @@ dq_data = {
     "Malwee":[0.0,0.0,0.0,0.0,0.0,0.1,0.0,0.2,1.6],
     "Brinox":[0.0,0.0,0.0,4.1,17.8,14.1,15.5,18.6,0.0,0.0],
 }
-dq_legend = "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in dq_order)
+dq_agg = [0.0,0.0,0.0,0.8,2.9,4.7,5.4,7.1,8.5,9.5,8.9,9.3,10.8]
+dq_legend = ('<span><i style="background:#0C0C0C;height:3px;border-radius:2px"></i>Company aggregate</span>'
+             + "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in dq_order))
 def dq_lines():
-    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 46, 46, 34, 44
+    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 46, 54, 38, 44
     maxm = max(len(v) for v in dq_data.values()); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 24
     def X(j): return Lx + j/(maxm-1)*pw
     def Y(v): return Tx+ph - v/ymax*ph
@@ -451,24 +453,35 @@ def dq_lines():
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
     for j in range(maxm):
         s.append(f'<text x="{X(j):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">M{j}</text>')
+    # partner lines (muted context)
     ends = []
     for g in dq_order:
         vals = dq_data[g]; col = ANCHOR_COL[g]
         pts = " ".join(f"{X(j):.1f},{Y(v):.1f}" for j, v in enumerate(vals))
-        s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>')
+        s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="1.7" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="round"/>')
         je = len(vals)-1
-        ends.append({"x": X(je), "real": Y(vals[je]), "y": Y(vals[je]), "v": vals[je], "col": col})
+        ends.append({"x": X(je), "real": Y(vals[je]), "y": Y(vals[je]), "v": vals[je], "col": col, "hero": False})
+    # company aggregate (hero)
+    apts = " ".join(f"{X(j):.1f},{Y(v):.1f}" for j, v in enumerate(dq_agg))
+    s.append(f'<polyline points="{apts}" fill="none" stroke="#0C0C0C" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>')
+    for j in (3,6,9,12):
+        s.append(f'<circle cx="{X(j):.1f}" cy="{Y(dq_agg[j]):.1f}" r="3.6" fill="#0C0C0C"/>')
+        s.append(f'<text x="{X(j):.1f}" y="{Y(dq_agg[j])-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#0C0C0C">{dq_agg[j]:.0f}%</text>')
+    ends.append({"x": X(12), "real": Y(dq_agg[12]), "y": Y(dq_agg[12]), "v": dq_agg[12], "col": "#0C0C0C", "hero": True})
+    # de-clutter end labels
     ends.sort(key=lambda e: e["y"]); prev = -99
     for e in ends:
         if e["y"] < prev+15: e["y"] = prev+15
         prev = e["y"]
     for e in ends:
         xe = e["x"]; col = e["col"]; ry = e["real"]; ly = e["y"]; val = f'{e["v"]:.0f}%'
-        s.append(f'<circle cx="{xe:.1f}" cy="{ry:.1f}" r="3.2" fill="{col}"/>')
+        if e["hero"]:
+            continue  # aggregate already labelled along the line
+        s.append(f'<circle cx="{xe:.1f}" cy="{ry:.1f}" r="2.8" fill="{col}"/>')
         if abs(ly-ry) > 1.5:
-            s.append(f'<line x1="{xe:.1f}" y1="{ry:.1f}" x2="{xe+6:.1f}" y2="{ly:.1f}" stroke="{col}" stroke-width="1"/>')
-        s.append(f'<rect x="{xe+6:.1f}" y="{ly-7:.1f}" width="30" height="14" rx="3" fill="{col}"/>')
-        s.append(f'<text x="{xe+21:.1f}" y="{ly+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8" fill="#fff">{val}</text>')
+            s.append(f'<line x1="{xe:.1f}" y1="{ry:.1f}" x2="{xe+6:.1f}" y2="{ly:.1f}" stroke="{col}" stroke-width="1" stroke-opacity="0.6"/>')
+        s.append(f'<rect x="{xe+6:.1f}" y="{ly-6.5:.1f}" width="28" height="13" rx="3" fill="{col}" opacity="0.85"/>')
+        s.append(f'<text x="{xe+20:.1f}" y="{ly+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="7.5" fill="#fff">{val}</text>')
     s.append('</svg>')
     return "\n".join(s)
 dq_svg = dq_lines()
