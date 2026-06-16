@@ -373,7 +373,7 @@ lb_con_svg  = stack_rm(port_labels, port_data, 48, [0,10,20,30,40], PORT_FIDC)
 div_con_svg = stack_pct(port_labels, port_data, PORT_FIDC)
 
 # ---------- cohort loan book per partner (months on book, R$M) ----------
-cohort_order = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox"]
+cohort_order = ["Cantu","Moura","Juntos Somos Mais","Chilli Beans","Others","Malwee","Brinox"]
 def _cohort(name):
     vals = port_data[name]; i = 0
     while i < len(vals) and vals[i] == 0: i += 1
@@ -383,26 +383,26 @@ cohort_legend = "".join(
     f'<span><i style="background:{ANCHOR_COL[n]}"></i>{n} ({port_labels[cohort[n][0]]})</span>' for n in cohort_order)
 
 def cohort_lines():
-    WD, HD = 1040, 444; Lx, Rx, Tx, Bx = 22, 30, 22, 38
+    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 26, 30, 40, 40
     pw, ph = WD-Lx-Rx, HD-Tx-Bx
-    maxm = max(len(v) for _, v in cohort.values()); ymax = 19
+    maxm = max(len(v) for _, v in cohort.values()); ymax = 18
     def X(j): return Lx + j/(maxm-1)*pw
     def Y(v): return Tx+ph - v/ymax*ph
     base = Tx+ph
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
-    for j in range(0, maxm, 2):
-        s.append(f'<text x="{X(j):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">M{j}</text>')
+    s.append(f'<text x="{WD-Rx}" y="{Tx-12:.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="700" font-size="13" fill="#0C0C0C">Total carteira · R$ 33,5M</text>')
+    for j in range(0, maxm, 3):
+        s.append(f'<text x="{X(j):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">M{j}</text>')
     for n in cohort_order:
         _, vals = cohort[n]; col = ANCHOR_COL[n]
         pts = " ".join(f"{X(j):.1f},{Y(v):.1f}" for j, v in enumerate(vals))
-        s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"/>')
-        for j, v in enumerate(vals):
-            if j % 2 and j != len(vals)-1: continue
-            x = X(j); y = Y(v); txt = f"{v:.1f}".replace(".", ",")
-            tc = "#2E2E2E" if n == "Others" else "#fff"
-            s.append(f'<rect x="{x-12:.1f}" y="{y-7:.1f}" width="24" height="14" rx="3" fill="{col}"/>')
-            s.append(f'<text x="{x:.1f}" y="{y+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="7.6" fill="{tc}">{txt}</text>')
+        s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>')
+        je = len(vals)-1; xe = X(je); ye = Y(vals[je]); txt = f"{vals[je]:.1f}".replace(".", ",")
+        tc = "#2E2E2E" if n == "Others" else "#fff"
+        s.append(f'<circle cx="{xe:.1f}" cy="{ye:.1f}" r="3.3" fill="{col}"/>')
+        s.append(f'<rect x="{xe-13:.1f}" y="{ye-21:.1f}" width="26" height="14" rx="3" fill="{col}"/>')
+        s.append(f'<text x="{xe:.1f}" y="{ye-11:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8" fill="{tc}">{txt}</text>')
     s.append('</svg>')
     return "\n".join(s)
 cohort_svg = cohort_lines()
@@ -545,7 +545,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Credit portfolio · cohort</span></div>
   <div class="slide-head reveal"><h1>Cohort credit <span class="accent">portfolio.</span></h1>
-  <p class="sub">Loan book per partner by months on book (R$M) — total carteira R$ 30.9M, peak R$ 42.8M.</p></div>
+  <p class="sub">Loan book per partner by months on book (R$M) — total carteira R$ 33.5M.</p></div>
   <div class="blegend reveal">{cohort_legend}</div>
   <div class="chartframe reveal">{cohort_svg}</div>
   <div class="illus">Source: cohort — credit portfolio · balance by vintage</div>
