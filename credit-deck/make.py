@@ -498,8 +498,8 @@ def vint_table():
             f'<th>% of 90+</th><th>CDR</th></tr></thead><tbody>{rows}</tbody></table>')
 vint_tbl = vint_table()
 def cdr_vintage_chart():
-    WD, HD = 1040, 458; Lx, Rx, Tx, Bx = 40, 10, 22, 46
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 20; n = len(vint); slot = pw/n; bw = slot*0.56
+    WD, HD = 1040, 466; Lx, Rx, Tx, Bx = 40, 16, 30, 46
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 20; n = len(vint); slot = pw/n; bw = slot*0.6
     def Y(v): return Tx+ph - v/ymax*ph
     base = Y(0)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
@@ -508,11 +508,15 @@ def cdr_vintage_chart():
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
     for i, (m, saldo, sh, cdr, hi) in enumerate(vint):
         cx = Lx+slot*i+slot/2; x = cx-bw/2; y = Y(cdr); h = base-y
-        col = "#8E0E2E" if hi else "#C0143C"
+        col = "#8E0E2E" if hi else "#D33B57"
         if cdr > 0:
-            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2" fill="{col}"/>')
-            s.append(f'<text x="{cx:.1f}" y="{y-5:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.5" fill="#6A6A6A">{cdr:.0f}</text>')
+            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2.5" fill="{col}"/>')
+            s.append(f'<text x="{cx:.1f}" y="{y-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8" fill="#0C0C0C">{cdr:.0f}%</text>')
         s.append(f'<text x="{cx:.1f}" y="{HD-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.5" fill="#5A5A5A">{m}</text>')
+    # portfolio average line
+    ya = Y(5.7)
+    s.append(f'<line x1="{Lx}" y1="{ya:.1f}" x2="{WD-Rx}" y2="{ya:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="3 4" opacity="0.55"/>')
+    s.append(f'<text x="{WD-Rx:.1f}" y="{ya-5:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#6A6A6A">portfolio avg · 5,7%</text>')
     s.append('</svg>')
     return "\n".join(s)
 cdr_vint_svg = cdr_vintage_chart()
@@ -740,8 +744,8 @@ SLIDES = STYLE + f"""
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risk · 90+ by vintage</span></div>
   <div class="slide-head reveal"><h1>90+ by <span class="accent">vintage.</span></h1>
   <p class="sub">CDR by origination month (90+ ÷ principal originated) — no amortization bias.</p></div>
-  <div class="blegend reveal" style="margin-bottom:.4vh"><span><i style="background:#C0143C;border-radius:50%"></i>bubble = 90+ balance</span><span><i style="background:linear-gradient(90deg,#F4A6B8,#7A0A23)"></i>colour = CDR intensity</span></div>
-  <div class="chartframe reveal">{bubble_svg}</div>
+  <div class="blegend reveal" style="margin-bottom:.4vh"><span><i style="background:#8E0E2E"></i>worst vintages (fev–mai/25)</span><span><i style="background:#D33B57"></i>other vintages</span><span style="color:#8a8a8a">— — portfolio avg 5,7%</span></div>
+  <div class="chartframe reveal">{cdr_vint_svg}</div>
   <div class="illus">Source: PIX/boleto loan tape · over90 ÷ principal originated</div>
 </section>
 
