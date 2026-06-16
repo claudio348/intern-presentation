@@ -508,22 +508,40 @@ def dq_lines():
 dq_svg = dq_lines()
 
 # ---------- revenue run rate (ARR) ----------
-arr_labels = ["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","Apr/26"]
-arr_vals = [319,550,1427,1716,2077,2532,2976,3176]
+arr_labels = ["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","Apr/26","May/26"]
+arr_vals = [319,550,1427,1716,2077,2532,2976,3176,3721]
 def arr_chart():
-    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 18, 14, 44, 40
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(arr_vals); slot = pw/n; bw = slot*0.5; ymax = 3500
+    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 30, 20, 58, 42
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(arr_vals); ymax = 4100
+    xs = [Lx + i/(n-1)*pw for i in range(n)]
     def Y(v): return Tx+ph - v/ymax*ph
-    base = Y(0)
+    base = Y(0); ys = [Y(v) for v in arr_vals]
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append('<defs><linearGradient id="arrG" x1="0" y1="0" x2="0" y2="1">'
+             '<stop offset="0" stop-color="#0C0C0C" stop-opacity="0.20"/>'
+             '<stop offset="1" stop-color="#0C0C0C" stop-opacity="0.02"/></linearGradient></defs>')
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
-    for i, v in enumerate(arr_vals):
-        cx = Lx+slot*i+slot/2; x = cx-bw/2; y = Y(v); h = base-y
-        col = "#0C0C0C" if i == n-1 else "#CBCBCB"
-        s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2" fill="{col}"/>')
+    # area + growth line
+    d = f"M {xs[0]:.1f},{base:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{base:.1f} Z"
+    s.append(f'<path d="{d}" fill="url(#arrG)"/>')
+    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>'
+             % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
+    # growth-multiple callout in the empty upper-left
+    mult = arr_vals[-1]/arr_vals[0]
+    s.append(f'<text x="{Lx+4:.1f}" y="{Tx-26:.1f}" font-family="Geist,sans-serif" font-weight="800" font-size="34" fill="#0C0C0C">{mult:.0f}×</text>')
+    s.append(f'<text x="{Lx+5:.1f}" y="{Tx-10:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#8a8a8a">ARR GROWTH SINCE 3Q24</text>')
+    # dots + value labels
+    for i,(x,y,v) in enumerate(zip(xs,ys,arr_vals)):
+        last = i == n-1
         val = f"{v:,}".replace(",", ".")
-        s.append(f'<text x="{cx:.1f}" y="{y-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="14" fill="#0C0C0C">{val}</text>')
-        s.append(f'<text x="{cx:.1f}" y="{HD-14:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="11" fill="#5A5A5A">{arr_labels[i]}</text>')
+        if last:
+            s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="none" stroke="#0C0C0C" stroke-opacity="0.18"/>')
+            s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="#0C0C0C"/>')
+            s.append(f'<text x="{x:.1f}" y="{y-13:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="800" font-size="16" fill="#0C0C0C">{val}</text>')
+        else:
+            s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.1" fill="#0C0C0C"/>')
+            s.append(f'<text x="{x:.1f}" y="{y-10:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="12" fill="#3A3A3A">{val}</text>')
+        s.append(f'<text x="{x:.1f}" y="{HD-14:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="11" fill="#5A5A5A">{arr_labels[i]}</text>')
     s.append('</svg>')
     return "\n".join(s)
 arr_svg = arr_chart()
@@ -1005,9 +1023,9 @@ SLIDES = STYLE + f"""
     <div>
       <span class="wip wip-lg">WIP · placeholder figures — to confirm</span>
       <div class="metrics compact" data-stagger>
-        {metric("Monthly burn","R$ 2.1M","net")}
-        {metric("Runway","15+ <span style='font-size:.5em'>mo</span>","at current burn")}
-        {metric("Origination","R$ 80M <span style='font-size:.5em'>/mo</span>","target · year exit")}
+        {metric("Runway","18 <span style='font-size:.5em'>mo</span>","at current burn")}
+        {metric("Expected TPV","R$ 25M <span style='font-size:.5em'>/mo</span>","by Dec/26")}
+        {metric("Credit portfolio","R$ 71M","target book")}
         {metric("FIDC capacity","R$ 500M","senior share")}
         {metric("Target subord.","≥ 20%","structural floor")}
       </div>
