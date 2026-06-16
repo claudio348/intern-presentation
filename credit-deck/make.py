@@ -517,29 +517,44 @@ def cdr_vintage_chart():
     return "\n".join(s)
 cdr_vint_svg = cdr_vintage_chart()
 
+def _heat(cdr):
+    t = min(cdr/18.0, 1.0); a = (244,166,184); b = (122,10,35)
+    return "#%02X%02X%02X" % tuple(round(a[k]+(b[k]-a[k])*t) for k in range(3))
+
 def bubble_vintage():
-    WD, HD = 1040, 470; Lx, Rx, Tx, Bx = 44, 28, 42, 48
+    WD, HD = 1040, 480; Lx, Rx, Tx, Bx = 44, 28, 48, 50
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 20; n = len(vint)
     def X(i): return Lx + (i+0.5)/n*pw
     def Y(v): return Tx+ph - v/ymax*ph
+    def R(saldo): return 0.05*(saldo**0.5)
     base = Y(0)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    # worst-block shading (fev/25 .. mai/25 = i 3..6)
+    bx0 = Lx + 3/n*pw; bx1 = Lx + 7/n*pw
+    s.append(f'<rect x="{bx0:.1f}" y="{Tx}" width="{bx1-bx0:.1f}" height="{base-Tx:.1f}" fill="#C0143C" opacity="0.05"/>')
+    s.append(f'<text x="{(bx0+bx1)/2:.1f}" y="{Tx-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="10" fill="#8E0E2E">worst vintages</text>')
     for t in (0,5,10,15,20):
         s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
-    # portfolio average line
     ya = Y(5.7)
-    s.append(f'<line x1="{Lx}" y1="{ya:.1f}" x2="{WD-Rx}" y2="{ya:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.5"/>')
+    s.append(f'<line x1="{Lx}" y1="{ya:.1f}" x2="{WD-Rx}" y2="{ya:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="2 4" opacity="0.45"/>')
     s.append(f'<text x="{WD-Rx:.1f}" y="{ya-5:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#6A6A6A">portfolio avg · 5,7%</text>')
-    # annotations
-    s.append(f'<text x="{X(4):.1f}" y="{Tx-4:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="10" fill="#8E0E2E">worst vintages · fev–mai/25</text>')
-    s.append(f'<text x="{X(16):.1f}" y="{Y(3):.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">recent ↓ improving</text>')
+    s.append(f'<text x="{X(16):.1f}" y="{Y(2.6):.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">recent ↓ improving</text>')
+    # size legend (top-left)
+    s.append(f'<text x="{Lx+4:.1f}" y="{Tx+8:.1f}" font-family="Geist Mono,monospace" font-size="8.5" fill="#8a8a8a">90+ balance (R$)</text>')
+    lx = Lx+14
+    for sv, lb in [(50000,"50k"),(150000,"150k"),(330000,"330k")]:
+        rr = R(sv); cyl = Tx+30
+        s.append(f'<circle cx="{lx+rr:.1f}" cy="{cyl:.1f}" r="{rr:.1f}" fill="none" stroke="#B0B0B0" stroke-width="1"/>')
+        s.append(f'<text x="{lx+rr:.1f}" y="{cyl+rr+9:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.5" fill="#9a9a9a">{lb}</text>')
+        lx += rr*2 + 18
+    # stems + heat bubbles
     for i, (m, saldo, sh, cdr, hi) in enumerate(vint):
         cx = X(i)
         if saldo:
-            r = 0.05*(saldo**0.5); cy = Y(cdr)
-            col = "#8E0E2E" if hi else "#C0143C"
-            s.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" opacity="0.82"/>')
+            cy = Y(cdr); r = R(saldo); col = _heat(cdr)
+            s.append(f'<line x1="{cx:.1f}" y1="{base:.1f}" x2="{cx:.1f}" y2="{cy:.1f}" stroke="#DADADA" stroke-width="1"/>')
+            s.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" stroke="#fff" stroke-width="1"/>')
             s.append(f'<text x="{cx:.1f}" y="{cy-r-4:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8.5" fill="#0C0C0C">{cdr:.0f}%</text>')
         s.append(f'<text x="{cx:.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.5" fill="#5A5A5A">{m}</text>')
     s.append('</svg>')
@@ -725,7 +740,7 @@ SLIDES = STYLE + f"""
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risk · 90+ by vintage</span></div>
   <div class="slide-head reveal"><h1>90+ by <span class="accent">vintage.</span></h1>
   <p class="sub">CDR by origination month (90+ ÷ principal originated) — no amortization bias.</p></div>
-  <div class="blegend reveal" style="margin-bottom:.4vh"><span><i style="background:#C0143C;border-radius:50%"></i>bubble = 90+ balance (R$)</span><span><i style="background:#8E0E2E;border-radius:50%"></i>worst vintages</span></div>
+  <div class="blegend reveal" style="margin-bottom:.4vh"><span><i style="background:#C0143C;border-radius:50%"></i>bubble = 90+ balance</span><span><i style="background:linear-gradient(90deg,#F4A6B8,#7A0A23)"></i>colour = CDR intensity</span></div>
   <div class="chartframe reveal">{bubble_svg}</div>
   <div class="illus">Source: PIX/boleto loan tape · over90 ÷ principal originated</div>
 </section>
