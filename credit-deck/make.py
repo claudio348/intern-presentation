@@ -498,24 +498,41 @@ def vint_table():
             f'<th>% of 90+</th><th>CDR</th></tr></thead><tbody>{rows}</tbody></table>')
 vint_tbl = vint_table()
 def cdr_vintage_chart():
-    WD, HD = 1040, 466; Lx, Rx, Tx, Bx = 40, 16, 30, 46
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 20; n = len(vint); slot = pw/n; bw = slot*0.6
+    WD, HD = 1040, 470; Lx, Rx, Tx, Bx = 40, 16, 34, 46
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 20; n = len(vint); slot = pw/n; bw = slot*0.58
     def Y(v): return Tx+ph - v/ymax*ph
+    def Cx(i): return Lx+slot*i+slot/2
     base = Y(0)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append('<defs>'
+             '<linearGradient id="cdrN" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E45C74"/><stop offset="1" stop-color="#C0143C"/></linearGradient>'
+             '<linearGradient id="cdrW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9E1F38"/><stop offset="1" stop-color="#6E0A20"/></linearGradient>'
+             '<linearGradient id="cdrArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C0143C" stop-opacity="0.16"/><stop offset="1" stop-color="#C0143C" stop-opacity="0"/></linearGradient>'
+             '<filter id="cdrSh" x="-25%" y="-25%" width="150%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#7A0A23" flood-opacity="0.22"/></filter>'
+             '</defs>')
+    # soft band behind worst block (fev/25..mai/25 = i 3..6)
+    bx0 = Lx + 3*slot; bx1 = Lx + 7*slot
+    s.append(f'<rect x="{bx0:.1f}" y="{Tx}" width="{bx1-bx0:.1f}" height="{base-Tx:.1f}" rx="6" fill="#C0143C" opacity="0.05"/>')
+    s.append(f'<text x="{(bx0+bx1)/2:.1f}" y="{Tx-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="9.5" fill="#8E0E2E">worst vintages</text>')
     for t in (0,5,10,15,20):
         s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    # trend area + line over the tops (artistic arc)
+    nz = [(Cx(i), Y(c)) for i,(m,sa,sh,c,hi) in enumerate(vint) if c > 0]
+    area = f"M {nz[0][0]:.1f},{base:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in nz) + f" L {nz[-1][0]:.1f},{base:.1f} Z"
+    s.append(f'<path d="{area}" fill="url(#cdrArea)"/>')
+    s.append('<polyline points="%s" fill="none" stroke="#8E0E2E" stroke-width="1.5" stroke-opacity="0.35" stroke-linejoin="round"/>' % " ".join(f"{x:.1f},{y:.1f}" for x,y in nz))
+    # bars
     for i, (m, saldo, sh, cdr, hi) in enumerate(vint):
-        cx = Lx+slot*i+slot/2; x = cx-bw/2; y = Y(cdr); h = base-y
-        col = "#8E0E2E" if hi else "#D33B57"
+        cx = Cx(i); x = cx-bw/2; y = Y(cdr); h = base-y
+        grad = "url(#cdrW)" if hi else "url(#cdrN)"
         if cdr > 0:
-            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2.5" fill="{col}"/>')
-            s.append(f'<text x="{cx:.1f}" y="{y-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8" fill="#0C0C0C">{cdr:.0f}%</text>')
+            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="3" fill="{grad}" filter="url(#cdrSh)"/>')
+            s.append(f'<text x="{cx:.1f}" y="{y-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8" fill="#0C0C0C">{cdr:.0f}%</text>')
         s.append(f'<text x="{cx:.1f}" y="{HD-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.5" fill="#5A5A5A">{m}</text>')
     # portfolio average line
     ya = Y(5.7)
-    s.append(f'<line x1="{Lx}" y1="{ya:.1f}" x2="{WD-Rx}" y2="{ya:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="3 4" opacity="0.55"/>')
+    s.append(f'<line x1="{Lx}" y1="{ya:.1f}" x2="{WD-Rx}" y2="{ya:.1f}" stroke="#0C0C0C" stroke-width="1" stroke-dasharray="3 4" opacity="0.5"/>')
     s.append(f'<text x="{WD-Rx:.1f}" y="{ya-5:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#6A6A6A">portfolio avg · 5,7%</text>')
     s.append('</svg>')
     return "\n".join(s)
