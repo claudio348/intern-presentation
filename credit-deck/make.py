@@ -568,26 +568,26 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: cohort — credit portfolio · balance by vintage</div>
 </section>
 
-<!-- LOAN BOOK — CONSOLIDATED -->
+<!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
 <section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Loan book · consolidated</span></div>
-  <div class="slide-head reveal"><h1>Loan book by <span class="accent">anchor.</span></h1>
-  <p class="sub">Outstanding balance by anchor (R$M).</p>
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · consolidated</span></div>
+  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
+  <p class="sub">Anchor as % of the credit portfolio — total R$M on top.</p>
   <span class="tag-pill">Corporate consolidated</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
-  <div class="chartframe reveal">{lb_con_svg}</div>
-  <div class="illus">Source: portfolio by month/source · Mar/24–Jun/26</div>
+  <div class="chartframe reveal">{div_con_svg}</div>
+  <div class="illus">Source: portfolio by month/source · May/24–Jun/26</div>
 </section>
 
-<!-- LOAN BOOK — OFF-BALANCE FIDC -->
+<!-- INCREASING DIVERSIFICATION — OFF-BALANCE FIDC -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Loan book · off-balance</span></div>
-  <div class="slide-head reveal"><h1>Loan book by <span class="accent">anchor.</span></h1>
-  <p class="sub">Outstanding balance by anchor (R$M) — FIDC carve-out.</p>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · off-balance</span></div>
+  <div class="slide-head reveal"><h1>Increasing <span class="accent">diversification.</span></h1>
+  <p class="sub">Anchor as % of the credit portfolio — FIDC carve-out.</p>
   <span class="tag-pill">Off-balance · FIDC</span></div>
   <div class="blegend reveal">{anchor_legend}</div>
-  <div class="chartframe reveal">{lb_off_svg}</div>
-  <div class="illus">Source: PIX/boleto loan tape · Jan/26–May/26 (FIDC)</div>
+  <div class="chartframe reveal">{div_off_svg}</div>
+  <div class="illus">Source: PIX/boleto loan tape · Dec/25–May/26 (FIDC)</div>
 </section>
 
 <!-- 8 — TENOR & DURATION -->
