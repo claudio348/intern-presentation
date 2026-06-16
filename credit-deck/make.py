@@ -436,7 +436,7 @@ def cohort_lines():
 cohort_svg = cohort_lines()
 
 # ---------- delinquency (90+) by cohort & partner ----------
-dq_order = ["Moura","Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee"]
+dq_order = ["Chilli Beans","Truss","Moura","Juntos Somos Mais","Cantu","Brinox","Malwee","iFood","Intelbras"]
 dq_data = {
     "Cantu":[0.0,0.0,0.0,1.9,4.5,7.4,7.8,7.9,6.5,5.7,6.1,7.5,6.8],
     "Moura":[0.0,0.0,0.0,0.0,0.1,1.4,4.0,4.4,10.4,14.8,13.6,8.1,15.0],
@@ -444,6 +444,9 @@ dq_data = {
     "Juntos Somos Mais":[0.0,0.0,0.0,0.3,3.0,4.3,3.7,7.1,11.1,10.2,8.9,11.8,12.4],
     "Malwee":[0.0,0.0,0.0,0.0,0.0,0.1,0.0,0.2,1.6],
     "Brinox":[0.0,0.0,0.0,4.1,17.8,14.1,15.5,18.6,0.0,0.0],
+    "Truss":[0.0,0.0,0.0,0.0,3.5,5.0,4.6,6.1,5.4,8.3,9.6,11.2,20.6],
+    "iFood":[0.0,0.0,0.0,0.0,0.0],
+    "Intelbras":[0.0,0.0],
 }
 dq_agg = [0.0,0.0,0.0,0.8,2.9,4.7,5.4,7.1,8.5,9.5,8.9,9.3,10.8]
 dq_legend = ('<span><i style="background:#0C0C0C;height:3px;border-radius:2px"></i>Company aggregate</span>'
