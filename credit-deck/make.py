@@ -1116,7 +1116,7 @@ SLIDES = STYLE + f"""
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
 <section class="slide theme-light vcenter" data-num="10">
   <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Company</span></div>
-  <div class="slide-head reveal"><h1>Corporate backing of the <span class="accent">leverage.</span></h1>
+  <div class="slide-head reveal"><h1>Corporate-backed <span class="accent">leverage.</span></h1>
   <p class="sub">Revenue run rate (US$k) and the balance sheet behind the leverage.</p></div>
   <div class="two-col reveal" style="grid-template-columns:1.45fr 1fr; align-items:center;">
     <div>
