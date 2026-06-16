@@ -459,21 +459,23 @@ def conc_table():
 conc_tbl = conc_table()
 
 def hbar90():
-    WD, HD = 1040, 460; Lx, Rx, Tx, Bx = 168, 60, 18, 38
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; xmax = 60; n = len(conc90); rowh = ph/n
+    WD, HD = 1040, 470; Lx, Rx, Tx, Bx = 178, 64, 22, 40
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; xmax = 60; n = len(conc90); rowh = ph/n; bh = 17
     def X(v): return Lx + v/xmax*pw
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append('<defs><linearGradient id="h90g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFCFCF"/><stop offset="1" stop-color="#ADADAD"/></linearGradient>'
+             '<linearGradient id="h90r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D8254A"/><stop offset="1" stop-color="#B30E36"/></linearGradient></defs>')
     s.append(f'<line x1="{Lx}" y1="{Tx}" x2="{Lx}" y2="{Tx+ph:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
     for t in range(0, 61, 10):
         s.append(f'<text x="{X(t):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
     for i, (name, saldo, sh, cdr) in enumerate(conc90):
         cy = Tx + rowh*i + rowh/2
-        s.append(f'<text x="{Lx-12:.1f}" y="{cy+3:.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="600" font-size="11.5" fill="#0C0C0C">{name}</text>')
-        gy = cy-13; ry = cy+1
-        s.append(f'<rect x="{Lx:.1f}" y="{gy:.1f}" width="{X(sh)-Lx:.1f}" height="11" rx="2" fill="#B5B5B5"/>')
-        s.append(f'<text x="{X(sh)+5:.1f}" y="{gy+9:.1f}" font-family="Geist,sans-serif" font-weight="600" font-size="9.5" fill="#6A6A6A">{round(sh)}%</text>')
-        s.append(f'<rect x="{Lx:.1f}" y="{ry:.1f}" width="{X(cdr)-Lx:.1f}" height="11" rx="2" fill="#C0143C"/>')
-        s.append(f'<text x="{X(cdr)+5:.1f}" y="{ry+9:.1f}" font-family="Geist,sans-serif" font-weight="600" font-size="9.5" fill="#C0143C">{round(cdr)}%</text>')
+        s.append(f'<text x="{Lx-14:.1f}" y="{cy+3:.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="600" font-size="12.5" fill="#0C0C0C">{name}</text>')
+        gy = cy-bh-2; ry = cy+2
+        s.append(f'<rect x="{Lx:.1f}" y="{gy:.1f}" width="{max(X(sh)-Lx,1):.1f}" height="{bh}" rx="3" fill="url(#h90g)"/>')
+        s.append(f'<text x="{X(sh)+6:.1f}" y="{gy+bh-4:.1f}" font-family="Geist,sans-serif" font-weight="700" font-size="10.5" fill="#6A6A6A">{round(sh)}%</text>')
+        s.append(f'<rect x="{Lx:.1f}" y="{ry:.1f}" width="{max(X(cdr)-Lx,1):.1f}" height="{bh}" rx="3" fill="url(#h90r)"/>')
+        s.append(f'<text x="{X(cdr)+6:.1f}" y="{ry+bh-4:.1f}" font-family="Geist,sans-serif" font-weight="700" font-size="10.5" fill="#B30E36">{round(cdr)}%</text>')
     s.append('</svg>')
     return "\n".join(s)
 conc_svg = hbar90()
@@ -754,16 +756,6 @@ SLIDES = STYLE + f"""
     </div>
   </div>
   <div class="illus">Source: PIX/boleto loan tape · over90 balance May/26</div>
-</section>
-
-<!-- 90+ BY VINTAGE -->
-<section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risk · 90+ by vintage</span></div>
-  <div class="slide-head reveal"><h1>90+ by <span class="accent">vintage.</span></h1>
-  <p class="sub">CDR by origination month (90+ ÷ principal originated) — no amortization bias.</p></div>
-  <div class="blegend reveal" style="margin-bottom:.4vh"><span><i style="background:#8E0E2E"></i>worst vintages (fev–mai/25)</span><span><i style="background:#D33B57"></i>other vintages</span><span style="color:#8a8a8a">— — portfolio avg 5,7%</span></div>
-  <div class="chartframe reveal">{cdr_vint_svg}</div>
-  <div class="illus">Source: PIX/boleto loan tape · over90 ÷ principal originated</div>
 </section>
 
 <!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
