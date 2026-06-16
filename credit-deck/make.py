@@ -445,6 +445,41 @@ def arr_chart():
     return "\n".join(s)
 arr_svg = arr_chart()
 
+# ---------- 90+ concentration by source ----------
+conc90 = [("Chilli Beans",1400985,52.9,7.6),("Juntos Somos Mais",729211,27.5,12.7),
+          ("Cantu",390897,14.7,3.8),("Malwee",74723,2.8,1.5),("Moura",34412,1.3,0.6),("Brinox",19981,0.8,1.3)]
+def conc_table():
+    rows = ""
+    for name, saldo, sh, cdr in conc90:
+        rows += (f'<tr><td>{name}</td><td>{f"{saldo:,}".replace(",", ".")}</td>'
+                 f'<td>{sh:.1f}%</td><td class="cdr">{cdr:.1f}%</td></tr>')
+    rows += ('<tr class="total"><td>Total carteira</td><td>2.650.209</td><td>100,0%</td><td class="cdr">5,7%</td></tr>')
+    return (f'<table class="ctab"><thead><tr><th>By source</th><th>90+ (R$)</th>'
+            f'<th>% of 90+</th><th>CDR</th></tr></thead><tbody>{rows}</tbody></table>')
+conc_tbl = conc_table()
+
+def hbar90():
+    WD, HD = 1040, 460; Lx, Rx, Tx, Bx = 168, 60, 18, 38
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; xmax = 60; n = len(conc90); rowh = ph/n
+    def X(v): return Lx + v/xmax*pw
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append(f'<line x1="{Lx}" y1="{Tx}" x2="{Lx}" y2="{Tx+ph:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    for t in range(0, 61, 10):
+        s.append(f'<text x="{X(t):.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
+    for i, (name, saldo, sh, cdr) in enumerate(conc90):
+        cy = Tx + rowh*i + rowh/2
+        s.append(f'<text x="{Lx-12:.1f}" y="{cy+3:.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="600" font-size="11.5" fill="#0C0C0C">{name}</text>')
+        gy = cy-13; ry = cy+1
+        s.append(f'<rect x="{Lx:.1f}" y="{gy:.1f}" width="{X(sh)-Lx:.1f}" height="11" rx="2" fill="#B5B5B5"/>')
+        s.append(f'<text x="{X(sh)+5:.1f}" y="{gy+9:.1f}" font-family="Geist,sans-serif" font-weight="600" font-size="9.5" fill="#6A6A6A">{round(sh)}%</text>')
+        s.append(f'<rect x="{Lx:.1f}" y="{ry:.1f}" width="{X(cdr)-Lx:.1f}" height="11" rx="2" fill="#C0143C"/>')
+        s.append(f'<text x="{X(cdr)+5:.1f}" y="{ry+9:.1f}" font-family="Geist,sans-serif" font-weight="600" font-size="9.5" fill="#C0143C">{round(cdr)}%</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+conc_svg = hbar90()
+conc_legend = ('<span><i style="background:#B5B5B5"></i>% of 90+</span>'
+               '<span><i style="background:#C0143C"></i>CDR (90+ ÷ principal originated)</span>')
+
 
 STYLE = """<style>
 .chartframe { padding:1vh 0 0; background:transparent; border:none; }
@@ -471,6 +506,13 @@ STYLE = """<style>
 .metrics.compact .v { font-size:clamp(18px,1.7vw,28px); }
 .metrics.compact .s { font-size:11px; margin-top:.4vh; }
 .arr-cap { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; margin-bottom:.6vh; }
+.ctab { width:100%; border-collapse:collapse; font-family:var(--font-sans); font-size:clamp(12px,1vw,15px); }
+.ctab th { font-family:var(--font-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:#fff; background:#0C0C0C; padding:.9vh .8vw; text-align:right; }
+.ctab th:first-child { text-align:left; }
+.ctab td { padding:.85vh .8vw; border-bottom:1px solid rgba(12,12,12,.1); text-align:right; color:#2E2E2E; }
+.ctab td:first-child { text-align:left; font-weight:600; color:var(--ink); }
+.ctab .cdr { color:#C0143C; font-weight:600; }
+.ctab tr.total td { font-weight:700; color:var(--ink); border-top:2px solid #0C0C0C; border-bottom:none; }
 .callout { border:1px solid rgba(12,12,12,.18); border-left:3px solid var(--ink); border-radius:10px; padding:1.6vh 1.4vw; margin-top:2vh; font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#2E2E2E; line-height:1.55; }
 .callout b { color:var(--ink); font-weight:600; }
 .illus { position:absolute; bottom:2.2vh; left:3vw; z-index:6; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
@@ -595,6 +637,21 @@ SLIDES = STYLE + f"""
   <div class="illus">Source: cohort — credit portfolio · balance by vintage</div>
 </section>
 
+<!-- WHERE DOES 90+ COME FROM -->
+<section class="slide theme-light vcenter" data-num="06">
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risk · concentration</span></div>
+  <div class="slide-head reveal"><h1>Where does the <span class="accent">90+ come from?</span></h1>
+  <p class="sub">Over90 by source — R$ 2.65M decomposed (May/26). CDR = 90+ ÷ principal originated.</p></div>
+  <div class="two-col reveal" style="grid-template-columns:1fr 1.2fr; align-items:center;">
+    <div>{conc_tbl}</div>
+    <div>
+      <div class="blegend" style="margin-top:0">{conc_legend}</div>
+      <div class="chartframe">{conc_svg}</div>
+    </div>
+  </div>
+  <div class="illus">Source: PIX/boleto loan tape · over90 balance May/26</div>
+</section>
+
 <!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Diversification · consolidated</span></div>
@@ -664,7 +721,6 @@ SLIDES = STYLE + f"""
     <div>
       <span class="wip wip-lg">WIP · placeholder figures — to confirm</span>
       <div class="metrics compact" data-stagger>
-        {metric("Cash","R$ 32M","current position")}
         {metric("Monthly burn","R$ 2.1M","net")}
         {metric("Runway","15+ <span style='font-size:.5em'>mo</span>","at current burn")}
         {metric("Origination","R$ 80M <span style='font-size:.5em'>/mo</span>","target · year exit")}
