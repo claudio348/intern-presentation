@@ -445,6 +445,37 @@ def arr_chart():
     return "\n".join(s)
 arr_svg = arr_chart()
 
+# ---------- credit economics waterfall ----------
+# (label, y0, y1, color, value, label_pos)
+wf_steps = [("Aggregate Yield",0,74,"#0C0C0C","74%","top"),
+            ("Direct Costs",63,74,"#C0143C","−11%","bot"),
+            ("Funding Cost All-in",40,63,"#C0143C","−23%","bot"),
+            ("NIM",0,41,"#0C0C0C","41%","top"),
+            ("Capital Losses",32,41,"#C0143C","−9%","bot"),
+            ("Risk-Adjusted NIM",0,32,"#0C0C0C","32%","top")]
+wf_levels = [74,63,40,41,32]   # connector level between bar i and i+1
+def waterfall():
+    WD, HD = 940, 500; Lx, Rx, Tx, Bx = 16, 16, 40, 44
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 82; n = len(wf_steps); slot = pw/n; bw = slot*0.56
+    def Y(v): return Tx+ph - v/ymax*ph
+    def Cx(i): return Lx+slot*i+slot/2
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    # connectors
+    for i in range(n-1):
+        y = Y(wf_levels[i])
+        s.append(f'<line x1="{Cx(i)+bw/2:.1f}" y1="{y:.1f}" x2="{Cx(i+1)-bw/2:.1f}" y2="{y:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    for i, (lab, y0, y1, col, val, pos) in enumerate(wf_steps):
+        cx = Cx(i); x = cx-bw/2; yt = Y(max(y0, y1)); yb = Y(min(y0, y1)); h = yb-yt
+        s.append(f'<rect x="{x:.1f}" y="{yt:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2" fill="{col}"/>')
+        if pos == "top":
+            s.append(f'<text x="{cx:.1f}" y="{yt-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="16" fill="#0C0C0C">{val}</text>')
+        else:
+            s.append(f'<text x="{cx:.1f}" y="{yb+19:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="13" fill="#2E2E2E">{val}</text>')
+        s.append(f'<text x="{cx:.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{lab}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+wf_svg = waterfall()
+
 # ---------- 90+ concentration by source ----------
 conc90 = [("Chilli Beans",1400985,52.9,7.6),("Juntos Somos Mais",729211,27.5,12.7),
           ("Cantu",390897,14.7,3.8),("Malwee",74723,2.8,1.5),("Moura",34412,1.3,0.6),("Brinox",19981,0.8,1.3)]
@@ -630,6 +661,9 @@ STYLE = """<style>
 .metrics.compact .v { font-size:clamp(18px,1.7vw,28px); }
 .metrics.compact .s { font-size:11px; margin-top:.4vh; }
 .arr-cap { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; margin-bottom:.6vh; }
+.wf-wrap { display:grid; grid-template-columns:1fr 1.55fr; align-items:center; gap:3vw; margin-top:2vh; }
+.wf-title { font-family:var(--font-sans); font-weight:500; font-size:clamp(30px,3.6vw,56px); letter-spacing:-.03em; line-height:1.04; color:var(--ink); }
+.wf-title b { display:block; font-weight:800; }
 .ctab { width:100%; border-collapse:collapse; font-family:var(--font-sans); font-size:clamp(12px,1vw,15px); }
 .ctab th { font-family:var(--font-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:#fff; background:#0C0C0C; padding:.9vh .8vw; text-align:right; }
 .ctab th:first-child { text-align:left; }
@@ -727,6 +761,16 @@ SLIDES = STYLE + f"""
       <div class="pyr-tier"><span class="pyr-idx">03</span><h3>Willingness to pay</h3><p>Leveraging the supplier's brand, our co-branded card captures SMEs' <b>willingness to pay, rooted in loyalty and dependence</b>.</p></div>
     </div>
   </div>
+</section>
+
+<!-- CREDIT ECONOMICS WATERFALL -->
+<section class="slide theme-light vcenter" data-num="04">
+  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">Credit economics</span></div>
+  <div class="wf-wrap reveal">
+    <div class="wf-title">Credit Economics<b>9M25</b></div>
+    <div class="chartframe">{wf_svg}</div>
+  </div>
+  <div class="illus">9M25 · % of aggregate yield · NIM bridge</div>
 </section>
 
 <!-- 4 — CDR BY VINTAGE -->
