@@ -167,7 +167,7 @@ def _fidc(s, xd, Tx, ybase, WD, Rx, shade_only=False):
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
 
 def stack_rm(labels, data, ymax, yticks, fidc_idx):
-    WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 44, 12, 26, 42
+    WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 44, 12, 26, 42
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.66
     def Y(v): return Tx+ph - v/ymax*ph
     ybase = Y(0)
@@ -200,7 +200,7 @@ def stack_rm(labels, data, ymax, yticks, fidc_idx):
     s.append('</svg>'); return "\n".join(s)
 
 def stack_pct(labels, data, fidc_idx):
-    WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 38, 12, 24, 44
+    WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 38, 12, 24, 44
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.72
     def Y(v): return Tx+ph - v/100*ph
     ybase = Y(0)
@@ -250,7 +250,7 @@ tpv_data = {
 }
 
 def tpv_chart():
-    WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 40, 12, 24, 46
+    WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 40, 12, 24, 46
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 17; n = len(tpv_months); slot = pw/n; bw = slot*0.6
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     for t in (0,4,8,12,16):
@@ -335,7 +335,7 @@ port_svg = portfolio_stack()
 port_legend = "".join(f'<span><i style="background:{PORT_COL[g]}"></i>{g}</span>' for g in port_order)
 
 def portfolio_total_bars():
-    WD, HD = 1040, 476; Lx, Rx, Tx, Bx = 46, 16, 30, 44
+    WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 46, 16, 30, 44
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 48; n = len(_pm); slot = pw/n; bw = slot*0.62
     def Y(v): return Tx+ph - v/ymax*ph
     ybase = Y(0)
@@ -375,8 +375,9 @@ div_con_svg = stack_pct(port_labels, port_data, PORT_FIDC)
 
 STYLE = """<style>
 .chartframe { padding:1vh 0 0; background:transparent; border:none; }
-.chart { width:100%; height:auto; display:block; max-height:60vh; }
-.slide.vcenter { padding-bottom:8vh; }
+.chart { width:100%; height:auto; display:block; }
+.slide { padding-left:3vw; padding-right:3vw; }
+.slide.vcenter { padding-bottom:6.5vh; }
 .slide-head .sub { white-space:nowrap; max-width:none; }
 .legend { display:flex; gap:1.2vw; flex-wrap:wrap; margin-top:1vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
 .legend span { display:inline-flex; align-items:center; }
@@ -393,7 +394,7 @@ STYLE = """<style>
 .metric .s { font-family:var(--font-sans); font-size:12.5px; color:#2E2E2E; margin-top:.8vh; line-height:1.4; }
 .callout { border:1px solid rgba(12,12,12,.18); border-left:3px solid var(--ink); border-radius:10px; padding:1.6vh 1.4vw; margin-top:2vh; font-family:var(--font-sans); font-size:clamp(13px,1.02vw,16px); color:#2E2E2E; line-height:1.55; }
 .callout b { color:var(--ink); font-weight:600; }
-.illus { position:absolute; bottom:4.4vh; left:4vw; z-index:6; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
+.illus { position:absolute; bottom:2.2vh; left:3vw; z-index:6; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
 .tag-pill { display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); border:1px solid rgba(12,12,12,.32); border-radius:100px; padding:3px 12px; margin-top:1.3vh; }
 .wip { display:inline-flex; align-items:center; gap:5px; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a5a00; border:1px dashed #C9A227; background:rgba(201,162,39,.12); border-radius:6px; padding:2px 8px; width:fit-content; }
 .wip::before { content:''; width:5px; height:5px; border-radius:50%; background:#C9A227; }
