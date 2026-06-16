@@ -200,7 +200,7 @@ def stack_rm(labels, data, ymax, yticks, fidc_idx):
     s.append('</svg>'); return "\n".join(s)
 
 def stack_pct(labels, data, fidc_idx):
-    WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 38, 12, 24, 44
+    WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 38, 12, 50, 44
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(labels); slot = pw/n; bw = slot*0.72
     def Y(v): return Tx+ph - v/100*ph
     ybase = Y(0)
@@ -223,11 +223,11 @@ def stack_pct(labels, data, fidc_idx):
                 s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="{tc}">{round(pct)}%</text>')
             ytop = y
         if tot > 0.05:
-            s.append(f'<text x="{cx:.1f}" y="{Y(100)-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="7.4" fill="#6A6A6A">{tot:.0f}</text>')
+            s.append(f'<text x="{cx:.1f}" y="{Y(100)-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8" fill="#3A3A3A">{tot:.0f}</text>')
         s.append(f'<text x="{cx:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" fill="#5A5A5A">{labels[i]}</text>')
     if fidc_idx is not None:
         s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-        s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC raised →</text>')
+        s.append(f'<text x="{xd+7:.1f}" y="16" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC raised →</text>')
     s.append('</svg>'); return "\n".join(s)
 
 # off-balance (FIDC) charts — no shading (whole window is post-FIDC)
@@ -423,6 +423,27 @@ def cohort_lines():
     s.append('</svg>')
     return "\n".join(s)
 cohort_svg = cohort_lines()
+
+# ---------- revenue run rate (ARR) ----------
+arr_labels = ["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","Apr/26"]
+arr_vals = [319,550,1427,1716,2077,2532,2976,3176]
+def arr_chart():
+    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 18, 14, 44, 40
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(arr_vals); slot = pw/n; bw = slot*0.5; ymax = 3500
+    def Y(v): return Tx+ph - v/ymax*ph
+    base = Y(0)
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    for i, v in enumerate(arr_vals):
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; y = Y(v); h = base-y
+        col = "#0C0C0C" if i == n-1 else "#CBCBCB"
+        s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2" fill="{col}"/>')
+        val = f"{v:,}".replace(",", ".")
+        s.append(f'<text x="{cx:.1f}" y="{y-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="14" fill="#0C0C0C">{val}</text>')
+        s.append(f'<text x="{cx:.1f}" y="{HD-14:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="11" fill="#5A5A5A">{arr_labels[i]}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+arr_svg = arr_chart()
 
 
 STYLE = """<style>
@@ -640,6 +661,15 @@ SLIDES = STYLE + f"""
   </div>
   <div class="callout reveal">Corporate targets, cash and runway sized to <b>sustain the subordinated share</b> through the cycle — aligning shareholder risk with the senior shareholders'.</div>
   <div class="illus">Illustrative data — replace with the company's real figures</div>
+</section>
+
+<!-- REVENUE RUN RATE -->
+<section class="slide theme-light vcenter" data-num="11">
+  <div class="chapter-mark light-mark"><span class="chapter-num">10</span><span class="chapter-divider"></span><span class="chapter-year">Company · ARR</span></div>
+  <div class="slide-head reveal"><h1>Revenue run <span class="accent">rate.</span></h1>
+  <p class="sub">Revenue run rate in US$ thousands · FX R$ 5.00 / US$.</p></div>
+  <div class="chartframe reveal">{arr_svg}</div>
+  <div class="illus">Source: company figures · revenue run-rate</div>
 </section>
 
 <!-- 11 — Q&A -->
