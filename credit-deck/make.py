@@ -546,6 +546,55 @@ def arr_chart():
     return "\n".join(s)
 arr_svg = arr_chart()
 
+# ---------- amortization run-off curve (real loan tape) ----------
+# avg outstanding balance as % of original principal, by months on book
+ro_mob  = [0,1,2,3,4,5,6,7,8]
+ro_out  = [90.5,61.1,42.0,27.9,20.3,15.2,12.8,12.4,12.0]
+RO_TENOR = 3.5   # mean installments
+RO_DUR   = 2.1   # balance-weighted duration
+def runoff_chart():
+    WD, HD = 1000, 440; Lx, Rx, Tx, Bx = 40, 22, 46, 46
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(ro_mob); ymax = 100
+    def X(i): return Lx + i/(n-1)*pw
+    def Xv(m): return Lx + m/(n-1)*pw
+    def Y(v): return Tx+ph - v/ymax*ph
+    base = Y(0); xs=[X(i) for i in range(n)]; ys=[Y(v) for v in ro_out]
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append('<defs><linearGradient id="roG" x1="0" y1="0" x2="0" y2="1">'
+             '<stop offset="0" stop-color="#0C0C0C" stop-opacity="0.18"/>'
+             '<stop offset="1" stop-color="#0C0C0C" stop-opacity="0.02"/></linearGradient></defs>')
+    for t in (0,25,50,75,100):
+        s.append(f'<text x="{Lx-8}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    # area + curve
+    d = f"M {xs[0]:.1f},{base:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{base:.1f} Z"
+    s.append(f'<path d="{d}" fill="url(#roG)"/>')
+    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>'
+             % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
+    # duration marker (balance-weighted center of mass)
+    xd = Xv(RO_DUR)
+    s.append(f'<line x1="{xd:.1f}" y1="{Tx-2:.1f}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.5"/>')
+    s.append(f'<text x="{xd+6:.1f}" y="{Tx+8:.1f}" font-family="Geist Mono,monospace" font-size="10" fill="#3A3A3A">duration ~{RO_DUR} mo</text>')
+    # tenor marker (avg installments)
+    xt = Xv(RO_TENOR)
+    s.append(f'<line x1="{xt:.1f}" y1="{Tx+24:.1f}" x2="{xt:.1f}" y2="{base:.1f}" stroke="#8a8a8a" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>')
+    s.append(f'<text x="{xt+6:.1f}" y="{Tx+34:.1f}" font-family="Geist Mono,monospace" font-size="10" fill="#7A7A7A">avg tenor {RO_TENOR} mo</text>')
+    # repaid callout at MOB 2 (58% repaid)
+    rp = 100-ro_out[2]
+    s.append(f'<text x="{X(3.4):.1f}" y="{Y(70):.1f}" font-family="Geist,sans-serif" font-weight="800" font-size="26" fill="#0C0C0C">~{rp:.0f}%</text>')
+    s.append(f'<text x="{X(3.4):.1f}" y="{Y(70)+16:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.04em" fill="#8a8a8a">of principal repaid by month 2</text>')
+    # points + value labels
+    for i,(x,y,v) in enumerate(zip(xs,ys,ro_out)):
+        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="#0C0C0C"/>')
+        s.append(f'<text x="{x:.1f}" y="{y-9:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="10.5" fill="#3A3A3A">{v:.0f}</text>')
+    # x labels
+    for i,m in enumerate(ro_mob):
+        s.append(f'<text x="{X(i):.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" fill="#5A5A5A">M{m}</text>')
+    s.append(f'<text x="{(Lx+WD-Rx)/2:.1f}" y="{HD-2}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8.5" letter-spacing="0.1em" fill="#9a9a9a">MONTHS ON BOOK · % OF ORIGINAL PRINCIPAL OUTSTANDING</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+runoff_svg = runoff_chart()
+
 # ---------- credit economics waterfall ----------
 # (label, y0, y1, color, value, label_pos)
 wf_steps = [("Aggregate Yield",0,95.8,"#0C0C0C","95.8%","top"),
@@ -985,14 +1034,15 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="08">
   <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Portfolio · tenor</span></div>
   <div class="slide-head reveal"><h1>Average tenor and <span class="accent">duration.</span></h1>
-  <p class="sub">A short, fast-rotating book — quick recomposition.</p></div>
-  <div class="metrics reveal" data-stagger>
-    {metric("Avg. tenor","3.5 <span style='font-size:.5em'>months</span>","mean installments")}
-    {metric("Duration","~2.1 <span style='font-size:.5em'>months</span>","balance-weighted")}
-    {metric("Avg. rate","44.6% <span style='font-size:.5em'>/yr</span>","principal-weighted")}
-    {metric("Origination","R$ 4.9M <span style='font-size:.5em'>/mo</span>","last-3-month run-rate")}
-    {metric("Current book","R$ 15.1M","outstanding balance")}
-    {metric("Turnover","~3.5×","per year")}
+  <p class="sub">A short, fast-rotating book — principal returns in weeks, not years.</p></div>
+  <div class="two-col reveal" style="grid-template-columns:1.7fr 1fr; align-items:center;">
+    <div class="chartframe">{runoff_svg}</div>
+    <div class="metrics vstack" data-stagger>
+      {metric("Avg. tenor","3.5 <span style='font-size:.5em'>months</span>","mean installments")}
+      {metric("Duration","~2.1 <span style='font-size:.5em'>months</span>","balance-weighted")}
+      {metric("Avg. rate","44.6% <span style='font-size:.5em'>/yr</span>","principal-weighted")}
+      {metric("Turnover","~3.5× <span style='font-size:.5em'>/yr</span>","book recycles fast")}
+    </div>
   </div>
   <div class="illus">Source: PIX/boleto loan tape · book @ May/26 · 16,172 contracts</div>
 </section>
