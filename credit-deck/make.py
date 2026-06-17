@@ -351,19 +351,29 @@ def portfolio_total_bars():
     ybase = Y(0)
     di = _pm.index(FIDC_FROM); xd = Lx + slot*di
     totals = [round(sum(port_data[g][i] for g in port_order), 2) for i in range(n)]
+    # FIDC (off-balance) portion mapped onto the portfolio months; carried flat to the last month
+    fidc = [0.0]*n
+    for k in range(len(lt_labels)):
+        fidc[di+k] = round(sum(lt_data[g][k] for g in lt_data), 2)
+    if di+len(lt_labels) < n:
+        fidc[di+len(lt_labels)] = fidc[di+len(lt_labels)-1]
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
     for t in (0,10,20,30,40):
         y = Y(t)
         s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
-        cx = Lx+slot*i+slot/2; x = cx-bw/2; v = totals[i]
-        y = Y(v); h = ybase-y
-        col = "#0C0C0C" if i >= di else "#B9B9B9"
-        s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{max(h,0):.1f}" rx="2" fill="{col}"/>')
-        if v > 0.05:  # label every month
-            last = i == n-1
-            s.append(f'<text x="{cx:.1f}" y="{y-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="7.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{v:.1f}</text>')
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; v = totals[i]; f = min(fidc[i], v)
+        if v <= 0.05: continue
+        # FIDC portion (dark, bottom) + on-balance remainder (grey, top)
+        hf = f/ymax*ph; yf = ybase-hf
+        if f > 0.02:
+            s.append(f'<rect x="{x:.1f}" y="{yf:.1f}" width="{bw:.1f}" height="{hf:.1f}" fill="#0C0C0C"/>')
+        on = v-f; hon = on/ymax*ph; yon = yf-hon
+        if on > 0.02:
+            s.append(f'<rect x="{x:.1f}" y="{yon:.1f}" width="{bw:.1f}" height="{hon:.1f}" rx="2" fill="#B9B9B9"/>')
+        last = i == n-1
+        s.append(f'<text x="{cx:.1f}" y="{Y(v)-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="7.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{v:.1f}</text>')
     # FIDC divider + label
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
     s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
@@ -373,8 +383,8 @@ def portfolio_total_bars():
     return "\n".join(s)
 
 port_total_svg = portfolio_total_bars()
-port_total_legend = ('<span><i style="background:#B9B9B9"></i>pré-FIDC</span>'
-                     '<span><i style="background:#0C0C0C"></i>financiado por FIDC (dez/25 →)</span>'
+port_total_legend = ('<span><i style="background:#B9B9B9"></i>On-balance · Pré-FIDC</span>'
+                     '<span><i style="background:#0C0C0C"></i>Financiado por FIDC · off-balance (dez/25 →)</span>'
                      '<span style="color:#8a8a8a">total na carteira · R$M</span>')
 
 # consolidated (corporate) charts
@@ -1024,7 +1034,8 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
   <div class="slide-head reveal"><h1>A carteira de <span class="accent">crédito.</span></h1>
-  <p class="sub">Saldo total em aberto (R$M) — pico de R$ 44M, R$ 34M hoje.</p></div>
+  <p class="sub">Carteira de crédito (R$M) — pico de R$ 44M, R$ 34M hoje.</p>
+  <span class="tag-pill">Hoje ~R$ 15M (≈46%) no FIDC · restante on-balance</span></div>
   <div class="blegend reveal">{port_total_legend}</div>
   <div class="chartframe reveal">{port_total_svg}</div>
   <div class="illus">Fonte: carteira por mês/origem · mar/24–jun/26</div>
