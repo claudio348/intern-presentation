@@ -8304,7 +8304,10 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 .slide.vcenter > * { flex-shrink:0; }
 .slide.vcenter .slide-head { margin-bottom:1.6vh; }
 .slide.vcenter .chartframe { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; }
-.slide.vcenter .chartframe .chart { width:100%; height:auto; max-height:74vh; }
+.slide.vcenter .chartframe .chart { width:100%; height:auto; max-height:70vh; }
+.slide-kicker { font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#9A9A9A; display:flex; align-items:center; gap:.7em; margin-bottom:1.1vh; }
+.slide-kicker b { color:#C0143C; font-weight:600; }
+.slide-kicker::before { content:''; width:22px; height:1px; background:#C0143C; flex-shrink:0; }
 .slide-head .sub { white-space:nowrap; max-width:none; }
 .slide-head h1 { max-width:86%; }
 .legend { display:flex; gap:1.2vw; flex-wrap:wrap; margin-top:1vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
@@ -8409,77 +8412,84 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- PORTFOLIO -->
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
-  <div class="slide-head reveal"><h1>A carteira de <span class="accent">crédito.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">O ponto de <b>partida</b></div><h1>A carteira de <span class="accent">crédito.</span></h1>
   <p class="sub">Carteira de crédito (R$M) — pico de R$ 44M, R$ 34M hoje.</p>
   <span class="tag-pill">Hoje ~R$ 15M (≈46%) no FIDC · restante on-balance</span>
   <span class="wip">Ainda fechando números de carteira com Marcos</span></div>
-  <div class="blegend reveal"><span><i style="background:#B9B9B9"></i>On-balance · Pré-FIDC</span><span><i style="background:#0C0C0C"></i>Financiado por FIDC · off-balance (dez/25 →)</span><span style="color:#8a8a8a">total na carteira · R$M</span></div>
+  <div class="blegend reveal"><span><i style="background:#B9B9B9"></i>On-balance · Pré-FIDC</span><span><i style="background:#0C0C0C"></i>Financiado por FIDC · off-balance (dez/25 →)</span><span style="color:#8a8a8a">total na carteira · R$M · % = FIDC ÷ total</span></div>
   <div class="chartframe reveal"><svg class="chart" viewBox="0 0 1040 440" xmlns="http://www.w3.org/2000/svg">
 <rect x="760.7" y="30" width="263.3" height="366.0" fill="#0C0C0C" opacity="0.05"/>
 <text x="39" y="399.0" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">0</text>
-<text x="39" y="322.8" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">10</text>
-<text x="39" y="246.5" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">20</text>
-<text x="39" y="170.2" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">30</text>
-<text x="39" y="94.0" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">40</text>
-<rect x="53.1" y="394.1" width="23.3" height="1.9" rx="2" fill="#B9B9B9"/>
-<text x="64.8" y="389.1" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">0.2</text>
-<rect x="90.8" y="391.0" width="23.3" height="5.0" rx="2" fill="#B9B9B9"/>
-<text x="102.4" y="386.0" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">0.7</text>
-<rect x="128.4" y="385.1" width="23.3" height="10.9" rx="2" fill="#B9B9B9"/>
-<text x="140.0" y="380.1" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">1.4</text>
-<rect x="166.0" y="376.6" width="23.3" height="19.4" rx="2" fill="#B9B9B9"/>
-<text x="177.7" y="371.6" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">2.5</text>
-<rect x="203.6" y="344.4" width="23.3" height="51.6" rx="2" fill="#B9B9B9"/>
-<text x="215.3" y="339.4" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">6.8</text>
-<rect x="241.2" y="315.8" width="23.3" height="80.2" rx="2" fill="#B9B9B9"/>
-<text x="252.9" y="310.8" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">10.5</text>
-<rect x="278.8" y="287.6" width="23.3" height="108.4" rx="2" fill="#B9B9B9"/>
-<text x="290.5" y="282.6" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">14.2</text>
-<rect x="316.5" y="270.3" width="23.3" height="125.7" rx="2" fill="#B9B9B9"/>
-<text x="328.1" y="265.3" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">16.5</text>
-<rect x="354.1" y="260.4" width="23.3" height="135.6" rx="2" fill="#B9B9B9"/>
-<text x="365.7" y="255.4" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">17.8</text>
-<rect x="391.7" y="246.2" width="23.3" height="149.8" rx="2" fill="#B9B9B9"/>
-<text x="403.3" y="241.2" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">19.6</text>
-<rect x="429.3" y="217.4" width="23.3" height="178.6" rx="2" fill="#B9B9B9"/>
-<text x="441.0" y="212.4" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">23.4</text>
-<rect x="466.9" y="206.1" width="23.3" height="189.9" rx="2" fill="#B9B9B9"/>
-<text x="478.6" y="201.1" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">24.9</text>
-<rect x="504.5" y="189.9" width="23.3" height="206.1" rx="2" fill="#B9B9B9"/>
-<text x="516.2" y="184.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">27.0</text>
-<rect x="542.1" y="173.6" width="23.3" height="222.4" rx="2" fill="#B9B9B9"/>
-<text x="553.8" y="168.6" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">29.2</text>
-<rect x="579.8" y="161.8" width="23.3" height="234.2" rx="2" fill="#B9B9B9"/>
-<text x="591.4" y="156.8" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">30.7</text>
-<rect x="617.4" y="137.9" width="23.3" height="258.1" rx="2" fill="#B9B9B9"/>
-<text x="629.0" y="132.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">33.9</text>
-<rect x="655.0" y="89.2" width="23.3" height="306.8" rx="2" fill="#B9B9B9"/>
-<text x="666.7" y="84.2" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">40.2</text>
-<rect x="692.6" y="70.8" width="23.3" height="325.2" rx="2" fill="#B9B9B9"/>
-<text x="704.3" y="65.8" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">42.6</text>
-<rect x="730.2" y="61.2" width="23.3" height="334.8" rx="2" fill="#B9B9B9"/>
-<text x="741.9" y="56.2" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">43.9</text>
-<rect x="767.8" y="346.6" width="23.3" height="49.4" fill="#0C0C0C"/>
-<rect x="767.8" y="65.7" width="23.3" height="280.9" rx="2" fill="#B9B9B9"/>
-<text x="779.5" y="60.7" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">43.3</text>
-<rect x="805.5" y="340.1" width="23.3" height="55.9" fill="#0C0C0C"/>
-<rect x="805.5" y="78.8" width="23.3" height="261.3" rx="2" fill="#B9B9B9"/>
-<text x="817.1" y="73.8" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">41.6</text>
-<rect x="843.1" y="325.9" width="23.3" height="70.1" fill="#0C0C0C"/>
-<rect x="843.1" y="94.7" width="23.3" height="231.3" rx="2" fill="#B9B9B9"/>
-<text x="854.7" y="89.7" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">39.5</text>
-<rect x="880.7" y="307.2" width="23.3" height="88.8" fill="#0C0C0C"/>
-<rect x="880.7" y="105.0" width="23.3" height="202.1" rx="2" fill="#B9B9B9"/>
-<text x="892.3" y="100.0" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">38.2</text>
-<rect x="918.3" y="297.4" width="23.3" height="98.6" fill="#0C0C0C"/>
-<rect x="918.3" y="130.9" width="23.3" height="166.5" rx="2" fill="#B9B9B9"/>
-<text x="930.0" y="125.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">34.8</text>
-<rect x="955.9" y="280.9" width="23.3" height="115.1" fill="#0C0C0C"/>
-<rect x="955.9" y="146.8" width="23.3" height="134.0" rx="2" fill="#B9B9B9"/>
-<text x="967.6" y="141.8" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="7.6" fill="#6A6A6A">32.7</text>
-<rect x="993.5" y="280.9" width="23.3" height="115.1" fill="#0C0C0C"/>
-<rect x="993.5" y="140.3" width="23.3" height="140.6" rx="2" fill="#B9B9B9"/>
-<text x="1005.2" y="135.3" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="7.6" fill="#0C0C0C">33.5</text>
+<text x="39" y="319.4" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">10</text>
+<text x="39" y="239.9" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">20</text>
+<text x="39" y="160.3" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">30</text>
+<text x="39" y="80.7" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">40</text>
+<rect x="51.6" y="394.0" width="26.3" height="2.0" rx="2" fill="#B9B9B9"/>
+<text x="64.8" y="388.0" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">0.2</text>
+<rect x="89.3" y="390.8" width="26.3" height="5.2" rx="2" fill="#B9B9B9"/>
+<text x="102.4" y="384.8" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">0.7</text>
+<rect x="126.9" y="384.6" width="26.3" height="11.4" rx="2" fill="#B9B9B9"/>
+<text x="140.0" y="378.6" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">1.4</text>
+<rect x="164.5" y="375.8" width="26.3" height="20.2" rx="2" fill="#B9B9B9"/>
+<text x="177.7" y="369.8" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">2.5</text>
+<rect x="202.1" y="342.1" width="26.3" height="53.9" rx="2" fill="#B9B9B9"/>
+<text x="215.3" y="336.1" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">6.8</text>
+<rect x="239.7" y="312.3" width="26.3" height="83.7" rx="2" fill="#B9B9B9"/>
+<text x="252.9" y="306.3" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">10.5</text>
+<rect x="277.3" y="282.9" width="26.3" height="113.1" rx="2" fill="#B9B9B9"/>
+<text x="290.5" y="276.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">14.2</text>
+<rect x="314.9" y="264.8" width="26.3" height="131.2" rx="2" fill="#B9B9B9"/>
+<text x="328.1" y="258.8" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">16.5</text>
+<rect x="352.6" y="254.5" width="26.3" height="141.5" rx="2" fill="#B9B9B9"/>
+<text x="365.7" y="248.5" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">17.8</text>
+<rect x="390.2" y="239.7" width="26.3" height="156.3" rx="2" fill="#B9B9B9"/>
+<text x="403.3" y="233.7" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">19.6</text>
+<rect x="427.8" y="209.7" width="26.3" height="186.3" rx="2" fill="#B9B9B9"/>
+<text x="441.0" y="203.7" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">23.4</text>
+<rect x="465.4" y="197.9" width="26.3" height="198.1" rx="2" fill="#B9B9B9"/>
+<text x="478.6" y="191.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">24.9</text>
+<rect x="503.0" y="180.9" width="26.3" height="215.1" rx="2" fill="#B9B9B9"/>
+<text x="516.2" y="174.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">27.0</text>
+<rect x="540.6" y="163.9" width="26.3" height="232.1" rx="2" fill="#B9B9B9"/>
+<text x="553.8" y="157.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">29.2</text>
+<rect x="578.3" y="151.6" width="26.3" height="244.4" rx="2" fill="#B9B9B9"/>
+<text x="591.4" y="145.6" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">30.7</text>
+<rect x="615.9" y="126.7" width="26.3" height="269.3" rx="2" fill="#B9B9B9"/>
+<text x="629.0" y="120.7" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">33.9</text>
+<rect x="653.5" y="75.9" width="26.3" height="320.1" rx="2" fill="#B9B9B9"/>
+<text x="666.7" y="69.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">40.2</text>
+<rect x="691.1" y="56.7" width="26.3" height="339.3" rx="2" fill="#B9B9B9"/>
+<text x="704.3" y="50.7" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">42.6</text>
+<rect x="728.7" y="46.6" width="26.3" height="349.4" rx="2" fill="#B9B9B9"/>
+<text x="741.9" y="40.6" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">43.9</text>
+<rect x="766.3" y="344.4" width="26.3" height="51.6" fill="#0C0C0C"/>
+<text x="779.5" y="373.2" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="#fff">15%</text>
+<rect x="766.3" y="51.3" width="26.3" height="293.1" rx="2" fill="#B9B9B9"/>
+<text x="779.5" y="45.3" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">43.3</text>
+<rect x="803.9" y="337.7" width="26.3" height="58.3" fill="#0C0C0C"/>
+<text x="817.1" y="369.8" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="#fff">18%</text>
+<rect x="803.9" y="65.0" width="26.3" height="272.7" rx="2" fill="#B9B9B9"/>
+<text x="817.1" y="59.0" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">41.6</text>
+<rect x="841.6" y="322.9" width="26.3" height="73.1" fill="#0C0C0C"/>
+<text x="854.7" y="362.4" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="#fff">23%</text>
+<rect x="841.6" y="81.6" width="26.3" height="241.3" rx="2" fill="#B9B9B9"/>
+<text x="854.7" y="75.6" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">39.5</text>
+<rect x="879.2" y="303.3" width="26.3" height="92.7" fill="#0C0C0C"/>
+<text x="892.3" y="352.7" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="#fff">31%</text>
+<rect x="879.2" y="92.4" width="26.3" height="210.9" rx="2" fill="#B9B9B9"/>
+<text x="892.3" y="86.4" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">38.2</text>
+<rect x="916.8" y="293.1" width="26.3" height="102.9" fill="#0C0C0C"/>
+<text x="930.0" y="347.6" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="#fff">37%</text>
+<rect x="916.8" y="119.4" width="26.3" height="173.8" rx="2" fill="#B9B9B9"/>
+<text x="930.0" y="113.4" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">34.8</text>
+<rect x="954.4" y="275.9" width="26.3" height="120.1" fill="#0C0C0C"/>
+<text x="967.6" y="338.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="#fff">46%</text>
+<rect x="954.4" y="136.0" width="26.3" height="139.9" rx="2" fill="#B9B9B9"/>
+<text x="967.6" y="130.0" text-anchor="middle" font-family="Geist,sans-serif" font-weight="500" font-size="8.6" fill="#6A6A6A">32.7</text>
+<rect x="992.0" y="275.9" width="26.3" height="120.1" fill="#0C0C0C"/>
+<text x="1005.2" y="338.9" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="#fff">45%</text>
+<rect x="992.0" y="129.1" width="26.3" height="146.7" rx="2" fill="#B9B9B9"/>
+<text x="1005.2" y="123.1" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="8.6" fill="#0C0C0C">33.5</text>
 <line x1="760.7" y1="30" x2="760.7" y2="396.0" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>
 <text x="767.7" y="41.0" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>
 <text x="64.8" y="425" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">mai/24</text>
@@ -8498,7 +8508,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- ORIGINATION -->
 <section class="slide theme-light vcenter" data-num="03">
   <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Originação</span></div>
-  <div class="slide-head reveal"><h1>Originação no <span class="accent">trilho PIX.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">De onde vem a <b>carteira</b></div><h1>Originação no <span class="accent">trilho PIX.</span></h1>
   <p class="sub">Originação mensal (R$M) — migração para Boleto/Pix parcelado em fase final.</p></div>
   <div class="blegend reveal"><span><i style="background:#CBCBCB"></i>Trilho legado</span><span><i style="background:#0C0C0C"></i>Trilhos PIX</span></div>
   <div class="chartframe reveal"><svg class="chart" viewBox="0 0 1040 440" xmlns="http://www.w3.org/2000/svg">
@@ -8656,7 +8666,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- WHY WE PERFORM BETTER THAN BANKS (iso stack) -->
 <section class="slide theme-light vcenter" data-num="04">
   <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">O diferencial</span></div>
-  <div class="slide-head reveal"><h1>Por que performamos melhor que os <span class="accent">bancos.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">A nossa <b>vantagem</b></div><h1>Por que performamos melhor que os <span class="accent">bancos.</span></h1>
   <p class="sub">Três vantagens estruturais — cada uma reforçando a anterior.</p></div>
   <div class="pyr-wrap reveal">
     <div class="pyr-fig"><svg class="pyr-svg" viewBox="0 0 324 360" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
@@ -8686,7 +8696,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- CREDIT ECONOMICS (yield allocation) -->
 <section class="slide theme-light vcenter" data-num="05">
   <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">1T26</span></div>
-  <div class="slide-head reveal"><h1>Do yield ao <span class="accent">NIMAL.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">… e como vira <b>margem</b></div><h1>Do yield ao <span class="accent">NIMAL.</span></h1>
   <p class="sub">NIM (a.a.) — 1T26.</p></div>
   <div class="chartframe reveal"><svg class="chart" viewBox="0 0 1000 504" xmlns="http://www.w3.org/2000/svg">
 <line x1="141.7" y1="76.5" x2="215.6" y2="76.5" stroke="#C8C8C8" stroke-width="1"/>
@@ -8721,7 +8731,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- 5 — FPD -->
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
-  <div class="slide-head reveal"><h1>FPD 30 <span class="accent">por safra.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">A qualidade nasce na <b>originação</b></div><h1>FPD 30 <span class="accent">por safra.</span></h1>
   <p class="sub">Inadimplência da 1ª parcela (valor em atraso ÷ total) — safra mensal.</p></div>
   <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Média 4,1%</b></span><span style="color:#8a8a8a">Meta &le; 5%</span><span style="color:#8a8a8a">Pior safra: mai/25 · 15,2%</span></div>
   <div class="chartframe reveal"><svg class="chart" viewBox="0 0 1040 430" xmlns="http://www.w3.org/2000/svg">
@@ -8769,7 +8779,8 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <line x1="38" y1="283.1" x2="1024" y2="283.1" stroke="#0C0C0C" stroke-width="1.4" stroke-dasharray="5 4"/>
 <text x="818.6" y="276.1" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" letter-spacing="0.04em" fill="#5A5A5A">meta &le; 5%</text>
 <text x="79.1" y="45.1" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="#C0143C">pior safra</text>
-<text x="325.6" y="382.0" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9.5" fill="#2E7D46">melhor safra</text>
+<text x="325.6" y="338.7" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="#2E7D46">melhor safra</text>
+<line x1="325.6" y1="347.2" x2="325.6" y2="376.0" stroke="#2E7D46" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>
 </svg></div>
   <div class="blegend reveal"><span><i style="background:#2E7D46"></i>dentro da meta (&le; 5%)</span><span><i style="background:#C0143C"></i>acima da meta (&gt; 5%)</span><span style="color:#8a8a8a">tracejado = meta de underwriting</span></div>
   <div class="illus">Fonte: Robbin Data · FPD 30 · safra mensal</div>
@@ -8778,7 +8789,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- CREDIT PORTFOLIO PER PARTNER -->
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Carteira de crédito · por parceiro</span></div>
-  <div class="slide-head reveal"><h1>Carteira de crédito <span class="accent">por parceiro.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">Distribuída por <b>parceiro</b></div><h1>Carteira de crédito <span class="accent">por parceiro.</span></h1>
   <p class="sub">Carteira em aberto por parceiro (R$M) — FIDC ativo desde dez/25 · total R$ 33,5M.</p></div>
   <div class="blegend reveal"><span><i style="background:#5B2E91"></i>Cantu (mai/24)</span><span><i style="background:#2563B0"></i>Moura (nov/24)</span><span><i style="background:#8FA31E"></i>Juntos Somos Mais (ago/24)</span><span><i style="background:#E11D48"></i>Chilli Beans (ago/24)</span><span><i style="background:#B5B5B5"></i>Outros (mai/24)</span><span><i style="background:#1F7A3D"></i>Malwee (out/25)</span><span><i style="background:#0F8C8C"></i>Brinox (set/25)</span></div>
   <div class="chartframe reveal"><svg class="chart" viewBox="0 0 1040 452" xmlns="http://www.w3.org/2000/svg">
@@ -8830,7 +8841,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- DELINQUENCY — CONSOLIDATED 90+ + COMPOSITION TABLE -->
 <section class="slide theme-light vcenter" data-num="08">
   <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
-  <div class="slide-head reveal"><h1>Inadimplência <span class="accent">consolidada.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">O comportamento da <b>inadimplência</b></div><h1>Inadimplência <span class="accent">consolidada.</span></h1>
   <p class="sub">BNPL + Legacy Rail · 90+ consolidado (% do saldo) e de onde vem o 90+ por origem (mai/26).</p></div>
   <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div><div class="dq-line"><svg class="chart" viewBox="0 0 1040 158" xmlns="http://www.w3.org/2000/svg">
 <defs><linearGradient id="dqcG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.16"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0.02"/></linearGradient></defs>
@@ -8869,7 +8880,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- AGING DA CARTEIRA (composition chart) -->
 <section class="slide theme-light vcenter" data-num="09">
   <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Risco · aging</span></div>
-  <div class="slide-head reveal"><h1>Aging da <span class="accent">carteira.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">… e como ela <b>envelhece</b></div><h1>Aging da <span class="accent">carteira.</span></h1>
   <p class="sub">Saldo por faixa de atraso — participação ao longo do tempo, R$M no topo.</p></div>
   <div class="blegend reveal"><span><i style="background:#E4E4E4;border-radius:2px;height:11px;width:14px"></i>Em dia</span><span><i style="background:#F6C6C2;border-radius:2px;height:11px;width:14px"></i>1-30</span><span><i style="background:#EE9A90;border-radius:2px;height:11px;width:14px"></i>31-60</span><span><i style="background:#E0685C;border-radius:2px;height:11px;width:14px"></i>61-90</span><span><i style="background:#D11A2A;border-radius:2px;height:11px;width:14px"></i>91-180</span><span><i style="background:#A01024;border-radius:2px;height:11px;width:14px"></i>181-360</span><span><i style="background:#6E0A1A;border-radius:2px;height:11px;width:14px"></i>360+</span><span style="color:#8a8a8a">dias de atraso · participação no saldo</span></div>
   <div class="chartframe reveal"><svg class="chart" viewBox="0 0 1040 430" xmlns="http://www.w3.org/2000/svg">
@@ -8915,7 +8926,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- FIDC LOAN BOOK GROWTH (off-balance, total only) -->
 <section class="slide theme-light vcenter" data-num="10">
   <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
-  <div class="slide-head reveal"><h1>Crescimento da carteira <span class="accent">do FIDC.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">Estruturamos um <b>FIDC</b> para escalar</div><h1>Crescimento da carteira <span class="accent">do FIDC.</span></h1>
   <p class="sub">Saldo total em aberto no FIDC (R$M) — carve-out off-balance desde dez/25.</p></div>
   <div class="blegend reveal"><span><i style="background:#0C0C0C"></i>total off-balance · R$M</span></div>
   <div class="chartframe reveal fit"><svg class="chart" viewBox="0 0 1040 440" xmlns="http://www.w3.org/2000/svg">
@@ -8952,7 +8963,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- INCREASING DIVERSIFICATION — OFF-BALANCE (FIDC) -->
 <section class="slide theme-light vcenter" data-num="11">
   <div class="chapter-mark light-mark"><span class="chapter-num">10</span><span class="chapter-divider"></span><span class="chapter-year">Diversificação · FIDC</span></div>
-  <div class="slide-head reveal"><h1>Diversificação <span class="accent">crescente.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">… cada vez mais <b>diversificada</b></div><h1>Diversificação <span class="accent">crescente.</span></h1>
   <p class="sub">Âncora como % da carteira off-balance (FIDC) — dez/25 → mai/26.</p></div>
   <div class="blegend reveal"><span><i style="background:#5B2E91"></i>Cantu</span><span><i style="background:#2563B0"></i>Moura</span><span><i style="background:#E11D48"></i>Chilli Beans</span><span><i style="background:#8FA31E"></i>Juntos Somos Mais</span><span><i style="background:#1F7A3D"></i>Malwee</span><span><i style="background:#0F8C8C"></i>Brinox</span><span><i style="background:#EA1D2C"></i>iFood</span><span><i style="background:#5DB85C"></i>Intelbras</span><span><i style="background:#B5B5B5"></i>Outros</span><span style="color:#8a8a8a">Outros = app / beta testers & usuários</span></div>
   <div class="chartframe reveal fit"><svg class="chart" viewBox="0 0 1040 440" xmlns="http://www.w3.org/2000/svg">
@@ -9050,7 +9061,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- 8 — TENOR & DURATION -->
 <section class="slide theme-light vcenter" data-num="12">
   <div class="chapter-mark light-mark"><span class="chapter-num">11</span><span class="chapter-divider"></span><span class="chapter-year">Carteira · prazo</span></div>
-  <div class="slide-head reveal"><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">Curta e de <b>giro rápido</b></div><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
   <p class="sub">Uma carteira curta e de giro rápido — métricas-chave, mês a mês.</p></div>
   <div class="sparks reveal" data-stagger><div class="spark-card"><div class="k">Prazo médio</div><div class="v">3,5 <span style='font-size:.5em'>meses</span></div><div class="s">parcelas médias</div><svg viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="sp31193" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.16"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0.015"/></linearGradient></defs><path d="M 10.0,128.0 L 10.0,87.8 L 38.6,59.4 L 67.2,60.5 L 95.9,40.9 L 124.5,51.8 L 153.1,58.4 L 181.8,64.9 L 210.4,72.5 L 239.0,88.9 L 267.6,96.6 L 296.2,103.1 L 324.9,95.5 L 353.5,72.5 L 382.1,67.1 L 410.8,62.7 L 439.4,62.7 L 468.0,59.4 L 468.0,128.0 Z" fill="url(#sp31193)"/><polyline points="10.0,87.8 38.6,59.4 67.2,60.5 95.9,40.9 124.5,51.8 153.1,58.4 181.8,64.9 210.4,72.5 239.0,88.9 267.6,96.6 296.2,103.1 324.9,95.5 353.5,72.5 382.1,67.1 410.8,62.7 439.4,62.7 468.0,59.4" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="468.0" cy="59.4" r="7" fill="none" stroke="#0C0C0C" stroke-opacity="0.18"/><circle cx="468.0" cy="59.4" r="4" fill="#0C0C0C"/><text x="10.0" y="144" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">jan/25</text><text x="468.0" y="144" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">mai/26</text></svg></div><div class="spark-card"><div class="k">Duration</div><div class="v">~2,3 <span style='font-size:.5em'>meses</span></div><div class="s">vida média ponderada por saldo</div><svg viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="sp68373" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.16"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0.015"/></linearGradient></defs><path d="M 10.0,128.0 L 10.0,49.8 L 38.6,40.9 L 67.2,64.2 L 95.9,75.3 L 124.5,85.3 L 153.1,78.7 L 181.8,75.3 L 210.4,86.4 L 239.0,85.3 L 267.6,98.7 L 296.2,98.7 L 324.9,103.1 L 353.5,87.6 L 382.1,73.1 L 410.8,62.0 L 439.4,70.9 L 468.0,57.6 L 468.0,128.0 Z" fill="url(#sp68373)"/><polyline points="10.0,49.8 38.6,40.9 67.2,64.2 95.9,75.3 124.5,85.3 153.1,78.7 181.8,75.3 210.4,86.4 239.0,85.3 267.6,98.7 296.2,98.7 324.9,103.1 353.5,87.6 382.1,73.1 410.8,62.0 439.4,70.9 468.0,57.6" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="468.0" cy="57.6" r="7" fill="none" stroke="#0C0C0C" stroke-opacity="0.18"/><circle cx="468.0" cy="57.6" r="4" fill="#0C0C0C"/><text x="10.0" y="144" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">jan/25</text><text x="468.0" y="144" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">mai/26</text></svg></div><div class="spark-card"><div class="k">Taxa média</div><div class="v">44,6% <span style='font-size:.5em'>/ano</span></div><div class="s">ponderada pelo principal</div><svg viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="sp94247" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.16"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0.015"/></linearGradient></defs><path d="M 10.0,128.0 L 10.0,103.1 L 38.6,95.8 L 67.2,97.5 L 95.9,72.4 L 124.5,52.2 L 153.1,61.9 L 181.8,57.9 L 210.4,61.9 L 239.0,57.9 L 267.6,51.4 L 296.2,40.9 L 324.9,48.2 L 353.5,58.7 L 382.1,63.5 L 410.8,66.7 L 439.4,70.0 L 468.0,74.0 L 468.0,128.0 Z" fill="url(#sp94247)"/><polyline points="10.0,103.1 38.6,95.8 67.2,97.5 95.9,72.4 124.5,52.2 153.1,61.9 181.8,57.9 210.4,61.9 239.0,57.9 267.6,51.4 296.2,40.9 324.9,48.2 353.5,58.7 382.1,63.5 410.8,66.7 439.4,70.0 468.0,74.0" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="468.0" cy="74.0" r="7" fill="none" stroke="#0C0C0C" stroke-opacity="0.18"/><circle cx="468.0" cy="74.0" r="4" fill="#0C0C0C"/><text x="10.0" y="144" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">jan/25</text><text x="468.0" y="144" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">mai/26</text></svg></div><div class="spark-card"><div class="k">Giro</div><div class="v">~3,5× <span style='font-size:.5em'>/ano</span></div><div class="s">a carteira recicla rápido</div><svg viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><defs><linearGradient id="sp65038" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.16"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0.015"/></linearGradient></defs><path d="M 10.0,128.0 L 10.0,57.9 L 38.6,86.1 L 67.2,85.0 L 95.9,103.1 L 124.5,94.1 L 153.1,87.1 L 181.8,81.0 L 210.4,74.0 L 239.0,56.9 L 267.6,47.9 L 296.2,40.9 L 324.9,49.9 L 353.5,74.0 L 382.1,79.0 L 410.8,83.0 L 439.4,83.0 L 468.0,86.1 L 468.0,128.0 Z" fill="url(#sp65038)"/><polyline points="10.0,57.9 38.6,86.1 67.2,85.0 95.9,103.1 124.5,94.1 153.1,87.1 181.8,81.0 210.4,74.0 239.0,56.9 267.6,47.9 296.2,40.9 324.9,49.9 353.5,74.0 382.1,79.0 410.8,83.0 439.4,83.0 468.0,86.1" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="468.0" cy="86.1" r="7" fill="none" stroke="#0C0C0C" stroke-opacity="0.18"/><circle cx="468.0" cy="86.1" r="4" fill="#0C0C0C"/><text x="10.0" y="144" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">jan/25</text><text x="468.0" y="144" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">mai/26</text></svg></div></div>
   <div class="illus">Fonte: Robbin Data · mensal · jan/25–mai/26</div>
@@ -9059,7 +9070,7 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
 <section class="slide theme-light vcenter" data-num="13">
   <div class="chapter-mark light-mark"><span class="chapter-num">12</span><span class="chapter-divider"></span><span class="chapter-year">Companhia</span></div>
-  <div class="slide-head reveal"><h1>Alavancagem com <span class="accent">lastro corporativo.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">Para <b>onde vamos</b></div><h1>Alavancagem com <span class="accent">lastro corporativo.</span></h1>
   <p class="sub">Receita run-rate (US$k) e o balanço por trás da alavancagem.</p></div>
   <div class="two-col reveal" style="grid-template-columns:1.45fr 1fr; align-items:center;">
     <div>

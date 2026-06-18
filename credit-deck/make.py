@@ -102,8 +102,9 @@ def fpd_bars():
     s.append(f'<text x="{cx(9):.1f}" y="{ythr-7:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" letter-spacing="0.04em" fill="#5A5A5A">meta &le; 5%</text>')
     # worst vintage
     s.append(f'<text x="{cx(imax):.1f}" y="{Y(fpd_vals[imax])-20:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="#C0143C">pior safra</text>')
-    # best vintage (lowest)
-    s.append(f'<text x="{cx(imin):.1f}" y="{base-8:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9.5" fill="#2E7D46">melhor safra</text>')
+    # best vintage (lowest) — label well above the (near-zero) bar to avoid the value label
+    s.append(f'<text x="{cx(imin):.1f}" y="{Y(2.4):.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="#2E7D46">melhor safra</text>')
+    s.append(f'<line x1="{cx(imin):.1f}" y1="{Y(2.0):.1f}" x2="{cx(imin):.1f}" y2="{base-14:.1f}" stroke="#2E7D46" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>')
     s.append('</svg>')
     return "\n".join(s)
 fpd_svg = fpd_bars()
@@ -373,7 +374,7 @@ port_legend = "".join(f'<span><i style="background:{PORT_COL[g]}"></i>{g}</span>
 
 def portfolio_total_bars():
     WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 46, 16, 30, 44
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 48; n = len(_pm); slot = pw/n; bw = slot*0.62
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 46; n = len(_pm); slot = pw/n; bw = slot*0.70
     def Y(v): return Tx+ph - v/ymax*ph
     ybase = Y(0)
     di = _pm.index(FIDC_FROM); xd = Lx + slot*di
@@ -396,11 +397,13 @@ def portfolio_total_bars():
         hf = f/ymax*ph; yf = ybase-hf
         if f > 0.02:
             s.append(f'<rect x="{x:.1f}" y="{yf:.1f}" width="{bw:.1f}" height="{hf:.1f}" fill="#0C0C0C"/>')
+            if hf >= 15:   # FIDC share of total, inside the black segment
+                s.append(f'<text x="{cx:.1f}" y="{yf+hf/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="#fff">{f/v*100:.0f}%</text>')
         on = v-f; hon = on/ymax*ph; yon = yf-hon
         if on > 0.02:
             s.append(f'<rect x="{x:.1f}" y="{yon:.1f}" width="{bw:.1f}" height="{hon:.1f}" rx="2" fill="#B9B9B9"/>')
         last = i == n-1
-        s.append(f'<text x="{cx:.1f}" y="{Y(v)-5:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="7.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{v:.1f}</text>')
+        s.append(f'<text x="{cx:.1f}" y="{Y(v)-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="8.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{v:.1f}</text>')
     # FIDC divider + label
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
     s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
@@ -412,7 +415,7 @@ def portfolio_total_bars():
 port_total_svg = portfolio_total_bars()
 port_total_legend = ('<span><i style="background:#B9B9B9"></i>On-balance · Pré-FIDC</span>'
                      '<span><i style="background:#0C0C0C"></i>Financiado por FIDC · off-balance (dez/25 →)</span>'
-                     '<span style="color:#8a8a8a">total na carteira · R$M</span>')
+                     '<span style="color:#8a8a8a">total na carteira · R$M · % = FIDC ÷ total</span>')
 
 # consolidated (corporate) charts
 PORT_FIDC = _pm.index("2025-12")
@@ -1018,7 +1021,10 @@ STYLE = """<style>
 .slide.vcenter > * { flex-shrink:0; }
 .slide.vcenter .slide-head { margin-bottom:1.6vh; }
 .slide.vcenter .chartframe { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; }
-.slide.vcenter .chartframe .chart { width:100%; height:auto; max-height:74vh; }
+.slide.vcenter .chartframe .chart { width:100%; height:auto; max-height:70vh; }
+.slide-kicker { font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#9A9A9A; display:flex; align-items:center; gap:.7em; margin-bottom:1.1vh; }
+.slide-kicker b { color:#C0143C; font-weight:600; }
+.slide-kicker::before { content:''; width:22px; height:1px; background:#C0143C; flex-shrink:0; }
 .slide-head .sub { white-space:nowrap; max-width:none; }
 .slide-head h1 { max-width:86%; }
 .legend { display:flex; gap:1.2vw; flex-wrap:wrap; margin-top:1vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
@@ -1125,7 +1131,7 @@ SLIDES = STYLE + f"""
 <!-- PORTFOLIO -->
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
-  <div class="slide-head reveal"><h1>A carteira de <span class="accent">crédito.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">O ponto de <b>partida</b></div><h1>A carteira de <span class="accent">crédito.</span></h1>
   <p class="sub">Carteira de crédito (R$M) — pico de R$ 44M, R$ 34M hoje.</p>
   <span class="tag-pill">Hoje ~R$ 15M (≈46%) no FIDC · restante on-balance</span>
   <span class="wip">Ainda fechando números de carteira com Marcos</span></div>
@@ -1137,7 +1143,7 @@ SLIDES = STYLE + f"""
 <!-- ORIGINATION -->
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Originação</span></div>
-  <div class="slide-head reveal"><h1>Originação no <span class="accent">trilho PIX.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">De onde vem a <b>carteira</b></div><h1>Originação no <span class="accent">trilho PIX.</span></h1>
   <p class="sub">Originação mensal (R$M) — migração para Boleto/Pix parcelado em fase final.</p></div>
   <div class="blegend reveal">{tpv_legend}</div>
   <div class="chartframe reveal">{tpv_svg}</div>
@@ -1147,7 +1153,7 @@ SLIDES = STYLE + f"""
 <!-- WHY WE PERFORM BETTER THAN BANKS (iso stack) -->
 <section class="slide theme-light vcenter" data-num="03">
   <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">O diferencial</span></div>
-  <div class="slide-head reveal"><h1>Por que performamos melhor que os <span class="accent">bancos.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">A nossa <b>vantagem</b></div><h1>Por que performamos melhor que os <span class="accent">bancos.</span></h1>
   <p class="sub">Três vantagens estruturais — cada uma reforçando a anterior.</p></div>
   <div class="pyr-wrap reveal">
     <div class="pyr-fig">{pyramid_svg}</div>
@@ -1162,7 +1168,7 @@ SLIDES = STYLE + f"""
 <!-- CREDIT ECONOMICS (yield allocation) -->
 <section class="slide theme-light vcenter" data-num="04">
   <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">1T26</span></div>
-  <div class="slide-head reveal"><h1>Do yield ao <span class="accent">NIMAL.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">… e como vira <b>margem</b></div><h1>Do yield ao <span class="accent">NIMAL.</span></h1>
   <p class="sub">NIM (a.a.) — 1T26.</p></div>
   <div class="chartframe reveal">{wf_svg}</div>
   <div class="illus">1T26 · valores anualizados (a.a.) · NIMAL = NII após perdas</div>
@@ -1173,7 +1179,7 @@ SLIDES = STYLE + f"""
 <!-- 5 — FPD -->
 <section class="slide theme-light vcenter" data-num="05">
   <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
-  <div class="slide-head reveal"><h1>FPD 30 <span class="accent">por safra.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">A qualidade nasce na <b>originação</b></div><h1>FPD 30 <span class="accent">por safra.</span></h1>
   <p class="sub">Inadimplência da 1ª parcela (valor em atraso ÷ total) — safra mensal.</p></div>
   <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Média 4,1%</b></span><span style="color:#8a8a8a">Meta &le; 5%</span><span style="color:#8a8a8a">Pior safra: mai/25 · 15,2%</span></div>
   <div class="chartframe reveal">{fpd_svg}</div>
@@ -1184,7 +1190,7 @@ SLIDES = STYLE + f"""
 <!-- CREDIT PORTFOLIO PER PARTNER -->
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Carteira de crédito · por parceiro</span></div>
-  <div class="slide-head reveal"><h1>Carteira de crédito <span class="accent">por parceiro.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">Distribuída por <b>parceiro</b></div><h1>Carteira de crédito <span class="accent">por parceiro.</span></h1>
   <p class="sub">Carteira em aberto por parceiro (R$M) — FIDC ativo desde dez/25 · total R$ 33,5M.</p></div>
   <div class="blegend reveal">{cohort_legend}</div>
   <div class="chartframe reveal">{cohort_svg}</div>
@@ -1194,7 +1200,7 @@ SLIDES = STYLE + f"""
 <!-- DELINQUENCY — CONSOLIDATED 90+ + COMPOSITION TABLE -->
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
-  <div class="slide-head reveal"><h1>Inadimplência <span class="accent">consolidada.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">O comportamento da <b>inadimplência</b></div><h1>Inadimplência <span class="accent">consolidada.</span></h1>
   <p class="sub">BNPL + Legacy Rail · 90+ consolidado (% do saldo) e de onde vem o 90+ por origem (mai/26).</p></div>
   <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div><div class="dq-line">{dq_cons_svg}</div></div>
   <div class="reveal" style="margin-top:1.2vh">{conc_ctab_html}</div>
@@ -1205,7 +1211,7 @@ SLIDES = STYLE + f"""
 <!-- AGING DA CARTEIRA (composition chart) -->
 <section class="slide theme-light vcenter" data-num="08">
   <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Risco · aging</span></div>
-  <div class="slide-head reveal"><h1>Aging da <span class="accent">carteira.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">… e como ela <b>envelhece</b></div><h1>Aging da <span class="accent">carteira.</span></h1>
   <p class="sub">Saldo por faixa de atraso — participação ao longo do tempo, R$M no topo.</p></div>
   <div class="blegend reveal">{ag_legend}</div>
   <div class="chartframe reveal">{aging_svg}</div>
@@ -1215,7 +1221,7 @@ SLIDES = STYLE + f"""
 <!-- FIDC LOAN BOOK GROWTH (off-balance, total only) -->
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
-  <div class="slide-head reveal"><h1>Crescimento da carteira <span class="accent">do FIDC.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">Estruturamos um <b>FIDC</b> para escalar</div><h1>Crescimento da carteira <span class="accent">do FIDC.</span></h1>
   <p class="sub">Saldo total em aberto no FIDC (R$M) — carve-out off-balance desde dez/25.</p></div>
   <div class="blegend reveal"><span><i style="background:#0C0C0C"></i>total off-balance · R$M</span></div>
   <div class="chartframe reveal fit">{fidc_total_svg}</div>
@@ -1225,7 +1231,7 @@ SLIDES = STYLE + f"""
 <!-- INCREASING DIVERSIFICATION — OFF-BALANCE (FIDC) -->
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Diversificação · FIDC</span></div>
-  <div class="slide-head reveal"><h1>Diversificação <span class="accent">crescente.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">… cada vez mais <b>diversificada</b></div><h1>Diversificação <span class="accent">crescente.</span></h1>
   <p class="sub">Âncora como % da carteira off-balance (FIDC) — dez/25 → mai/26.</p></div>
   <div class="blegend reveal">{anchor_legend}</div>
   <div class="chartframe reveal fit">{div_off_svg}</div>
@@ -1235,7 +1241,7 @@ SLIDES = STYLE + f"""
 <!-- 8 — TENOR & DURATION -->
 <section class="slide theme-light vcenter" data-num="08">
   <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Carteira · prazo</span></div>
-  <div class="slide-head reveal"><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">Curta e de <b>giro rápido</b></div><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
   <p class="sub">Uma carteira curta e de giro rápido — métricas-chave, mês a mês.</p></div>
   {kpi_grid}
   <div class="illus">Fonte: Robbin Data · mensal · jan/25–mai/26</div>
@@ -1244,7 +1250,7 @@ SLIDES = STYLE + f"""
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
 <section class="slide theme-light vcenter" data-num="10">
   <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Companhia</span></div>
-  <div class="slide-head reveal"><h1>Alavancagem com <span class="accent">lastro corporativo.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">Para <b>onde vamos</b></div><h1>Alavancagem com <span class="accent">lastro corporativo.</span></h1>
   <p class="sub">Receita run-rate (US$k) e o balanço por trás da alavancagem.</p></div>
   <div class="two-col reveal" style="grid-template-columns:1.45fr 1fr; align-items:center;">
     <div>
