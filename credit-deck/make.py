@@ -273,11 +273,11 @@ def metric(k, v, s, wip=False):
 
 # ---------- monthly TPV / origination by rail (real) ----------
 tpv_months = ptm(["may/24","jun/24","jul/24","aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"])
-tpv_order = ["Trilho legado","Trilhos PIX"]   # Trilho legado = Cartão · Trilhos PIX = Boleto + Pix
-TPV_COL = {"Trilho legado":"#CBCBCB","Trilhos PIX":"#0C0C0C"}
+tpv_order = ["Rail legado","Rails PIX"]   # Rail legado = Cartão · Rails PIX = Boleto + Pix
+TPV_COL = {"Rail legado":"#CBCBCB","Rails PIX":"#0C0C0C"}
 tpv_data = {
-  "Trilho legado":[0.26,0.49,0.91,1.43,4.93,4.54,3.66,3.14,2.8,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34],
-  "Trilhos PIX":[0.0,0.0,0.0,0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.28,1.99,1.72,2.81,3.59,4.59,3.74,3.15,2.57,3.16,5.49,3.45,5.69],
+  "Rail legado":[0.26,0.49,0.91,1.43,4.93,4.54,3.66,3.14,2.8,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34],
+  "Rails PIX":[0.0,0.0,0.0,0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.28,1.99,1.72,2.81,3.59,4.59,3.74,3.15,2.57,3.16,5.49,3.45,5.69],
 }
 
 def tpv_chart():
@@ -298,7 +298,7 @@ def tpv_chart():
             hh = v/ymax*ph; y = ytop-hh
             s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{TPV_COL[rail]}"/>')
             if hh >= 16:
-                tcol = "#fff" if rail == "Trilhos PIX" else "#3A3A3A"
+                tcol = "#fff" if rail == "Rails PIX" else "#3A3A3A"
                 s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="{tcol}">{round(v/total*100)}%</text>')
             ytop = y
         if total > 0:
@@ -1143,7 +1143,7 @@ SLIDES = STYLE + f"""
 <!-- ORIGINATION -->
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Originação</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">De onde vem a <b>carteira</b></div><h1>Originação no <span class="accent">trilho PIX.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">De onde vem a <b>carteira</b></div><h1>Originação no <span class="accent">rail PIX.</span></h1>
   <p class="sub">Originação mensal (R$M) — migração para Boleto/Pix parcelado em fase final.</p></div>
   <div class="blegend reveal">{tpv_legend}</div>
   <div class="chartframe reveal">{tpv_svg}</div>
