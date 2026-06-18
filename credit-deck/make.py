@@ -241,6 +241,29 @@ def stack_pct(labels, data, fidc_idx):
 lb_off_svg  = stack_rm(lt_labels, lt_data, 16, [0,4,8,12,16], None)
 div_off_svg = stack_pct(lt_labels, lt_data, None)
 
+def fidc_total():
+    WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 46, 16, 40, 46
+    vals = [round(sum(lt_data[g][i] for g in lt_data), 2) for i in range(len(lt_labels))]
+    n = len(vals); pw, ph = WD-Lx-Rx, HD-Tx-Bx; slot = pw/n; bw = slot*0.44; ymax = 16
+    def Y(v): return Tx+ph - v/ymax*ph
+    base = Y(0)
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    for t in (0,4,8,12,16):
+        s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    for i,v in enumerate(vals):
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; y = Y(v); last = i == n-1
+        s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{base-y:.1f}" rx="3" fill="#0C0C0C"/>')
+        s.append(f'<text x="{cx:.1f}" y="{y-8:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{800 if last else 700}" font-size="{15 if last else 13}" fill="#0C0C0C">{v:.1f}</text>')
+        s.append(f'<text x="{cx:.1f}" y="{HD-14}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="10" fill="#5A5A5A">{lt_labels[i]}</text>')
+    # growth callout
+    g = vals[-1]/vals[0]
+    s.append(f'<text x="{Lx+slot*0.5+slot:.1f}" y="{Y(13):.1f}" font-family="Geist,sans-serif" font-weight="800" font-size="30" fill="#0C0C0C">{g:.1f}×</text>')
+    s.append(f'<text x="{Lx+slot*0.5+slot:.1f}" y="{Y(13)+16:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#8a8a8a">DESDE DEZ/25</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+fidc_total_svg = fidc_total()
+
 
 def metric(k, v, s, wip=False):
     w = '<div class="wip" style="margin-top:1vh">WIP · to confirm</div>' if wip else ''
@@ -990,6 +1013,7 @@ STYLE = """<style>
 .chart { width:100%; height:auto; display:block; }
 .dq-line { margin-top:.3vh; }
 .dq-line svg { width:100%; height:auto; aspect-ratio:auto; display:block; }
+.chartframe.fit .chart { max-height:64vh; width:auto; max-width:100%; margin:0 auto; display:block; }
 .slide { padding-left:3vw; padding-right:3vw; }
 .slide.vcenter { padding-bottom:6.5vh; }
 .slide-head .sub { white-space:nowrap; max-width:none; }
@@ -1185,25 +1209,23 @@ SLIDES = STYLE + f"""
   <div class="illus">Fonte: loan tape BNPL + Legacy Rail · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
 </section>
 
-<!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
+<!-- FIDC LOAN BOOK GROWTH (off-balance, total only) -->
 <section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Diversificação · consolidado</span></div>
-  <div class="slide-head reveal"><h1>Diversificação <span class="accent">crescente.</span></h1>
-  <p class="sub">Âncora como % da carteira de crédito — total R$M no topo.</p>
-  <span class="tag-pill">Consolidado corporativo</span></div>
-  <div class="blegend reveal">{anchor_legend}</div>
-  <div class="chartframe reveal">{div_con_svg}</div>
-  <div class="illus">Fonte: carteira por mês/origem · mai/24–jun/26</div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
+  <div class="slide-head reveal"><h1>Crescimento da carteira <span class="accent">do FIDC.</span></h1>
+  <p class="sub">Saldo total em aberto no FIDC (R$M) — carve-out off-balance desde dez/25.</p></div>
+  <div class="blegend reveal"><span><i style="background:#0C0C0C"></i>total off-balance · R$M</span></div>
+  <div class="chartframe reveal fit">{fidc_total_svg}</div>
+  <div class="illus">Fonte: loan tape PIX/boleto · dez/25–mai/26 (FIDC)</div>
 </section>
 
-<!-- FIDC LOAN BOOK GROWTH (off-balance) -->
+<!-- INCREASING DIVERSIFICATION — OFF-BALANCE (FIDC) -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
-  <div class="slide-head reveal"><h1>Crescimento da carteira <span class="accent">do FIDC.</span></h1>
-  <p class="sub">Saldo em aberto por âncora (R$M) — carve-out do FIDC desde dez/25.</p>
-  <span class="tag-pill">Off-balance · FIDC</span></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Diversificação · FIDC</span></div>
+  <div class="slide-head reveal"><h1>Diversificação <span class="accent">crescente.</span></h1>
+  <p class="sub">Âncora como % da carteira off-balance (FIDC) — dez/25 → mai/26.</p></div>
   <div class="blegend reveal">{anchor_legend}</div>
-  <div class="chartframe reveal">{lb_off_svg}</div>
+  <div class="chartframe reveal fit">{div_off_svg}</div>
   <div class="illus">Fonte: loan tape PIX/boleto · dez/25–mai/26 (FIDC)</div>
 </section>
 
