@@ -874,9 +874,9 @@ def conc_ctab():
     for name, saldo, sh, cdr in conc90:
         sval = f"{saldo:,}".replace(",", ".")
         dot = f'<i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:{ANCHOR_COL.get(name,"#999")};margin-right:8px;vertical-align:middle"></i>'
-        rows += (f'<tr><td>{dot}{name}</td><td>{sval}</td><td>{sh:.1f}%</td>'
+        rows += (f'<tr><td>{dot}{name}</td><td>{sval}</td><td class="emph">{sh:.1f}%</td>'
                  f'<td><span class="cdr-chip" style="background:{_heat(cdr)}">{cdr:.1f}%</span></td></tr>')
-    rows += ('<tr class="total"><td>Total carteira</td><td>2.650.209</td><td>100%</td>'
+    rows += ('<tr class="total"><td>Total carteira</td><td>2.650.209</td><td class="emph">100%</td>'
              f'<td><span class="cdr-chip" style="background:{_heat(5.7)}">5,7%</span></td></tr>')
     return (f'<table class="ctab conc"><thead><tr><th>Por origem</th><th>90+ (R$)</th>'
             f'<th>% do 90+</th><th>CDR</th></tr></thead><tbody>{rows}</tbody></table>')
@@ -1037,6 +1037,7 @@ STYLE = """<style>
 .ctab tr.total td { font-weight:700; color:var(--ink); border-top:2px solid #0C0C0C; border-bottom:none; }
 .ctab.sm th, .ctab.sm td { padding:.42vh .7vw; font-size:clamp(9.5px,.8vw,12px); }
 .ctab.conc th, .ctab.conc td { padding:0.72vh .7vw; }
+.ctab.conc td.emph { font-weight:800; color:var(--ink); font-size:clamp(15px,1.25vw,20px); }
 .cdr-chip { display:inline-block; min-width:46px; text-align:center; color:#fff; font-weight:700; font-size:clamp(11px,.85vw,13px); padding:3px 8px; border-radius:7px; }
 .ctab tr.hi td { background:rgba(192,20,60,.08); }
 .r90 { display:grid; grid-template-columns:170px 112px 1fr 52px 72px; align-items:center; gap:1.4vw; padding:0.95vh 0; border-bottom:1px solid rgba(12,12,12,.1); }
