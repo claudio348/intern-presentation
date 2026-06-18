@@ -373,8 +373,8 @@ port_svg = portfolio_stack()
 port_legend = "".join(f'<span><i style="background:{PORT_COL[g]}"></i>{g}</span>' for g in port_order)
 
 def portfolio_total_bars():
-    WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 46, 16, 30, 44
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 46; n = len(_pm); slot = pw/n; bw = slot*0.70
+    WD, HD = 1040, 432; Lx, Rx, Tx, Bx = 30, 6, 44, 42
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 46; n = len(_pm); slot = pw/n; bw = slot*0.78
     def Y(v): return Tx+ph - v/ymax*ph
     ybase = Y(0)
     di = _pm.index(FIDC_FROM); xd = Lx + slot*di
@@ -403,10 +403,10 @@ def portfolio_total_bars():
         if on > 0.02:
             s.append(f'<rect x="{x:.1f}" y="{yon:.1f}" width="{bw:.1f}" height="{hon:.1f}" rx="2" fill="#B9B9B9"/>')
         last = i == n-1
-        s.append(f'<text x="{cx:.1f}" y="{Y(v)-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 500}" font-size="8.6" fill="{"#0C0C0C" if last else "#6A6A6A"}">{v:.1f}</text>')
-    # FIDC divider + label
+        s.append(f'<text x="{cx:.1f}" y="{Y(v)-7:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 600}" font-size="{12 if last else 11}" fill="{"#0C0C0C" if last else "#5A5A5A"}">{v:.1f}</text>')
+    # FIDC divider + label (in the top margin, clear of the bar value labels)
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{Tx+11:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
+    s.append(f'<text x="{xd+7:.1f}" y="{16:.1f}" font-family="Geist Mono,monospace" font-size="11" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
     for i in range(0, n, 3):
         s.append(f'<text x="{Lx+slot*i+slot/2:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{port_labels[i]}</text>')
     s.append('</svg>')
@@ -1133,8 +1133,7 @@ SLIDES = STYLE + f"""
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">O ponto de <b>partida</b></div><h1>A carteira de <span class="accent">crédito.</span></h1>
   <p class="sub">Carteira de crédito (R$M) — pico de R$ 44M, R$ 34M hoje.</p>
-  <span class="tag-pill">Hoje ~R$ 15M (≈46%) no FIDC · restante on-balance</span>
-  <span class="wip">Ainda fechando números de carteira com Marcos</span></div>
+  <span class="tag-pill">Hoje ~R$ 15M (≈46%) no FIDC · restante on-balance</span></div>
   <div class="blegend reveal">{port_total_legend}</div>
   <div class="chartframe reveal">{port_total_svg}</div>
   <div class="illus">Fonte: Robbin Data · mar/24–jun/26</div>
