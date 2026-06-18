@@ -8300,10 +8300,11 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 .dq-line { margin-top:.3vh; }
 .dq-line svg { width:100%; height:auto; aspect-ratio:auto; display:block; }
 .slide { padding-left:3vw; padding-right:3vw; }
-.slide.vcenter { justify-content:flex-start; padding-top:8vh; padding-bottom:4vh; }
+.slide.vcenter { justify-content:flex-start; padding-top:5.5vh; padding-bottom:3.5vh; }
 .slide.vcenter > * { flex-shrink:0; }
-.slide.vcenter .slide-head { margin-bottom:1.4vh; }
-.slide.vcenter .chartframe .chart { max-height:60vh; width:auto; max-width:100%; margin:0 auto; }
+.slide.vcenter .slide-head { margin-bottom:1.6vh; }
+.slide.vcenter .chartframe { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; }
+.slide.vcenter .chartframe .chart { width:100%; height:auto; max-height:74vh; }
 .slide-head .sub { white-space:nowrap; max-width:none; }
 .slide-head h1 { max-width:86%; }
 .legend { display:flex; gap:1.2vw; flex-wrap:wrap; margin-top:1vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
