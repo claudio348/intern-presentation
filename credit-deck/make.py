@@ -244,7 +244,7 @@ div_off_svg = stack_pct(lt_labels, lt_data, None)
 def fidc_total():
     WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 46, 16, 40, 46
     vals = [round(sum(lt_data[g][i] for g in lt_data), 2) for i in range(len(lt_labels))]
-    n = len(vals); pw, ph = WD-Lx-Rx, HD-Tx-Bx; slot = pw/n; bw = slot*0.44; ymax = 16
+    n = len(vals); pw, ph = WD-Lx-Rx, HD-Tx-Bx; slot = pw/n; bw = slot*0.64; ymax = 16
     def Y(v): return Tx+ph - v/ymax*ph
     base = Y(0)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
@@ -1128,7 +1128,7 @@ SLIDES = STYLE + f"""
   <span class="wip">Ainda fechando números de carteira com Marcos</span></div>
   <div class="blegend reveal">{port_total_legend}</div>
   <div class="chartframe reveal">{port_total_svg}</div>
-  <div class="illus">Fonte: carteira por mês/origem · mar/24–jun/26</div>
+  <div class="illus">Fonte: Robbin Data · mar/24–jun/26</div>
 </section>
 
 <!-- ORIGINATION -->
@@ -1138,7 +1138,7 @@ SLIDES = STYLE + f"""
   <p class="sub">Originação mensal (R$M) — migração para Boleto/Pix parcelado em fase final.</p></div>
   <div class="blegend reveal">{tpv_legend}</div>
   <div class="chartframe reveal">{tpv_svg}</div>
-  <div class="illus">Fonte: TPV mensal · mar/24–mai/26 (jun/26 parcial, excluído)</div>
+  <div class="illus">Fonte: Robbin Data · TPV mensal · mar/24–mai/26 (jun/26 parcial, excluído)</div>
 </section>
 
 <!-- WHY WE PERFORM BETTER THAN BANKS (iso stack) -->
@@ -1175,7 +1175,7 @@ SLIDES = STYLE + f"""
   <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Média 4,1%</b></span><span style="color:#8a8a8a">Meta &le; 5%</span><span style="color:#8a8a8a">Pior safra: mai/25 · 15,2%</span></div>
   <div class="chartframe reveal">{fpd_svg}</div>
   <div class="blegend reveal">{fpd_scale}</div>
-  <div class="illus">Fonte: loan tape BNPL · FPD 30 · safra mensal</div>
+  <div class="illus">Fonte: Robbin Data · FPD 30 · safra mensal</div>
 </section>
 
 <!-- CREDIT PORTFOLIO PER PARTNER -->
@@ -1185,7 +1185,7 @@ SLIDES = STYLE + f"""
   <p class="sub">Carteira em aberto por parceiro (R$M) — FIDC ativo desde dez/25 · total R$ 33,5M.</p></div>
   <div class="blegend reveal">{cohort_legend}</div>
   <div class="chartframe reveal">{cohort_svg}</div>
-  <div class="illus">Fonte: coorte — carteira de crédito · saldo por safra</div>
+  <div class="illus">Fonte: Robbin Data · saldo por safra</div>
 </section>
 
 <!-- DELINQUENCY — CONSOLIDATED 90+ + COMPOSITION TABLE -->
@@ -1196,7 +1196,7 @@ SLIDES = STYLE + f"""
   <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div><div class="dq-line">{dq_cons_svg}</div></div>
   <div class="reveal" style="margin-top:1.2vh">{conc_ctab_html}</div>
   <div class="blegend reveal" style="margin-top:.6vh"><span style="color:#8a8a8a">chip = CDR (90+ ÷ principal originado) · mais escuro = maior</span></div>
-  <div class="illus">Fonte: loan tape BNPL + Legacy Rail · 90+ ÷ saldo (linha) e over90 por origem mai/26 (tabela)</div>
+  <div class="illus">Fonte: Robbin Data · 90+ ÷ saldo (linha) e over90 por origem mai/26 (tabela)</div>
 </section>
 
 <!-- AGING DA CARTEIRA (composition chart) -->
@@ -1206,7 +1206,7 @@ SLIDES = STYLE + f"""
   <p class="sub">Saldo por faixa de atraso — participação ao longo do tempo, R$M no topo.</p></div>
   <div class="blegend reveal">{ag_legend}</div>
   <div class="chartframe reveal">{aging_svg}</div>
-  <div class="illus">Fonte: loan tape BNPL + Legacy Rail · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
+  <div class="illus">Fonte: Robbin Data · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
 </section>
 
 <!-- FIDC LOAN BOOK GROWTH (off-balance, total only) -->
@@ -1216,7 +1216,7 @@ SLIDES = STYLE + f"""
   <p class="sub">Saldo total em aberto no FIDC (R$M) — carve-out off-balance desde dez/25.</p></div>
   <div class="blegend reveal"><span><i style="background:#0C0C0C"></i>total off-balance · R$M</span></div>
   <div class="chartframe reveal fit">{fidc_total_svg}</div>
-  <div class="illus">Fonte: loan tape PIX/boleto · dez/25–mai/26 (FIDC)</div>
+  <div class="illus">Fonte: Robbin Data · dez/25–mai/26 (FIDC)</div>
 </section>
 
 <!-- INCREASING DIVERSIFICATION — OFF-BALANCE (FIDC) -->
@@ -1226,7 +1226,7 @@ SLIDES = STYLE + f"""
   <p class="sub">Âncora como % da carteira off-balance (FIDC) — dez/25 → mai/26.</p></div>
   <div class="blegend reveal">{anchor_legend}</div>
   <div class="chartframe reveal fit">{div_off_svg}</div>
-  <div class="illus">Fonte: loan tape PIX/boleto · dez/25–mai/26 (FIDC)</div>
+  <div class="illus">Fonte: Robbin Data · dez/25–mai/26 (FIDC)</div>
 </section>
 
 <!-- 8 — TENOR & DURATION -->
@@ -1235,7 +1235,7 @@ SLIDES = STYLE + f"""
   <div class="slide-head reveal"><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
   <p class="sub">Uma carteira curta e de giro rápido — métricas-chave, mês a mês.</p></div>
   {kpi_grid}
-  <div class="illus">Fonte: loan tape PIX/boleto · mensal · jan/25–mai/26</div>
+  <div class="illus">Fonte: Robbin Data · mensal · jan/25–mai/26</div>
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
