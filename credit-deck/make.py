@@ -1128,6 +1128,8 @@ SLIDES = STYLE + f"""
   <div class="cover5-meta">Confidencial · Material institucional</div>
 </section>
 
+<!--INTRO-->
+
 <!-- PORTFOLIO -->
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
@@ -1282,6 +1284,15 @@ SLIDES = STYLE + f"""
   </div>
 </section>
 """
+
+# insert imported pitchdeck slides (team + re-rail) right after the cover
+_here = os.path.dirname(os.path.abspath(__file__))
+_intro = ""
+for frag in ("_intro_team.html", "_intro_rerail.html"):
+    fp = os.path.join(_here, frag)
+    if os.path.isfile(fp):
+        _intro += "\n" + open(fp, encoding="utf-8").read() + "\n"
+SLIDES = SLIDES.replace("<!--INTRO-->", _intro)
 
 # auto-number slides (data-num) and chapter marks (chapter-num) in document order
 def _seq(tmpl):
