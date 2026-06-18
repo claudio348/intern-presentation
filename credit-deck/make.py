@@ -529,7 +529,7 @@ dq_svg = dq_lines()
 
 # ---------- consolidated 90+ only (company aggregate line) ----------
 def dq_cons():
-    WD, HD = 820, 300; Lx, Rx, Tx, Bx = 40, 46, 30, 32
+    WD, HD = 1040, 158; Lx, Rx, Tx, Bx = 40, 46, 22, 26
     n = len(dq_agg); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 28
     def X(j): return Lx + j/(n-1)*pw
     def Y(v): return Tx+ph - v/ymax*ph
@@ -1034,7 +1034,7 @@ STYLE = """<style>
 .ctab .cdr { color:#C0143C; font-weight:600; }
 .ctab tr.total td { font-weight:700; color:var(--ink); border-top:2px solid #0C0C0C; border-bottom:none; }
 .ctab.sm th, .ctab.sm td { padding:.42vh .7vw; font-size:clamp(9.5px,.8vw,12px); }
-.ctab.conc th, .ctab.conc td { padding:1.05vh .7vw; }
+.ctab.conc th, .ctab.conc td { padding:0.72vh .7vw; }
 .cdr-chip { display:inline-block; min-width:46px; text-align:center; color:#fff; font-weight:700; font-size:clamp(11px,.85vw,13px); padding:3px 8px; border-radius:7px; }
 .ctab tr.hi td { background:rgba(192,20,60,.08); }
 .r90 { display:grid; grid-template-columns:170px 112px 1fr 52px 72px; align-items:center; gap:1.4vw; padding:0.95vh 0; border-bottom:1px solid rgba(12,12,12,.1); }
@@ -1165,14 +1165,11 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
   <div class="slide-head reveal"><h1>Inadimplência <span class="accent">consolidada.</span></h1>
-  <p class="sub">Apenas BNPL · 90+ consolidado (% do saldo) e de onde vem o 90+ por origem (mai/26).</p></div>
-  <div class="two-col reveal" style="grid-template-columns:1.25fr 1fr; align-items:center;">
-    <div><div class="arr-cap">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
-    <div>{conc_ctab_html}
-      <div class="blegend" style="margin-top:1vh"><span style="color:#8a8a8a">chip = CDR (90+ ÷ principal originado) · mais escuro = maior</span></div>
-    </div>
-  </div>
-  <div class="illus">Fonte: apenas loan tape BNPL · 90+ ÷ saldo (linha) e over90 por origem mai/26 (tabela)</div>
+  <p class="sub">BNPL + Legacy Rail · 90+ consolidado (% do saldo) e de onde vem o 90+ por origem (mai/26).</p></div>
+  <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
+  <div class="reveal" style="margin-top:1vh">{conc_ctab_html}</div>
+  <div class="blegend reveal" style="margin-top:.6vh"><span style="color:#8a8a8a">chip = CDR (90+ ÷ principal originado) · mais escuro = maior</span></div>
+  <div class="illus">Fonte: loan tape BNPL + Legacy Rail · 90+ ÷ saldo (linha) e over90 por origem mai/26 (tabela)</div>
 </section>
 
 <!-- AGING DA CARTEIRA (composition chart) -->
@@ -1182,7 +1179,7 @@ SLIDES = STYLE + f"""
   <p class="sub">Saldo por faixa de atraso — participação ao longo do tempo, R$M no topo.</p></div>
   <div class="blegend reveal">{ag_legend}</div>
   <div class="chartframe reveal">{aging_svg}</div>
-  <div class="illus">Fonte: apenas loan tape BNPL · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
+  <div class="illus">Fonte: loan tape BNPL + Legacy Rail · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
 </section>
 
 <!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
