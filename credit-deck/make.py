@@ -527,6 +527,35 @@ def dq_lines():
     return "\n".join(s)
 dq_svg = dq_lines()
 
+# ---------- consolidated 90+ only (company aggregate line) ----------
+def dq_cons():
+    WD, HD = 1040, 184; Lx, Rx, Tx, Bx = 40, 46, 22, 26
+    n = len(dq_agg); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 28
+    def X(j): return Lx + j/(n-1)*pw
+    def Y(v): return Tx+ph - v/ymax*ph
+    base = Y(0); di = dq_labels.index("dez/25"); xd = X(di)
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    s.append('<defs><linearGradient id="dqcG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.16"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0.02"/></linearGradient></defs>')
+    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{base-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
+    for t in (0,10,20):
+        s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    pts = [(X(j), Y(v)) for j,v in enumerate(dq_agg)]
+    d = f"M {pts[0][0]:.1f},{base:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in pts) + f" L {pts[-1][0]:.1f},{base:.1f} Z"
+    s.append(f'<path d="{d}" fill="url(#dqcG)"/>')
+    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>' % " ".join(f"{x:.1f},{y:.1f}" for x,y in pts))
+    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.1" stroke-dasharray="4 4" opacity="0.5"/>')
+    s.append(f'<text x="{xd+6:.1f}" y="{Tx+9:.1f}" font-family="Geist Mono,monospace" font-size="9" fill="#3A3A3A">FIDC ativo →</text>')
+    for j in (6,8,12,n-1):
+        x,y = pts[j]
+        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" fill="#0C0C0C"/>')
+        s.append(f'<text x="{x:.1f}" y="{y-8:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10.5" fill="#0C0C0C">{dq_agg[j]:.0f}%</text>')
+    for j in range(0, n, 2):
+        s.append(f'<text x="{X(j):.1f}" y="{HD-9}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8" fill="#5A5A5A">{dq_labels[j]}</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+dq_cons_svg = dq_cons()
+
 # ---------- revenue run rate (ARR) ----------
 arr_labels = ["3T24","4T24","1T25","2T25","3T25","4T25","1T26","abr/26","mai/26"]
 arr_vals = [319,550,1427,1716,2077,2532,2976,3176,3721]
@@ -668,7 +697,7 @@ ag_totals = [round(sum(ag_data[b][i] for b in ag_buckets),3) for i in range(len(
 ag_legend = "".join(f'<span><i style="background:{AG_COL[b]};border-radius:2px;height:11px;width:14px"></i>{b}</span>' for b in ag_buckets) + '<span style="color:#8a8a8a">dias de atraso · participação no saldo</span>'
 
 def aging_chart():
-    WD, HD = 1040, 452; Lx, Rx, Tx, Bx = 40, 50, 34, 44
+    WD, HD = 1040, 300; Lx, Rx, Tx, Bx = 40, 50, 30, 38
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(ag_labels); ymax = 100
     xs = [Lx + i/(n-1)*pw for i in range(n)]
     def Y(v): return Tx+ph - v/ymax*ph
@@ -1103,14 +1132,15 @@ SLIDES = STYLE + f"""
   <div class="illus">Fonte: coorte — carteira de crédito · saldo por safra</div>
 </section>
 
-<!-- DELINQUENCY OVER TIME, BY PARTNER -->
+<!-- DELINQUENCY — CONSOLIDATED 90+ + COMPOSITION (merged) -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · 90+ ao longo do tempo</span></div>
-  <div class="slide-head reveal"><h1>Inadimplência <span class="accent">ao longo do tempo.</span></h1>
-  <p class="sub">Apenas BNPL · taxa de 90+ point-in-time por mês de calendário, por parceiro — FIDC ativo desde dez/25.</p></div>
-  <div class="blegend reveal">{dq_legend}</div>
-  <div class="chartframe reveal">{dq_svg}</div>
-  <div class="illus">Fonte: apenas loan tape BNPL — saldo 90+ ÷ saldo em aberto, mensal</div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
+  <div class="slide-head reveal"><h1>Inadimplência <span class="accent">consolidada.</span></h1>
+  <p class="sub">Apenas BNPL · 90+ consolidado (linha) e a composição da PDD por faixa de atraso — R$M no topo.</p></div>
+  <div class="reveal"><div class="arr-cap" style="margin-top:1vh">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
+  <div class="blegend reveal" style="margin-top:1.4vh">{ag_legend}</div>
+  <div class="chartframe reveal">{aging_svg}</div>
+  <div class="illus">Fonte: apenas loan tape BNPL · 90+ ÷ saldo (linha) e saldo por faixa de atraso (barras) · mensal</div>
 </section>
 
 <!-- WHERE DOES 90+ COME FROM -->
@@ -1152,16 +1182,6 @@ SLIDES = STYLE + f"""
   <p class="sub">Uma carteira curta e de giro rápido — métricas-chave, mês a mês.</p></div>
   {kpi_grid}
   <div class="illus">Fonte: loan tape PIX/boleto · mensal · jan/25–mai/26</div>
-</section>
-
-<!-- 9 — DELINQUENCY COMPOSITION (aging) -->
-<section class="slide theme-light vcenter" data-num="09">
-  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Risco · aging</span></div>
-  <div class="slide-head reveal"><h1>Composição da <span class="accent">inadimplência.</span></h1>
-  <p class="sub">Saldo em aberto por faixa de atraso — participação ao longo do tempo, R$M no topo.</p></div>
-  <div class="blegend reveal">{ag_legend}</div>
-  <div class="chartframe reveal">{aging_svg}</div>
-  <div class="illus">Fonte: apenas loan tape BNPL · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
