@@ -529,7 +529,7 @@ dq_svg = dq_lines()
 
 # ---------- consolidated 90+ only (company aggregate line) ----------
 def dq_cons():
-    WD, HD = 1040, 184; Lx, Rx, Tx, Bx = 40, 46, 22, 26
+    WD, HD = 1040, 150; Lx, Rx, Tx, Bx = 40, 46, 20, 24
     n = len(dq_agg); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 28
     def X(j): return Lx + j/(n-1)*pw
     def Y(v): return Tx+ph - v/ymax*ph
@@ -1022,12 +1022,12 @@ STYLE = """<style>
 .ctab tr.total td { font-weight:700; color:var(--ink); border-top:2px solid #0C0C0C; border-bottom:none; }
 .ctab.sm th, .ctab.sm td { padding:.42vh .7vw; font-size:clamp(9.5px,.8vw,12px); }
 .ctab tr.hi td { background:rgba(192,20,60,.08); }
-.r90 { display:grid; grid-template-columns:170px 112px 1fr 52px 72px; align-items:center; gap:1.4vw; padding:1.55vh 0; border-bottom:1px solid rgba(12,12,12,.1); }
+.r90 { display:grid; grid-template-columns:170px 112px 1fr 52px 72px; align-items:center; gap:1.4vw; padding:0.95vh 0; border-bottom:1px solid rgba(12,12,12,.1); }
 .r90.head { border-bottom:2px solid #0C0C0C; padding:0 0 1vh; }
 .r90.head span { font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; }
 .r90.total { border-top:2px solid #0C0C0C; border-bottom:none; }
-.r90 .r-name { display:flex; align-items:center; gap:.8vw; font-family:var(--font-sans); font-weight:600; font-size:clamp(14px,1.25vw,20px); color:var(--ink); }
-.r90 .r-dot { width:16px; height:16px; border-radius:5px; flex-shrink:0; }
+.r90 .r-name { display:flex; align-items:center; gap:.8vw; font-family:var(--font-sans); font-weight:600; font-size:clamp(13px,1.05vw,17px); color:var(--ink); }
+.r90 .r-dot { width:13px; height:13px; border-radius:4px; flex-shrink:0; }
 .r90 .r-val { font-family:var(--font-mono); font-size:clamp(12px,1vw,15px); color:#2E2E2E; text-align:right; }
 .r90 .r-track { height:18px; background:rgba(12,12,12,.06); border-radius:100px; overflow:hidden; }
 .r90 .r-fill { display:block; height:100%; border-radius:100px; background:linear-gradient(90deg,#C8C8C8,#A6A6A6); }
@@ -1150,10 +1150,11 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
   <div class="slide-head reveal"><h1>Inadimplência <span class="accent">consolidada.</span></h1>
-  <p class="sub">Apenas BNPL · 90+ consolidado (% do saldo) e a composição por faixa de atraso.</p></div>
-  <div class="reveal"><div class="arr-cap" style="margin-top:.6vh">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
-  <div class="reveal" style="margin-top:1.4vh">{comp_tbl}</div>
-  <div class="illus">Fonte: apenas loan tape BNPL · 90+ ÷ saldo (linha) e saldo por faixa de atraso (tabela) · mensal</div>
+  <p class="sub">Apenas BNPL · 90+ consolidado (% do saldo) e de onde vem o 90+ por origem (mai/26).</p></div>
+  <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
+  <div class="reveal" style="margin-top:.8vh">{conc_rows_html}</div>
+  <div class="blegend reveal" style="margin-top:.6vh"><span><i style="background:#A6A6A6"></i>barra = participação no pool de 90+</span><span><i style="background:#B30E36"></i>chip = CDR · severidade (mais escuro = maior)</span></div>
+  <div class="illus">Fonte: apenas loan tape BNPL · 90+ ÷ saldo (linha) e over90 por origem mai/26 (tabela)</div>
 </section>
 
 <!-- AGING DA CARTEIRA (composition chart) -->
@@ -1164,16 +1165,6 @@ SLIDES = STYLE + f"""
   <div class="blegend reveal">{ag_legend}</div>
   <div class="chartframe reveal">{aging_svg}</div>
   <div class="illus">Fonte: apenas loan tape BNPL · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
-</section>
-
-<!-- WHERE DOES 90+ COME FROM -->
-<section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Risco · concentração</span></div>
-  <div class="slide-head reveal"><h1>De onde vem o <span class="accent">90+?</span></h1>
-  <p class="sub">Over90 por origem — R$ 2,65M decompostos (mai/26). CDR = 90+ ÷ principal originado.</p></div>
-  <div class="reveal" style="margin-top:2vh;">{conc_rows_html}</div>
-  <div class="blegend reveal" style="margin-top:1.6vh"><span><i style="background:#A6A6A6"></i>barra = participação no pool de 90+</span><span><i style="background:#B30E36"></i>chip = CDR · severidade (mais escuro = maior)</span></div>
-  <div class="illus">Fonte: apenas loan tape BNPL · saldo over90 mai/26</div>
 </section>
 
 <!-- INCREASING DIVERSIFICATION — CONSOLIDATED -->
