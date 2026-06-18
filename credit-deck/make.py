@@ -529,7 +529,7 @@ dq_svg = dq_lines()
 
 # ---------- consolidated 90+ only (company aggregate line) ----------
 def dq_cons():
-    WD, HD = 1040, 150; Lx, Rx, Tx, Bx = 40, 46, 20, 24
+    WD, HD = 820, 300; Lx, Rx, Tx, Bx = 40, 46, 30, 32
     n = len(dq_agg); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 28
     def X(j): return Lx + j/(n-1)*pw
     def Y(v): return Tx+ph - v/ymax*ph
@@ -869,6 +869,19 @@ def conc_rows():
     return "".join(out)
 conc_rows_html = conc_rows()
 
+def conc_ctab():
+    rows = ""
+    for name, saldo, sh, cdr in conc90:
+        sval = f"{saldo:,}".replace(",", ".")
+        dot = f'<i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:{ANCHOR_COL.get(name,"#999")};margin-right:8px;vertical-align:middle"></i>'
+        rows += (f'<tr><td>{dot}{name}</td><td>{sval}</td><td>{sh:.1f}%</td>'
+                 f'<td><span class="cdr-chip" style="background:{_heat(cdr)}">{cdr:.1f}%</span></td></tr>')
+    rows += ('<tr class="total"><td>Total carteira</td><td>2.650.209</td><td>100%</td>'
+             f'<td><span class="cdr-chip" style="background:{_heat(5.7)}">5,7%</span></td></tr>')
+    return (f'<table class="ctab conc"><thead><tr><th>Por origem</th><th>90+ (R$)</th>'
+            f'<th>% do 90+</th><th>CDR</th></tr></thead><tbody>{rows}</tbody></table>')
+conc_ctab_html = conc_ctab()
+
 # ---------- 90+ by vintage (origination month) ----------
 vint = [("nov/24",10090,0.4,2.9,0),("dez/24",29297,1.1,4.8,0),("jan/25",60118,2.3,5.0,0),
         ("fev/25",256352,9.7,17.6,1),("mar/25",329536,12.4,17.7,1),("abr/25",129270,4.9,7.0,0),
@@ -1021,6 +1034,8 @@ STYLE = """<style>
 .ctab .cdr { color:#C0143C; font-weight:600; }
 .ctab tr.total td { font-weight:700; color:var(--ink); border-top:2px solid #0C0C0C; border-bottom:none; }
 .ctab.sm th, .ctab.sm td { padding:.42vh .7vw; font-size:clamp(9.5px,.8vw,12px); }
+.ctab.conc th, .ctab.conc td { padding:1.05vh .7vw; }
+.cdr-chip { display:inline-block; min-width:46px; text-align:center; color:#fff; font-weight:700; font-size:clamp(11px,.85vw,13px); padding:3px 8px; border-radius:7px; }
 .ctab tr.hi td { background:rgba(192,20,60,.08); }
 .r90 { display:grid; grid-template-columns:170px 112px 1fr 52px 72px; align-items:center; gap:1.4vw; padding:0.95vh 0; border-bottom:1px solid rgba(12,12,12,.1); }
 .r90.head { border-bottom:2px solid #0C0C0C; padding:0 0 1vh; }
@@ -1151,9 +1166,12 @@ SLIDES = STYLE + f"""
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
   <div class="slide-head reveal"><h1>Inadimplência <span class="accent">consolidada.</span></h1>
   <p class="sub">Apenas BNPL · 90+ consolidado (% do saldo) e de onde vem o 90+ por origem (mai/26).</p></div>
-  <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
-  <div class="reveal" style="margin-top:.8vh">{conc_rows_html}</div>
-  <div class="blegend reveal" style="margin-top:.6vh"><span><i style="background:#A6A6A6"></i>barra = participação no pool de 90+</span><span><i style="background:#B30E36"></i>chip = CDR · severidade (mais escuro = maior)</span></div>
+  <div class="two-col reveal" style="grid-template-columns:1.25fr 1fr; align-items:center;">
+    <div><div class="arr-cap">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
+    <div>{conc_ctab_html}
+      <div class="blegend" style="margin-top:1vh"><span style="color:#8a8a8a">chip = CDR (90+ ÷ principal originado) · mais escuro = maior</span></div>
+    </div>
+  </div>
   <div class="illus">Fonte: apenas loan tape BNPL · 90+ ÷ saldo (linha) e over90 por origem mai/26 (tabela)</div>
 </section>
 
