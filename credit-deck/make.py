@@ -490,7 +490,7 @@ dq_data = {
     "iFood":            [N,N,N,N,N,N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0],
 }
 # company-wide point-in-time 90+ ratio
-dq_agg = [0.0,0.0,0.4,0.4,0.3,4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.5]
+dq_agg = [1.2,1.4,1.8,1.9,2.1,3.4,3.5,4.1,3.6,3.7,2.0,3.3,5.5,6.6,8.9,9.7,10.0]  # over90 ÷ saldo da carteira
 DQ_FIDC = dq_labels.index("dez/25")  # FIDC went live Dec/25
 dq_legend = ('<span><i style="background:#0C0C0C;height:3px;border-radius:2px"></i>Agregado da companhia</span>'
              + "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in dq_order))
@@ -556,14 +556,14 @@ dq_svg = dq_lines()
 # ---------- consolidated 90+ only (company aggregate line) ----------
 def dq_cons():
     WD, HD = 1040, 158; Lx, Rx, Tx, Bx = 40, 46, 22, 26
-    n = len(dq_agg); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 28
+    n = len(dq_agg); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 12
     def X(j): return Lx + j/(n-1)*pw
     def Y(v): return Tx+ph - v/ymax*ph
     base = Y(0); di = dq_labels.index("dez/25"); xd = X(di)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     s.append('<defs><linearGradient id="dqcG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.16"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0.02"/></linearGradient></defs>')
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{base-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
-    for t in (0,10,20):
+    for t in (0,5,10):
         s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
     pts = [(X(j), Y(v)) for j,v in enumerate(dq_agg)]
