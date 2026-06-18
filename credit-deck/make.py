@@ -988,6 +988,8 @@ bubble_svg = bubble_vintage()
 STYLE = """<style>
 .chartframe { padding:1vh 0 0; background:transparent; border:none; }
 .chart { width:100%; height:auto; display:block; }
+.dq-line { margin-top:.3vh; }
+.dq-line svg { width:100%; height:auto; aspect-ratio:auto; display:block; }
 .slide { padding-left:3vw; padding-right:3vw; }
 .slide.vcenter { padding-bottom:6.5vh; }
 .slide-head .sub { white-space:nowrap; max-width:none; }
@@ -1166,8 +1168,8 @@ SLIDES = STYLE + f"""
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
   <div class="slide-head reveal"><h1>Inadimplência <span class="accent">consolidada.</span></h1>
   <p class="sub">BNPL + Legacy Rail · 90+ consolidado (% do saldo) e de onde vem o 90+ por origem (mai/26).</p></div>
-  <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
-  <div class="reveal" style="margin-top:1vh">{conc_ctab_html}</div>
+  <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div><div class="dq-line">{dq_cons_svg}</div></div>
+  <div class="reveal" style="margin-top:1.2vh">{conc_ctab_html}</div>
   <div class="blegend reveal" style="margin-top:.6vh"><span style="color:#8a8a8a">chip = CDR (90+ ÷ principal originado) · mais escuro = maior</span></div>
   <div class="illus">Fonte: loan tape BNPL + Legacy Rail · 90+ ÷ saldo (linha) e over90 por origem mai/26 (tabela)</div>
 </section>
