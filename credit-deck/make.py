@@ -72,40 +72,44 @@ cdr_svg = chart("\n".join(cdr_inner))
 cdr_legend = "".join(
     f'<span><i style="background:{c}"></i>{n}</span>' for n, c in zip(cdr.keys(), cdr_colors))
 
-# ---------- FPD 30 — faixa de calor mensal por safra (real loan tape) ----------
+# ---------- FPD 30 — barras por safra mensal (real loan tape) ----------
 fpd_labels = ["mai/25","jun/25","jul/25","ago/25","set/25","out/25","nov/25","dez/25","jan/26","fev/26","mar/26","abr/26"]
 fpd_vals   = [15.2,7.4,3.1,0.0,2.0,3.9,1.0,3.7,5.8,0.9,5.4,1.4]
 FPD_THR = 5.0
 FPD_MEAN = sum(fpd_vals)/len(fpd_vals)
 
-def _fpd_col(v):
-    if v <= FPD_THR:
-        t = v/FPD_THR; a=(236,236,236); b=(202,202,202)               # saudável → cinza claro→médio
-    else:
-        t = min((v-FPD_THR)/10.0,1.0); a=(233,150,150); b=(176,14,54)  # breach → rampa vermelha
-    return "#%02X%02X%02X" % tuple(round(a[k]+(b[k]-a[k])*t) for k in range(3))
-
-def fpd_ribbon():
-    WD, HD = 1040, 300; Lx, Rx, Tx, Bx = 6, 6, 14, 34
-    n = len(fpd_vals); gap = 10
-    cw = (WD-Lx-Rx-gap*(n-1))/n; ch = HD-Tx-Bx
+def fpd_bars():
+    WD, HD = 1040, 430; Lx, Rx, Tx, Bx = 38, 16, 48, 40
+    n = len(fpd_vals); pw, ph = WD-Lx-Rx, HD-Tx-Bx
+    slot = pw/n; bw = slot*0.56; ymax = 16
+    def cx(i): return Lx+slot*i+slot/2
+    def Y(v): return Tx+ph - v/ymax*ph
+    base = Y(0); ythr = Y(FPD_THR)
+    imin = min(range(n), key=lambda i: fpd_vals[i])
+    imax = max(range(n), key=lambda i: fpd_vals[i])
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    for t in (0,5,10,15):
+        s.append(f'<text x="{Lx-8}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
     for i,v in enumerate(fpd_vals):
-        x = Lx + i*(cw+gap); breach = v > FPD_THR; col = _fpd_col(v)
-        tcol = "#fff" if v > 6.5 else "#0C0C0C"
-        s.append(f'<rect x="{x:.1f}" y="{Tx}" width="{cw:.1f}" height="{ch}" rx="7" fill="{col}"/>')
-        s.append(f'<text x="{x+cw/2:.1f}" y="{Tx+ch/2+4:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="800" font-size="27" fill="{tcol}">{v:.1f}<tspan font-size="13" font-weight="600">%</tspan></text>')
-        if breach:
-            s.append(f'<circle cx="{x+cw/2:.1f}" cy="{Tx+18:.1f}" r="3" fill="{tcol}" opacity="0.85"/>')
-        s.append(f'<text x="{x+cw/2:.1f}" y="{HD-10}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="10" fill="#5A5A5A">{fpd_labels[i]}</text>')
+        x = cx(i)-bw/2; y = Y(v); breach = v > FPD_THR
+        col = "#C0143C" if breach else "#2E7D46"
+        s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{base-y:.1f}" rx="3" fill="{col}"/>')
+        s.append(f'<text x="{cx(i):.1f}" y="{y-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="{col}">{v:.1f}</text>')
+        s.append(f'<text x="{cx(i):.1f}" y="{HD-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{fpd_labels[i]}</text>')
+    # underwriting target line (label in the empty right gap)
+    s.append(f'<line x1="{Lx}" y1="{ythr:.1f}" x2="{WD-Rx}" y2="{ythr:.1f}" stroke="#0C0C0C" stroke-width="1.4" stroke-dasharray="5 4"/>')
+    s.append(f'<text x="{cx(9):.1f}" y="{ythr-7:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" letter-spacing="0.04em" fill="#5A5A5A">meta &le; 5%</text>')
+    # worst vintage
+    s.append(f'<text x="{cx(imax):.1f}" y="{Y(fpd_vals[imax])-20:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="#C0143C">pior safra</text>')
+    # best vintage (lowest)
+    s.append(f'<text x="{cx(imin):.1f}" y="{base-8:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9.5" fill="#2E7D46">melhor safra</text>')
     s.append('</svg>')
     return "\n".join(s)
-fpd_svg = fpd_ribbon()
-fpd_scale = ('<span style="color:#8a8a8a">escala FPD</span>'
-             '<span><i style="background:#ECECEC"></i>0%</span>'
-             '<span><i style="background:#CACACA"></i>meta &le; 5%</span>'
-             '<span><i style="background:#E99696"></i>&gt; 5%</span>'
-             '<span><i style="background:#B00E36"></i>15%+</span>')
+fpd_svg = fpd_bars()
+fpd_scale = ('<span><i style="background:#2E7D46"></i>dentro da meta (&le; 5%)</span>'
+             '<span><i style="background:#C0143C"></i>acima da meta (&gt; 5%)</span>'
+             '<span style="color:#8a8a8a">tracejado = meta de underwriting</span>')
 
 # ---------- Portfolio over90 vs smoothed trend (real loan tape) ----------
 jr_months= ["jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
@@ -282,7 +286,7 @@ def tpv_chart():
     return "\n".join(s)
 
 tpv_svg = tpv_chart()
-tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' for r in tpv_order) + '<span style="color:#8a8a8a">total no topo · R$M</span>'
+tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' for r in tpv_order)
 
 
 # ---------- credit portfolio (outstanding balance) by source over time (real) ----------
@@ -710,8 +714,8 @@ wf_steps = [("Yield agregado",0,95.8,"#0C0C0C","95,8%","top"),
             ("Custos diretos",87.8,95.8,"#C0143C","−8,0%","bot"),
             ("Custo de funding",64.8,87.8,"#C0143C","−23,0%","bot"),
             ("NIM",0,64.8,"#0C0C0C","64,8%","top"),
-            ("Perdas de capital (NPL)",39.8,64.8,"#C0143C","−25,0%","bot"),
-            ("NIM ajustado ao risco",0,39.8,"#0C0C0C","39,8%","top")]
+            ("Perdas",39.8,64.8,"#C0143C","−25,0%","bot"),
+            ("NIMAL",0,39.8,"#0C0C0C","39,8%","top")]
 wf_levels = [95.8,87.8,64.8,64.8,39.8]   # connector level between bar i and i+1
 def waterfall():
     WD, HD = 1000, 504; Lx, Rx, Tx, Bx = 18, 18, 44, 48
@@ -1035,7 +1039,8 @@ SLIDES = STYLE + f"""
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
   <div class="slide-head reveal"><h1>A carteira de <span class="accent">crédito.</span></h1>
   <p class="sub">Carteira de crédito (R$M) — pico de R$ 44M, R$ 34M hoje.</p>
-  <span class="tag-pill">Hoje ~R$ 15M (≈46%) no FIDC · restante on-balance</span></div>
+  <span class="tag-pill">Hoje ~R$ 15M (≈46%) no FIDC · restante on-balance</span>
+  <span class="wip">Ainda fechando números de carteira com Marcos</span></div>
   <div class="blegend reveal">{port_total_legend}</div>
   <div class="chartframe reveal">{port_total_svg}</div>
   <div class="illus">Fonte: carteira por mês/origem · mar/24–jun/26</div>
@@ -1045,7 +1050,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Originação</span></div>
   <div class="slide-head reveal"><h1>Originação no <span class="accent">trilho PIX.</span></h1>
-  <p class="sub">TPV mensal por trilho (R$M) — migrando do trilho legado para PIX · FIDC ativo em dez/25.</p></div>
+  <p class="sub">Originação mensal (R$M) — migração para Boleto/Pix parcelado em fase final.</p></div>
   <div class="blegend reveal">{tpv_legend}</div>
   <div class="chartframe reveal">{tpv_svg}</div>
   <div class="illus">Fonte: TPV mensal · mar/24–mai/26 (jun/26 parcial, excluído)</div>
@@ -1069,10 +1074,10 @@ SLIDES = STYLE + f"""
 <!-- CREDIT ECONOMICS (yield allocation) -->
 <section class="slide theme-light vcenter" data-num="04">
   <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">1T26</span></div>
-  <div class="slide-head reveal"><h1>Economia do <span class="accent">crédito.</span></h1>
-  <p class="sub">Ponte de NIM — 1T26, anualizado (% do yield agregado).</p></div>
+  <div class="slide-head reveal"><h1>Do yield ao <span class="accent">NIMAL.</span></h1>
+  <p class="sub">NIM (a.a.) — 1T26.</p></div>
   <div class="chartframe reveal">{wf_svg}</div>
-  <div class="illus">1T26 anualizado · % do yield agregado · ponte de NIM</div>
+  <div class="illus">1T26 · valores anualizados (a.a.) · NIMAL = NII após perdas</div>
 </section>
 
 <!-- 4 — CDR BY VINTAGE (removed per request) -->
@@ -1081,11 +1086,11 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="05">
   <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
   <div class="slide-head reveal"><h1>FPD 30 <span class="accent">por safra.</span></h1>
-  <p class="sub">Inadimplência da 1ª parcela (valor em atraso ÷ total) — por mês de safra.</p></div>
+  <p class="sub">Inadimplência da 1ª parcela (valor em atraso ÷ total) — safra mensal.</p></div>
   <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Média 4,1%</b></span><span style="color:#8a8a8a">Meta &le; 5%</span><span style="color:#8a8a8a">Pior safra: mai/25 · 15,2%</span></div>
   <div class="chartframe reveal">{fpd_svg}</div>
   <div class="blegend reveal">{fpd_scale}</div>
-  <div class="illus">Fonte: loan tape BNPL · FPD 30 por mês de safra</div>
+  <div class="illus">Fonte: loan tape BNPL · FPD 30 · safra mensal</div>
 </section>
 
 <!-- CREDIT PORTFOLIO PER PARTNER -->
