@@ -545,7 +545,7 @@ def dq_cons():
     s.append(f'<path d="{d}" fill="url(#dqcG)"/>')
     s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>' % " ".join(f"{x:.1f},{y:.1f}" for x,y in pts))
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.1" stroke-dasharray="4 4" opacity="0.5"/>')
-    s.append(f'<text x="{xd+6:.1f}" y="{Tx+9:.1f}" font-family="Geist Mono,monospace" font-size="9" fill="#3A3A3A">FIDC ativo →</text>')
+    s.append(f'<text x="{xd+6:.1f}" y="{base-6:.1f}" font-family="Geist Mono,monospace" font-size="9" fill="#3A3A3A">FIDC ativo →</text>')
     for j in (6,8,12,n-1):
         x,y = pts[j]
         s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" fill="#0C0C0C"/>')
@@ -697,7 +697,7 @@ ag_totals = [round(sum(ag_data[b][i] for b in ag_buckets),3) for i in range(len(
 ag_legend = "".join(f'<span><i style="background:{AG_COL[b]};border-radius:2px;height:11px;width:14px"></i>{b}</span>' for b in ag_buckets) + '<span style="color:#8a8a8a">dias de atraso · participação no saldo</span>'
 
 def aging_chart():
-    WD, HD = 1040, 300; Lx, Rx, Tx, Bx = 40, 50, 30, 38
+    WD, HD = 1040, 430; Lx, Rx, Tx, Bx = 40, 50, 34, 44
     pw, ph = WD-Lx-Rx, HD-Tx-Bx; n = len(ag_labels); ymax = 100
     xs = [Lx + i/(n-1)*pw for i in range(n)]
     def Y(v): return Tx+ph - v/ymax*ph
@@ -736,6 +736,20 @@ def aging_chart():
     s.append('</svg>')
     return "\n".join(s)
 aging_svg = aging_chart()
+
+# composition table (saldo por faixa de atraso) — compact snapshots
+def comp_table():
+    cols = [7,10,13,16,18]   # jun/25, set/25, dez/25, mar/26, mai/26
+    head = "".join(f"<th>{ag_labels[c]}</th>" for c in cols)
+    rows = ""
+    for b in ag_buckets:
+        cells = "".join(f"<td>{ag_data[b][c]:.1f}</td>" for c in cols)
+        rows += f"<tr><td>{b}</td>{cells}</tr>"
+    rows += '<tr class="total"><td>Total (R$M)</td>' + "".join(f"<td>{ag_totals[c]:.1f}</td>" for c in cols) + "</tr>"
+    rows += '<tr class="hi"><td>90+ %</td>' + "".join(f'<td class="cdr">{ag_pct90[c]:.0f}%</td>' for c in cols) + "</tr>"
+    return (f'<table class="ctab sm"><thead><tr><th>Faixa de atraso · R$M</th>{head}</tr></thead>'
+            f'<tbody>{rows}</tbody></table>')
+comp_tbl = comp_table()
 
 # ---------- credit economics waterfall ----------
 # (label, y0, y1, color, value, label_pos)
@@ -1132,15 +1146,24 @@ SLIDES = STYLE + f"""
   <div class="illus">Fonte: coorte — carteira de crédito · saldo por safra</div>
 </section>
 
-<!-- DELINQUENCY — CONSOLIDATED 90+ + COMPOSITION (merged) -->
+<!-- DELINQUENCY — CONSOLIDATED 90+ + COMPOSITION TABLE -->
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
   <div class="slide-head reveal"><h1>Inadimplência <span class="accent">consolidada.</span></h1>
-  <p class="sub">Apenas BNPL · 90+ consolidado (linha) e a composição da PDD por faixa de atraso — R$M no topo.</p></div>
-  <div class="reveal"><div class="arr-cap" style="margin-top:1vh">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
-  <div class="blegend reveal" style="margin-top:1.4vh">{ag_legend}</div>
+  <p class="sub">Apenas BNPL · 90+ consolidado (% do saldo) e a composição por faixa de atraso.</p></div>
+  <div class="reveal"><div class="arr-cap" style="margin-top:.6vh">90+ consolidado · % do saldo</div>{dq_cons_svg}</div>
+  <div class="reveal" style="margin-top:1.4vh">{comp_tbl}</div>
+  <div class="illus">Fonte: apenas loan tape BNPL · 90+ ÷ saldo (linha) e saldo por faixa de atraso (tabela) · mensal</div>
+</section>
+
+<!-- AGING DA CARTEIRA (composition chart) -->
+<section class="slide theme-light vcenter" data-num="08">
+  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Risco · aging</span></div>
+  <div class="slide-head reveal"><h1>Aging da <span class="accent">carteira.</span></h1>
+  <p class="sub">Saldo por faixa de atraso — participação ao longo do tempo, R$M no topo.</p></div>
+  <div class="blegend reveal">{ag_legend}</div>
   <div class="chartframe reveal">{aging_svg}</div>
-  <div class="illus">Fonte: apenas loan tape BNPL · 90+ ÷ saldo (linha) e saldo por faixa de atraso (barras) · mensal</div>
+  <div class="illus">Fonte: apenas loan tape BNPL · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
 </section>
 
 <!-- WHERE DOES 90+ COME FROM -->
