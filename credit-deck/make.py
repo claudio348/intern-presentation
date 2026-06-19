@@ -97,9 +97,6 @@ def fpd_bars():
         s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{base-y:.1f}" rx="3" fill="{col}"/>')
         s.append(f'<text x="{cx(i):.1f}" y="{y-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="{col}">{v:.1f}</text>')
         s.append(f'<text x="{cx(i):.1f}" y="{HD-13}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{fpd_labels[i]}</text>')
-    # underwriting target line (label in the empty right gap)
-    s.append(f'<line x1="{Lx}" y1="{ythr:.1f}" x2="{WD-Rx}" y2="{ythr:.1f}" stroke="#0C0C0C" stroke-width="1.4" stroke-dasharray="5 4"/>')
-    s.append(f'<text x="{cx(9):.1f}" y="{ythr-7:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" letter-spacing="0.04em" fill="#5A5A5A">meta &le; 5%</text>')
     # worst vintage
     s.append(f'<text x="{cx(imax):.1f}" y="{Y(fpd_vals[imax])-20:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10" fill="#C0143C">pior safra</text>')
     # best vintage (lowest) — label well above the (near-zero) bar to avoid the value label
@@ -109,8 +106,7 @@ def fpd_bars():
     return "\n".join(s)
 fpd_svg = fpd_bars()
 fpd_scale = ('<span><i style="background:#2E7D46"></i>dentro da meta (&le; 5%)</span>'
-             '<span><i style="background:#C0143C"></i>acima da meta (&gt; 5%)</span>'
-             '<span style="color:#8a8a8a">tracejado = meta de underwriting</span>')
+             '<span><i style="background:#C0143C"></i>acima da meta (&gt; 5%)</span>')
 
 # ---------- Portfolio over90 vs smoothed trend (real loan tape) ----------
 jr_months= ["jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
@@ -1123,7 +1119,6 @@ SLIDES = STYLE + f"""
   <div class="cover5-badge">São Paulo · 2026</div>
   <div class="cover5-center">
     <img class="cover5-logo" src="robbin-logo-black.svg" alt="Robbin">
-    <div class="cover5-tag">Apresentação Institucional</div>
   </div>
   <div class="cover5-meta">Confidencial · Material institucional</div>
 </section>
@@ -1170,7 +1165,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="04">
   <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">1T26</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">… e como vira <b>margem</b></div><h1>Do yield ao <span class="accent">NIMAL.</span></h1>
-  <p class="sub">NIM (a.a.) — 1T26.</p></div>
+  <p class="sub">NIM % (a.a.) — 1T26.</p></div>
   <div class="chartframe reveal">{wf_svg}</div>
   <div class="illus">1T26 · valores anualizados (a.a.) · NIMAL = NII após perdas</div>
 </section>
