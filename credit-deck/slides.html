@@ -18,6 +18,8 @@
 .biz-hub { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; background:#0C0C0C; border-radius:20px; padding:2.6vh 1.8vw; display:flex; flex-direction:column; align-items:center; gap:1.1vh; min-width:clamp(150px,13vw,196px); }
 .biz-hub img { height:clamp(22px,1.7vw,30px); width:auto; }
 .biz-hub span { font-family:var(--font-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
+.biz-hub-fns { display:flex; flex-wrap:wrap; gap:4px 5px; justify-content:center; max-width:clamp(168px,15vw,210px); margin-top:.5vh; }
+.biz-hub-fns em { font-style:normal; font-family:var(--font-mono); font-size:8px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.2); border-radius:5px; padding:2.5px 6px; }
 .biz-node { position:absolute; transform:translate(-50%,-50%); z-index:2; width:clamp(230px,21vw,300px); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:14px; padding:1.7vh 1.2vw; }
 .biz-node .bn-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; }
 .biz-node h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.2vw,19px); margin:.5vh 0; color:var(--ink); }
@@ -215,15 +217,19 @@
 
 <section class="slide theme-light vcenter" data-num="03">
   <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Modelo de negócio</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">Quem está na <b>orquestra</b></div><h1>A Robbin <span class="accent">orquestra a rede.</span></h1>
-  <p class="sub">Conectamos âncoras, lojistas e funding num só fluxo de crédito no PIX.</p></div>
+  <div class="slide-head reveal"><div class="slide-kicker">O que <b>fazemos</b></div><h1>A Robbin <span class="accent">orquestra a rede.</span></h1>
+  <p class="sub">Originamos, fazemos underwriting e liquidamos crédito no rail do PIX — conectando âncoras, lojistas e funding.</p></div>
   <div class="biz-stage reveal">
     <svg class="biz-links" viewBox="0 0 1000 560" preserveAspectRatio="none">
       <line x1="500" y1="280" x2="500" y2="67"  stroke="#0C0C0C" stroke-width="1.5"/>
       <line x1="500" y1="280" x2="190" y2="476" stroke="#0C0C0C" stroke-width="1.5"/>
       <line x1="500" y1="280" x2="810" y2="476" stroke="#0C0C0C" stroke-width="1.5"/>
     </svg>
-    <div class="biz-hub"><img src="robbin-logo-white.svg" alt="Robbin"><span>orquestra a rede</span></div>
+    <div class="biz-hub">
+      <img src="robbin-logo-white.svg" alt="Robbin">
+      <span>orquestra a rede</span>
+      <div class="biz-hub-fns"><em>Originação</em><em>Underwriting</em><em>Emissão</em><em>Servicing</em><em>Liquidação T+0</em></div>
+    </div>
     <div class="biz-node biz-anchors"><div class="bn-tag">Âncoras · fornecedores</div><h4>Marcas que co-brandam</h4><p>Trazem distribuição, marca e <b>dados de sell-out</b> — Cantu, Intelbras, Chilli Beans, JSM…</p></div>
     <div class="biz-node biz-smes"><div class="bn-tag">PMEs · lojistas (tomadores)</div><h4>Compram a prazo</h4><p>Crédito instantâneo no <b>rail do PIX (T+0)</b> e compram mais dos fornecedores.</p></div>
     <div class="biz-node biz-funding"><div class="bn-tag">Bancos · FIDC</div><h4>Abastecem a rede</h4><p><b>FIDC R$ 500M</b> off-balance e escalável — XP + banco tier-1.</p></div>
@@ -231,7 +237,7 @@
     <div class="biz-link-lbl biz-lbl-s">crédito no PIX</div>
     <div class="biz-link-lbl biz-lbl-f">funding R$ 500M</div>
   </div>
-  <div class="illus">Modelo de negócio · a Robbin orquestra âncoras, lojistas e funding</div>
+  <div class="illus">Modelo de negócio · originação, underwriting, emissão e liquidação no rail do PIX</div>
 </section>
 
 

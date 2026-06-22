@@ -1002,6 +1002,8 @@ STYLE = """<style>
 .biz-hub { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; background:#0C0C0C; border-radius:20px; padding:2.6vh 1.8vw; display:flex; flex-direction:column; align-items:center; gap:1.1vh; min-width:clamp(150px,13vw,196px); }
 .biz-hub img { height:clamp(22px,1.7vw,30px); width:auto; }
 .biz-hub span { font-family:var(--font-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
+.biz-hub-fns { display:flex; flex-wrap:wrap; gap:4px 5px; justify-content:center; max-width:clamp(168px,15vw,210px); margin-top:.5vh; }
+.biz-hub-fns em { font-style:normal; font-family:var(--font-mono); font-size:8px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.2); border-radius:5px; padding:2.5px 6px; }
 .biz-node { position:absolute; transform:translate(-50%,-50%); z-index:2; width:clamp(230px,21vw,300px); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:14px; padding:1.7vh 1.2vw; }
 .biz-node .bn-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; }
 .biz-node h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.2vw,19px); margin:.5vh 0; color:var(--ink); }
