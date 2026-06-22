@@ -374,8 +374,6 @@ def portfolio_total_bars():
         hf = f/ymax*ph; yf = ybase-hf
         if f > 0.02:
             s.append(f'<rect x="{x:.1f}" y="{yf:.1f}" width="{bw:.1f}" height="{hf:.1f}" fill="#0C0C0C"/>')
-            if hf >= 15:
-                s.append(f'<text x="{cx:.1f}" y="{yf+hf/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="9" fill="#fff">{f/v*100:.0f}%</text>')
         on = v-f; hon = on/ymax*ph; yon = yf-hon
         if on > 0.02:
             s.append(f'<rect x="{x:.1f}" y="{yon:.1f}" width="{bw:.1f}" height="{hon:.1f}" rx="2" fill="#B9B9B9"/>')
@@ -391,7 +389,7 @@ def portfolio_total_bars():
 port_total_svg = portfolio_total_bars()
 port_total_legend = ('<span><i style="background:#B9B9B9"></i>On-balance · Pré-FIDC</span>'
                      '<span><i style="background:#0C0C0C"></i>Financiado por FIDC (mar/26 →)</span>'
-                     '<span style="color:#8a8a8a">carteira BNPL · R$M · % = FIDC ÷ total</span>')
+                     '<span style="color:#8a8a8a">carteira BNPL · R$M</span>')
 
 # consolidated (corporate) charts
 PORT_FIDC = _pm.index("2025-12")
