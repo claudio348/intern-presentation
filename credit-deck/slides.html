@@ -13,6 +13,18 @@
 .slide-kicker b { color:#C0143C; font-weight:600; }
 .slide-kicker::before { content:''; width:22px; height:1px; background:#C0143C; flex-shrink:0; }
 .who2 .bio { font-family:var(--font-sans); font-size:clamp(12px,0.95vw,15px); color:#3A3A3A; line-height:1.45; margin:.6vh 0 .8vh; max-width:46ch; }
+.closing2.has-ts .closing2-inner { display:grid; grid-template-columns:0.78fr 1.12fr; gap:4.5vw; align-items:center; text-align:left; max-width:1500px; width:90vw; padding:5vh 5vw; }
+.closing2.has-ts .cl-left { display:flex; flex-direction:column; align-items:flex-start; gap:3vh; }
+.closing2.has-ts .closing2-line { font-size:clamp(46px,6.5vw,104px) !important; }
+.ts-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.16); border-radius:16px; padding:2.6vh 2vw; }
+.ts-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; border-bottom:1px solid rgba(255,255,255,.2); padding-bottom:1.3vh; margin-bottom:.4vh; }
+.ts-title { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.25vw,19px); color:#fff; }
+.ts-tag { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:#C9A227; white-space:nowrap; }
+.ts-row { display:grid; grid-template-columns:33% 1fr; gap:1vw; padding:0.95vh 0; border-bottom:1px solid rgba(255,255,255,.08); }
+.ts-row .k { font-family:var(--font-mono); font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:#9a9a9a; align-self:center; }
+.ts-row .v { font-family:var(--font-sans); font-size:clamp(12px,0.98vw,14.5px); color:#E6E6E6; line-height:1.4; }
+.ts-row .v b { color:#fff; font-weight:700; }
+.ts-foot { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7a7a7a; margin-top:1.3vh; }
 .biz-stage { position:relative; height:60vh; margin-top:2vh; }
 .biz-links { position:absolute; inset:0; width:100%; height:100%; z-index:0; }
 .biz-hub { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; background:#0C0C0C; border-radius:20px; padding:2.6vh 1.8vw; display:flex; flex-direction:column; align-items:center; gap:1.1vh; min-width:clamp(150px,13vw,196px); }
@@ -735,12 +747,26 @@
 </section>
 
 <!-- 11 — Q&A -->
-<section class="slide theme-dark closing2" data-num="15">
+<section class="slide theme-dark closing2 has-ts" data-num="15">
   <div class="closing2-bg"><div class="closing2-grid"></div><div class="closing2-glow"></div></div>
   <div class="closing2-inner">
-    <div class="closing2-eyebrow reveal"><span>—</span><span>Discussão</span></div>
-    <h2 class="closing2-line reveal"><span class="cl-row hi">Q&amp;A</span></h2>
-    <div class="closing2-divider reveal"></div>
-    <div class="closing2-logo reveal"><img src="robbin-logo-white.svg" alt="Robbin" style="height:46px;width:auto;"></div>
+    <div class="cl-left">
+      <div class="closing2-eyebrow reveal"><span>—</span><span>Discussão</span></div>
+      <h2 class="closing2-line reveal"><span class="cl-row hi">Q&amp;A</span></h2>
+      <div class="closing2-divider reveal"></div>
+      <div class="closing2-logo reveal"><img src="robbin-logo-white.svg" alt="Robbin" style="height:42px;width:auto;"></div>
+    </div>
+    <div class="ts-card reveal">
+      <div class="ts-head"><span class="ts-title">Term sheet — dívida corporativa</span><span class="ts-tag">indicativo · ilustrativo</span></div>
+      <div class="ts-row"><span class="k">Instrumento</span><span class="v">Dívida corporativa (debênture)</span></div>
+      <div class="ts-row"><span class="k">Emissor</span><span class="v">Robbin</span></div>
+      <div class="ts-row"><span class="k">Remuneração</span><span class="v"><b>CDI + 5,0%</b> a.a.</span></div>
+      <div class="ts-row"><span class="k">Garantia</span><span class="v">Cessão fiduciária das <b>cotas subordinadas (Jr) do FIDC</b></span></div>
+      <div class="ts-row"><span class="k">Montante</span><span class="v">R$ 50M (ilustrativo)</span></div>
+      <div class="ts-row"><span class="k">Prazo</span><span class="v">36 meses</span></div>
+      <div class="ts-row"><span class="k">Amortização</span><span class="v">Bullet · juros semestrais</span></div>
+      <div class="ts-row"><span class="k">Uso dos recursos</span><span class="v">Capitalizar a cota Jr · crescer a carteira</span></div>
+      <div class="ts-foot">Termo meramente ilustrativo · não vinculante</div>
+    </div>
   </div>
 </section>
