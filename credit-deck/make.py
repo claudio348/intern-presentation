@@ -634,45 +634,43 @@ def runoff_chart():
 runoff_svg = runoff_chart()
 
 # ---------- KPI history: tenor / duration / rate / turnover (real loan tape) ----------
-kpi_labels = ptm(["jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"])
-kpi_tenor = [3.19,3.45,3.44,3.62,3.52,3.46,3.40,3.33,3.18,3.11,3.05,3.12,3.33,3.38,3.42,3.42,3.45]
-kpi_dur   = [2.41,2.49,2.28,2.18,2.09,2.15,2.18,2.08,2.09,1.97,1.97,1.93,2.07,2.20,2.30,2.22,2.34]
-kpi_rate  = [41.0,41.9,41.7,44.8,47.3,46.1,46.6,46.1,46.6,47.4,48.7,47.8,46.5,45.9,45.5,45.1,44.6]
-kpi_turn  = [3.76,3.48,3.49,3.31,3.40,3.47,3.53,3.60,3.77,3.86,3.93,3.84,3.60,3.55,3.51,3.51,3.48]
+kpi_labels = ptm(["may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"])
+kpi_tenor = [3.52,3.46,3.40,3.33,3.18,3.11,3.05,3.12,3.33,3.38,3.42,3.42,3.45]
+kpi_dur   = [2.09,2.15,2.18,2.08,2.09,1.97,1.97,1.93,2.07,2.20,2.30,2.22,2.34]
+kpi_rate  = [47.3,46.1,46.6,46.1,46.6,47.4,48.7,47.8,46.5,45.9,45.5,45.1,44.6]
+kpi_turn  = [3.40,3.47,3.53,3.60,3.77,3.86,3.93,3.84,3.60,3.55,3.51,3.51,3.48]
 
-def spark(vals):
-    W, H = 480, 150; L, R, T, B = 10, 12, 16, 22
+def spark(vals, gid):
+    W, H = 300, 56; L, R, T, B = 3, 6, 7, 7
     pw, ph = W-L-R, H-T-B; n = len(vals)
     lo, hi = min(vals), max(vals); rng = (hi-lo) or 1
-    ymin, ymax = lo-rng*0.40, hi+rng*0.40
+    ymin, ymax = lo-rng*0.5, hi+rng*0.5
     X = lambda i: L + i/(n-1)*pw
     Y = lambda v: T+ph - (v-ymin)/(ymax-ymin)*ph
     xs = [X(i) for i in range(n)]; ys = [Y(v) for v in vals]; base = T+ph
-    gid = f"sp{abs(hash(tuple(vals)))%100000}"
-    s = [f'<svg viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">']
-    s.append(f'<defs><linearGradient id="{gid}" x1="0" y1="0" x2="0" y2="1">'
-             f'<stop offset="0" stop-color="#0C0C0C" stop-opacity="0.16"/>'
-             f'<stop offset="1" stop-color="#0C0C0C" stop-opacity="0.015"/></linearGradient></defs>')
+    s = [f'<svg class="kc-spark-svg" viewBox="0 0 {W} {H}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">']
+    s.append(f'<defs><linearGradient id="{gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.10"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0"/></linearGradient></defs>')
     d = f"M {xs[0]:.1f},{base:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{base:.1f} Z"
     s.append(f'<path d="{d}" fill="url(#{gid})"/>')
-    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'
-             % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
-    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="7" fill="none" stroke="#0C0C0C" stroke-opacity="0.18"/>')
-    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="4" fill="#0C0C0C"/>')
-    s.append(f'<text x="{xs[0]:.1f}" y="{H-6}" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{kpi_labels[0]}</text>')
-    s.append(f'<text x="{xs[-1]:.1f}" y="{H-6}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{kpi_labels[-1]}</text>')
+    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
+    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="3.4" fill="#0C0C0C"/>')
     s.append('</svg>')
     return "".join(s)
 
-def kpi_card(k, v, sub, vals):
-    return (f'<div class="spark-card"><div class="k">{k}</div>'
-            f'<div class="v">{v}</div><div class="s">{sub}</div>{spark(vals)}</div>')
+def kpi_card(k, v, sub, vals, gid, rng):
+    return (f'<div class="kpi-card">'
+            f'<div class="kc-k">{k}</div>'
+            f'<div class="kc-v">{v}</div>'
+            f'<div class="kc-s">{sub}</div>'
+            f'<div class="kc-spark">{spark(vals, gid)}</div>'
+            f'<div class="kc-range"><span>{kpi_labels[0]}</span><span>faixa {rng}</span><span>{kpi_labels[-1]}</span></div>'
+            f'</div>')
 
-kpi_grid = ('<div class="sparks reveal" data-stagger>'
-    + kpi_card("Prazo médio","3,5 <span style='font-size:.5em'>meses</span>","parcelas médias", kpi_tenor)
-    + kpi_card("Duration","~2,3 <span style='font-size:.5em'>meses</span>","vida média ponderada por saldo", kpi_dur)
-    + kpi_card("Taxa média","44,6% <span style='font-size:.5em'>/ano</span>","ponderada pelo principal", kpi_rate)
-    + kpi_card("Giro","~3,5× <span style='font-size:.5em'>/ano</span>","a carteira recicla rápido", kpi_turn)
+kpi_grid = ('<div class="kpi-board reveal" data-stagger>'
+    + kpi_card("Prazo médio","3,5 <em>meses</em>","parcelas médias por contrato", kpi_tenor, "spT", "3,1–3,5")
+    + kpi_card("Duration","~2,3 <em>meses</em>","vida média ponderada por saldo", kpi_dur, "spD", "1,9–2,3")
+    + kpi_card("Taxa média","44,6% <em>/ano</em>","ponderada pelo principal", kpi_rate, "spR", "45–49%")
+    + kpi_card("Giro","~3,5× <em>/ano</em>","a carteira recicla rápido", kpi_turn, "spG", "3,4–3,9×")
     + '</div>')
 
 # ---------- delinquency composition: balance by days-past-due bucket (real loan tape) ----------
@@ -1056,11 +1054,16 @@ STYLE = """<style>
 .metrics.compact .metric { padding:1.5vh 1vw; border-radius:12px; }
 .metrics.compact .k { font-size:9px; }
 .metrics.compact .v { font-size:clamp(18px,1.7vw,28px); }
-.sparks { display:grid; grid-template-columns:1fr 1fr; gap:2.2vh 3vw; margin-top:2.6vh; }
-.spark-card .k { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#5A5A5A; }
-.spark-card .v { font-family:var(--font-sans); font-weight:700; font-size:clamp(24px,2.5vw,40px); letter-spacing:-.02em; margin-top:.3vh; line-height:1; }
-.spark-card .s { font-family:var(--font-sans); font-size:12.5px; color:#2E2E2E; margin-top:.5vh; }
-.spark-card svg { width:100%; height:auto; display:block; margin-top:1vh; }
+.kpi-board { display:grid; grid-template-columns:1fr 1fr; grid-auto-rows:1fr; gap:2.4vh 2.6vw; margin-top:2.8vh; flex:1 1 auto; min-height:0; }
+.kpi-card { border:1px solid rgba(12,12,12,.13); border-radius:16px; padding:2.4vh 2vw 2vh; display:flex; flex-direction:column; }
+.kpi-card .kc-k { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:#9a9a9a; }
+.kpi-card .kc-v { font-family:var(--font-sans); font-weight:800; font-size:clamp(34px,3.6vw,54px); letter-spacing:-.025em; line-height:1; color:var(--ink); margin-top:1vh; }
+.kpi-card .kc-v em { font-style:normal; font-weight:600; font-size:.36em; color:#7a7a7a; letter-spacing:0; margin-left:.15em; }
+.kpi-card .kc-s { font-family:var(--font-sans); font-size:13px; color:#5A5A5A; margin-top:.7vh; }
+.kpi-card .kc-spark { margin-top:auto; padding-top:2vh; }
+.kpi-card .kc-spark-svg { width:100%; height:46px; display:block; }
+.kpi-card .kc-range { display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.06em; color:#b0b0b0; margin-top:.9vh; }
+.kpi-card .kc-range span:nth-child(2) { color:#5A5A5A; }
 .bp-badge { display:inline-flex; align-items:center; gap:.5em; background:#0C0C0C; color:#FAFAFA; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; padding:.9vh 1vw; border-radius:8px; margin-bottom:1.4vh; }
 .bp-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:#FAFAFA; }
 .metrics.vstack { grid-template-columns:1fr; gap:0; margin-top:1.2vh; }
@@ -1233,7 +1236,7 @@ SLIDES = STYLE + f"""
   <div class="slide-head reveal"><div class="slide-kicker">Curta e de <b>giro rápido</b></div><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
   <p class="sub">Uma carteira curta e de giro rápido — métricas-chave, mês a mês.</p></div>
   {kpi_grid}
-  <div class="illus">Fonte: Robbin Data · mensal · jan/25–mai/26</div>
+  <div class="illus">Fonte: Robbin Data · mensal · mai/25–mai/26</div>
 </section>
 
 <!-- NIMAL DO FIDC — conclusão da performance (antes do corporativo) -->
