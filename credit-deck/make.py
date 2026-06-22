@@ -144,10 +144,10 @@ pyramid_svg = iso_stack()
 
 
 # ---------- anchor composition: generic stacked R$M and stacked % ----------
-ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox","iFood","Intelbras","Outros"]
+ANCHOR_ORDER = ["Cantu","Moura","Chilli Beans","Juntos Somos Mais","Malwee","Brinox","Intelbras","Outros"]
 ANCHOR_COL = {"Cantu":"#5B2E91","Moura":"#2563B0","Chilli Beans":"#E11D48",
               "Juntos Somos Mais":"#8FA31E","Malwee":"#1F7A3D","Brinox":"#0F8C8C",
-              "iFood":"#EA1D2C","Intelbras":"#5DB85C","Outros":"#B5B5B5"}
+              "Intelbras":"#5DB85C","Outros":"#B5B5B5"}
 anchor_legend = ("".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in ANCHOR_ORDER)
                  + '<span style="color:#8a8a8a">Outros = app / beta testers & usuários</span>')
 
@@ -160,9 +160,8 @@ lt_data = {
   "Juntos Somos Mais":[0.96,0.88,1.01,1.31,1.95,2.22],
   "Malwee":[0.98,1.5,1.56,1.73,1.86,1.83],
   "Brinox":[0.27,0.26,0.34,0.34,0.37,0.39],
-  "iFood":[0.0,0.0,0.03,0.11,0.15,0.14],
   "Intelbras":[0,0,0,0,0,0],
-  "Outros":[0,0,0,0,0,0.01],   # incl. Truss + app / beta users
+  "Outros":[0.0,0.0,0.03,0.11,0.15,0.15],   # incl. iFood + Truss + app / beta users
 }
 
 def _xstep(n): return 1 if n <= 14 else (2 if n <= 22 else 3)
@@ -322,10 +321,9 @@ port_data = {
     "Juntos Somos Mais":[0.0,0.0,0.0,0.04,0.08,0.73,1.29,1.55,1.73,1.92,2.4,2.35,2.41,2.54,2.5,2.65,4.06,5.44,5.87,5.26,5.04,5.14,5.29,5.31,5.09,5.03],
     "Malwee":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.07,1.01,1.44,1.77,1.87,2.08,2.17,2.06,2.12],
     "Brinox":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.36,0.8,0.57,0.61,0.42,0.51,0.5,0.52,0.32,0.45],
-    "iFood":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.04,0.12,0.15,0.15,0.15],
     "Intelbras":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.05],
-    # Others = Truss + app / beta users (no individual anchor)
-    "Outros":[0.04,0.06,0.07,0.18,0.14,0.27,0.23,0.37,0.61,1.08,1.45,1.81,1.9,2.06,2.12,2.38,2.54,2.41,2.39,2.3,2.17,2.08,2.21,2.17,2.05,3.18],
+    # Others = iFood + Truss + app / beta users (no individual anchor)
+    "Outros":[0.04,0.06,0.07,0.18,0.14,0.27,0.23,0.37,0.61,1.08,1.45,1.81,1.9,2.06,2.12,2.38,2.54,2.41,2.39,2.3,2.17,2.12,2.33,2.32,2.2,3.33],
 }
 FIDC_FROM = "2025-12"   # month the FIDC was raised (shaded region onward)
 
@@ -472,9 +470,10 @@ cohort_svg = cohort_lines()
 
 # ---------- delinquency (90+) over time, by partner (calendar) ----------
 # Point-in-time 90+ ratio (over90 balance / total balance) per CALENDAR month.
+# inadimplência consolidada vai só até o início do FIDC (mar/26)
 dq_labels = ptm(["jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25",
-             "sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"])
-dq_order = ["Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee","Moura","iFood"]
+             "sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26"])
+dq_order = ["Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee","Moura"]
 N = None
 dq_data = {
     "Cantu":            [0.0,0.0,0.0,0.6,0.4,3.8,12.5,14.4,21.1,26.4,25.6,33.3,40.6,37.6,17.9,16.6,8.9],
@@ -483,10 +482,9 @@ dq_data = {
     "Juntos Somos Mais":[0.0,0.0,3.9,1.9,1.7,16.7,24.4,53.9,38.4,23.3,24.5,37.7,41.7,52.8,52.1,37.4,32.8],
     "Malwee":           [N,N,N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0,1.5,4.2,4.1],
     "Brinox":           [N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0,0.0,2.7,5.8,5.5,5.1],
-    "iFood":            [N,N,N,N,N,N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0],
 }
 # company-wide point-in-time 90+ ratio
-dq_agg = [1.2,1.4,1.8,1.9,2.1,3.4,3.5,4.1,3.6,3.7,2.0,3.3,5.5,6.6,8.9,9.7,10.0]  # over90 ÷ saldo da carteira
+dq_agg = [1.2,1.4,1.8,1.9,2.1,3.4,3.5,4.1,3.6,3.7,2.0,3.3,5.5,6.6,8.9]  # over90 ÷ saldo da carteira · até início do FIDC (mar/26)
 DQ_FIDC = dq_labels.index("dez/25")  # FIDC went live Dec/25
 dq_legend = ('<span><i style="background:#0C0C0C;height:3px;border-radius:2px"></i>Agregado da companhia</span>'
              + "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in dq_order))
@@ -555,10 +553,9 @@ def dq_cons():
     n = len(dq_agg); pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 12
     def X(j): return Lx + j/(n-1)*pw
     def Y(v): return Tx+ph - v/ymax*ph
-    base = Y(0); di = dq_labels.index("dez/25"); xd = X(di)
+    base = Y(0)
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     s.append('<defs><linearGradient id="dqcG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.16"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0.02"/></linearGradient></defs>')
-    s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{base-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
     for t in (0,5,10):
         s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="9" fill="#9a9a9a">{t}%</text>')
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
@@ -566,8 +563,6 @@ def dq_cons():
     d = f"M {pts[0][0]:.1f},{base:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in pts) + f" L {pts[-1][0]:.1f},{base:.1f} Z"
     s.append(f'<path d="{d}" fill="url(#dqcG)"/>')
     s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>' % " ".join(f"{x:.1f},{y:.1f}" for x,y in pts))
-    s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.1" stroke-dasharray="4 4" opacity="0.5"/>')
-    s.append(f'<text x="{xd+6:.1f}" y="{base-6:.1f}" font-family="Geist Mono,monospace" font-size="9" fill="#3A3A3A">FIDC ativo →</text>')
     for j in (6,8,12,n-1):
         x,y = pts[j]
         s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" fill="#0C0C0C"/>')
@@ -1161,14 +1156,7 @@ SLIDES = STYLE + f"""
   </div>
 </section>
 
-<!-- CREDIT ECONOMICS (yield allocation) -->
-<section class="slide theme-light vcenter" data-num="04">
-  <div class="chapter-mark light-mark"><span class="chapter-num">03</span><span class="chapter-divider"></span><span class="chapter-year">1T26</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">… e como vira <b>margem</b></div><h1>Do yield ao <span class="accent">NIMAL.</span></h1>
-  <p class="sub">NIM % (a.a.) — 1T26.</p></div>
-  <div class="chartframe reveal">{wf_svg}</div>
-  <div class="illus">1T26 · valores anualizados (a.a.) · NIMAL = NII após perdas</div>
-</section>
+<!--NIMAL-->
 
 <!-- 4 — CDR BY VINTAGE (removed per request) -->
 
@@ -1183,21 +1171,13 @@ SLIDES = STYLE + f"""
   <div class="illus">Fonte: Robbin Data · FPD 30 · safra mensal</div>
 </section>
 
-<!-- CREDIT PORTFOLIO PER PARTNER -->
-<section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">Carteira de crédito · por parceiro</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">Distribuída por <b>parceiro</b></div><h1>Carteira de crédito <span class="accent">por parceiro.</span></h1>
-  <p class="sub">Carteira em aberto por parceiro (R$M) — FIDC ativo desde dez/25 · total R$ 33,5M.</p></div>
-  <div class="blegend reveal">{cohort_legend}</div>
-  <div class="chartframe reveal">{cohort_svg}</div>
-  <div class="illus">Fonte: Robbin Data · saldo por safra</div>
-</section>
+<!-- CREDIT PORTFOLIO PER PARTNER (removido) -->
 
 <!-- DELINQUENCY — CONSOLIDATED 90+ + COMPOSITION TABLE -->
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">O comportamento da <b>inadimplência</b></div><h1>Inadimplência <span class="accent">consolidada.</span></h1>
-  <p class="sub">BNPL + Legacy Rail · 90+ consolidado (% do saldo) e de onde vem o 90+ por origem (mai/26).</p></div>
+  <p class="sub">90+ consolidado (% do saldo) até o início do FIDC (mar/26) · de onde vem o 90+ por origem.</p></div>
   <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div><div class="dq-line">{dq_cons_svg}</div></div>
   <div class="reveal" style="margin-top:1.2vh">{conc_ctab_html}</div>
   <div class="blegend reveal" style="margin-top:.6vh"><span style="color:#8a8a8a">chip = CDR (90+ ÷ principal originado) · mais escuro = maior</span></div>
@@ -1214,6 +1194,15 @@ SLIDES = STYLE + f"""
   <div class="illus">Fonte: Robbin Data · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
 </section>
 
+<!-- NIMAL DO FIDC — conclusão da performance -->
+<section class="slide theme-light vcenter" data-num="09">
+  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Performance · conclusão</span></div>
+  <div class="slide-head reveal"><div class="slide-kicker">Conclusão da <b>performance</b></div><h1>NIMAL do <span class="accent">FIDC.</span></h1>
+  <p class="sub">Do yield ao NIMAL — NIM % (a.a.) do FIDC, 1T26.</p></div>
+  <div class="chartframe reveal">{wf_svg}</div>
+  <div class="illus">FIDC · 1T26 · valores anualizados (a.a.) · NIMAL = NII após perdas</div>
+</section>
+
 <!-- FIDC LOAN BOOK GROWTH (off-balance, total only) -->
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
@@ -1224,15 +1213,7 @@ SLIDES = STYLE + f"""
   <div class="illus">Fonte: Robbin Data · dez/25–mai/26 (FIDC)</div>
 </section>
 
-<!-- INCREASING DIVERSIFICATION — OFF-BALANCE (FIDC) -->
-<section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Diversificação · FIDC</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">… cada vez mais <b>diversificada</b></div><h1>Diversificação <span class="accent">crescente.</span></h1>
-  <p class="sub">Âncora como % da carteira off-balance (FIDC) — dez/25 → mai/26.</p></div>
-  <div class="blegend reveal">{anchor_legend}</div>
-  <div class="chartframe reveal fit">{div_off_svg}</div>
-  <div class="illus">Fonte: Robbin Data · dez/25–mai/26 (FIDC)</div>
-</section>
+<!-- INCREASING DIVERSIFICATION (removido) -->
 
 <!-- 8 — TENOR & DURATION -->
 <section class="slide theme-light vcenter" data-num="08">
