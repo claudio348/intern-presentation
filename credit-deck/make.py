@@ -1005,6 +1005,7 @@ STYLE = """<style>
 .biz-hub-fns { display:flex; flex-wrap:wrap; gap:4px 5px; justify-content:center; max-width:clamp(168px,15vw,210px); margin-top:.5vh; }
 .biz-hub-fns em { font-style:normal; font-family:var(--font-mono); font-size:8px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.2); border-radius:5px; padding:2.5px 6px; }
 .biz-node { position:absolute; transform:translate(-50%,-50%); z-index:2; width:clamp(230px,21vw,300px); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:14px; padding:1.7vh 1.2vw; }
+.biz-node .bn-num { position:absolute; top:-12px; right:-12px; width:28px; height:28px; border-radius:50%; background:#0C0C0C; color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-sans); font-weight:800; font-size:13px; box-shadow:0 0 0 4px var(--paper); }
 .biz-node .bn-head { display:flex; align-items:center; gap:.7vw; margin-bottom:.6vh; }
 .biz-node .bn-ic { width:34px; height:34px; border-radius:9px; background:#0C0C0C; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .biz-node .bn-ic svg { width:19px; height:19px; stroke:#fff; fill:none; stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; }
