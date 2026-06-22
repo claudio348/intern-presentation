@@ -1015,9 +1015,9 @@ STYLE = """<style>
 .biz-node p { font-family:var(--font-sans); font-size:clamp(11.5px,.92vw,14px); color:#3A3A3A; line-height:1.45; margin:0; }
 .biz-node p b { color:var(--ink); font-weight:600; }
 .biz-link-lbl { position:absolute; transform:translate(-50%,-50%); z-index:1; background:var(--paper); padding:3px 10px; border-radius:100px; border:1px solid rgba(12,12,12,.14); font-family:var(--font-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:#5A5A5A; white-space:nowrap; }
-.biz-anchors{left:50%;top:12%} .biz-smes{left:19%;top:85%} .biz-funding{left:81%;top:85%}
-.biz-lbl-a{left:50%;top:31%} .biz-lbl-s{left:34.5%;top:67%} .biz-lbl-f{left:65.5%;top:67%}
-.biz-lbl-cb{left:13%;top:50%; color:#8a8a8a; border-style:dashed;}
+.biz-anchors{left:21%;top:23%} .biz-smes{left:79%;top:23%} .biz-funding{left:50%;top:87%}
+.biz-lbl-a{left:35%;top:37%} .biz-lbl-s{left:65%;top:37%} .biz-lbl-f{left:50%;top:69%}
+.biz-lbl-cb{left:50%;top:22.5%; color:#8a8a8a; border-style:dashed;}
 .inv-group { margin-bottom:3vh; }
 .inv-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; padding-bottom:1.1vh; border-bottom:1px solid rgba(12,12,12,.14); margin:0 0 1.8vh; }
 .inv-tag { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; }
