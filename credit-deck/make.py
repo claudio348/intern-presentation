@@ -997,11 +997,10 @@ STYLE = """<style>
 .slide-kicker b { color:#C0143C; font-weight:600; }
 .slide-kicker::before { content:''; width:22px; height:1px; background:#C0143C; flex-shrink:0; }
 .who2 .bio { font-family:var(--font-sans); font-size:clamp(12px,0.95vw,15px); color:#3A3A3A; line-height:1.45; margin:.6vh 0 .8vh; max-width:46ch; }
-.inv-group { margin-bottom:2.6vh; }
-.inv-head { display:flex; align-items:baseline; gap:.7vw; margin:0 0 1.4vh; flex-wrap:wrap; }
+.inv-group { margin-bottom:3vh; }
+.inv-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; padding-bottom:1.1vh; border-bottom:1px solid rgba(12,12,12,.14); margin:0 0 1.8vh; }
 .inv-tag { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; }
-.inv-amt { font-family:var(--font-sans); font-weight:800; font-size:clamp(26px,2.6vw,40px); letter-spacing:-.02em; color:#0C0C0C; line-height:1; }
-.inv-cap { font-family:var(--font-sans); font-size:13px; color:#6A6A6A; }
+.inv-amt { font-family:var(--font-sans); font-weight:700; font-size:clamp(22px,2vw,32px); letter-spacing:-.02em; color:#0C0C0C; line-height:1; }
 .inv-sublabel { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; margin:0 0 1.2vh; }
 .inv-sublabel b { color:#0C0C0C; font-weight:700; }
 .slide-head .sub { white-space:nowrap; max-width:none; }
