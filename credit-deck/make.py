@@ -1005,8 +1005,13 @@ STYLE = """<style>
 .biz-hub-fns { display:flex; flex-wrap:wrap; gap:4px 5px; justify-content:center; max-width:clamp(168px,15vw,210px); margin-top:.5vh; }
 .biz-hub-fns em { font-style:normal; font-family:var(--font-mono); font-size:8px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.2); border-radius:5px; padding:2.5px 6px; }
 .biz-node { position:absolute; transform:translate(-50%,-50%); z-index:2; width:clamp(230px,21vw,300px); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:14px; padding:1.7vh 1.2vw; }
-.biz-node .bn-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; }
-.biz-node h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.2vw,19px); margin:.5vh 0; color:var(--ink); }
+.biz-node .bn-head { display:flex; align-items:center; gap:.7vw; margin-bottom:.6vh; }
+.biz-node .bn-ic { width:34px; height:34px; border-radius:9px; background:#0C0C0C; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.biz-node .bn-ic svg { width:19px; height:19px; stroke:#fff; fill:none; stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; }
+.biz-node .bn-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a8a8a; }
+.biz-node h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.2vw,19px); margin:.2vh 0 .5vh; color:var(--ink); }
+.biz-node .bn-logos { display:flex; align-items:center; gap:1vw; margin-top:1.1vh; }
+.biz-node .bn-logos img { height:clamp(15px,1.2vw,19px); width:auto; opacity:.9; }
 .biz-node p { font-family:var(--font-sans); font-size:clamp(11.5px,.92vw,14px); color:#3A3A3A; line-height:1.45; margin:0; }
 .biz-node p b { color:var(--ink); font-weight:600; }
 .biz-link-lbl { position:absolute; transform:translate(-50%,-50%); z-index:1; background:var(--paper); padding:3px 10px; border-radius:100px; border:1px solid rgba(12,12,12,.14); font-family:var(--font-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:#5A5A5A; white-space:nowrap; }
