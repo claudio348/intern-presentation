@@ -996,6 +996,7 @@ STYLE = """<style>
 .slide-kicker { font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#9A9A9A; display:flex; align-items:center; gap:.7em; margin-bottom:1.1vh; }
 .slide-kicker b { color:#C0143C; font-weight:600; }
 .slide-kicker::before { content:''; width:22px; height:1px; background:#C0143C; flex-shrink:0; }
+.who2 .bio { font-family:var(--font-sans); font-size:clamp(12px,0.95vw,15px); color:#3A3A3A; line-height:1.45; margin:.6vh 0 .8vh; max-width:46ch; }
 .inv-group { margin-bottom:2.6vh; }
 .inv-sublabel { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; margin:0 0 1.2vh; }
 .inv-sublabel b { color:#0C0C0C; font-weight:700; }
