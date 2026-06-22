@@ -73,8 +73,8 @@ cdr_legend = "".join(
     f'<span><i style="background:{c}"></i>{n}</span>' for n, c in zip(cdr.keys(), cdr_colors))
 
 # ---------- FPD 30 — barras por safra mensal (real loan tape) ----------
-fpd_labels = ["mai/25","jun/25","jul/25","ago/25","set/25","out/25","nov/25","dez/25","jan/26","fev/26","mar/26","abr/26"]
-fpd_vals   = [15.2,7.4,3.1,0.0,2.0,3.9,1.0,3.7,5.8,0.9,5.4,1.4]
+fpd_labels = ["mai/25","jun/25","jul/25","ago/25","set/25","out/25","nov/25","dez/25","jan/26","fev/26","mar/26"]
+fpd_vals   = [15.2,7.4,3.1,0.0,2.0,3.9,1.0,3.7,5.8,0.9,5.4]
 FPD_THR = 5.0
 FPD_MEAN = sum(fpd_vals)/len(fpd_vals)
 
@@ -1172,12 +1172,12 @@ SLIDES = STYLE + f"""
 <!-- 5 — FPD -->
 <section class="slide theme-light vcenter" data-num="05">
   <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">A qualidade nasce na <b>originação</b></div><h1>FPD 30 <span class="accent">por safra.</span></h1>
-  <p class="sub">Inadimplência da 1ª parcela (valor em atraso ÷ total) — safra mensal.</p></div>
-  <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Média 4,1%</b></span><span style="color:#8a8a8a">Meta &le; 5%</span><span style="color:#8a8a8a">Pior safra: mai/25 · 15,2%</span></div>
+  <div class="slide-head reveal"><div class="slide-kicker">Melhoramos o jeito de fazer <b>crédito</b></div><h1>FPD 30 <span class="accent">por safra.</span></h1>
+  <p class="sub">Inadimplência da 1ª parcela (÷ total), por safra (até mar/26) — novo critério de elegibilidade e governança.</p></div>
+  <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Média 4,4%</b></span><span style="color:#8a8a8a">Meta &le; 5%</span><span style="color:#8a8a8a">Régua de provisionamento do FIDC ajustada</span></div>
   <div class="chartframe reveal">{fpd_svg}</div>
   <div class="blegend reveal">{fpd_scale}</div>
-  <div class="illus">Fonte: Robbin Data · FPD 30 · safra mensal</div>
+  <div class="illus">Fonte: Robbin Data · FPD 30 por safra · mai/25–mar/26 · novo critério de elegibilidade</div>
 </section>
 
 <!-- CREDIT PORTFOLIO PER PARTNER (removido) -->
