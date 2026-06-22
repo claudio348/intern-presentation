@@ -1177,15 +1177,6 @@ SLIDES = STYLE + f"""
   <div class="illus">Fonte: Robbin Data · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
 </section>
 
-<!-- NIMAL DO FIDC — conclusão da performance -->
-<section class="slide theme-light vcenter" data-num="09">
-  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Performance · conclusão</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">Conclusão da <b>performance</b></div><h1>NIMAL do <span class="accent">FIDC.</span></h1>
-  <p class="sub">Do yield ao NIMAL — NIM % (a.a.) do FIDC, 1T26.</p></div>
-  <div class="chartframe reveal">{wf_svg}</div>
-  <div class="illus">FIDC · 1T26 · valores anualizados (a.a.) · NIMAL = NII após perdas</div>
-</section>
-
 <!-- FIDC LOAN BOOK GROWTH (off-balance, total only) -->
 <section class="slide theme-light vcenter" data-num="06">
   <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
@@ -1205,6 +1196,15 @@ SLIDES = STYLE + f"""
   <p class="sub">Uma carteira curta e de giro rápido — métricas-chave, mês a mês.</p></div>
   {kpi_grid}
   <div class="illus">Fonte: Robbin Data · mensal · jan/25–mai/26</div>
+</section>
+
+<!-- NIMAL DO FIDC — conclusão da performance (antes do corporativo) -->
+<section class="slide theme-light vcenter" data-num="09">
+  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Performance · conclusão</span></div>
+  <div class="slide-head reveal"><div class="slide-kicker">Conclusão da <b>performance</b></div><h1>NIMAL do <span class="accent">FIDC.</span></h1>
+  <p class="sub">Do yield ao NIMAL — NIM % (a.a.) do FIDC, 1T26.</p></div>
+  <div class="chartframe reveal">{wf_svg}</div>
+  <div class="illus">FIDC · 1T26 · valores anualizados (a.a.) · NIMAL = NII após perdas</div>
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
