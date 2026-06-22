@@ -1251,7 +1251,7 @@ SLIDES = STYLE + f"""
 # insert imported pitchdeck slides (team + re-rail) right after the cover
 _here = os.path.dirname(os.path.abspath(__file__))
 _intro = ""
-for frag in ("_intro_team.html", "_intro_rerail.html"):
+for frag in ("_intro_team.html", "_intro_business.html", "_intro_rerail.html"):
     fp = os.path.join(_here, frag)
     if os.path.isfile(fp):
         _intro += "\n" + open(fp, encoding="utf-8").read() + "\n"
