@@ -997,6 +997,19 @@ STYLE = """<style>
 .slide-kicker b { color:#C0143C; font-weight:600; }
 .slide-kicker::before { content:''; width:22px; height:1px; background:#C0143C; flex-shrink:0; }
 .who2 .bio { font-family:var(--font-sans); font-size:clamp(12px,0.95vw,15px); color:#3A3A3A; line-height:1.45; margin:.6vh 0 .8vh; max-width:46ch; }
+.biz-stage { position:relative; height:60vh; margin-top:2vh; }
+.biz-links { position:absolute; inset:0; width:100%; height:100%; z-index:0; }
+.biz-hub { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; background:#0C0C0C; border-radius:20px; padding:2.6vh 1.8vw; display:flex; flex-direction:column; align-items:center; gap:1.1vh; min-width:clamp(150px,13vw,196px); }
+.biz-hub img { height:clamp(22px,1.7vw,30px); width:auto; }
+.biz-hub span { font-family:var(--font-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
+.biz-node { position:absolute; transform:translate(-50%,-50%); z-index:2; width:clamp(230px,21vw,300px); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:14px; padding:1.7vh 1.2vw; }
+.biz-node .bn-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; }
+.biz-node h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.2vw,19px); margin:.5vh 0; color:var(--ink); }
+.biz-node p { font-family:var(--font-sans); font-size:clamp(11.5px,.92vw,14px); color:#3A3A3A; line-height:1.45; margin:0; }
+.biz-node p b { color:var(--ink); font-weight:600; }
+.biz-link-lbl { position:absolute; transform:translate(-50%,-50%); z-index:1; background:var(--paper); padding:3px 10px; border-radius:100px; border:1px solid rgba(12,12,12,.14); font-family:var(--font-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:#5A5A5A; white-space:nowrap; }
+.biz-anchors{left:50%;top:12%} .biz-smes{left:19%;top:85%} .biz-funding{left:81%;top:85%}
+.biz-lbl-a{left:50%;top:31%} .biz-lbl-s{left:34.5%;top:67%} .biz-lbl-f{left:65.5%;top:67%}
 .inv-group { margin-bottom:3vh; }
 .inv-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; padding-bottom:1.1vh; border-bottom:1px solid rgba(12,12,12,.14); margin:0 0 1.8vh; }
 .inv-tag { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; }

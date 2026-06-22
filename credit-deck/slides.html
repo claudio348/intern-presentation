@@ -13,6 +13,19 @@
 .slide-kicker b { color:#C0143C; font-weight:600; }
 .slide-kicker::before { content:''; width:22px; height:1px; background:#C0143C; flex-shrink:0; }
 .who2 .bio { font-family:var(--font-sans); font-size:clamp(12px,0.95vw,15px); color:#3A3A3A; line-height:1.45; margin:.6vh 0 .8vh; max-width:46ch; }
+.biz-stage { position:relative; height:60vh; margin-top:2vh; }
+.biz-links { position:absolute; inset:0; width:100%; height:100%; z-index:0; }
+.biz-hub { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; background:#0C0C0C; border-radius:20px; padding:2.6vh 1.8vw; display:flex; flex-direction:column; align-items:center; gap:1.1vh; min-width:clamp(150px,13vw,196px); }
+.biz-hub img { height:clamp(22px,1.7vw,30px); width:auto; }
+.biz-hub span { font-family:var(--font-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
+.biz-node { position:absolute; transform:translate(-50%,-50%); z-index:2; width:clamp(230px,21vw,300px); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:14px; padding:1.7vh 1.2vw; }
+.biz-node .bn-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; }
+.biz-node h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.2vw,19px); margin:.5vh 0; color:var(--ink); }
+.biz-node p { font-family:var(--font-sans); font-size:clamp(11.5px,.92vw,14px); color:#3A3A3A; line-height:1.45; margin:0; }
+.biz-node p b { color:var(--ink); font-weight:600; }
+.biz-link-lbl { position:absolute; transform:translate(-50%,-50%); z-index:1; background:var(--paper); padding:3px 10px; border-radius:100px; border:1px solid rgba(12,12,12,.14); font-family:var(--font-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:#5A5A5A; white-space:nowrap; }
+.biz-anchors{left:50%;top:12%} .biz-smes{left:19%;top:85%} .biz-funding{left:81%;top:85%}
+.biz-lbl-a{left:50%;top:31%} .biz-lbl-s{left:34.5%;top:67%} .biz-lbl-f{left:65.5%;top:67%}
 .inv-group { margin-bottom:3vh; }
 .inv-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; padding-bottom:1.1vh; border-bottom:1px solid rgba(12,12,12,.14); margin:0 0 1.8vh; }
 .inv-tag { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; }
@@ -202,42 +215,25 @@
 
 <section class="slide theme-light vcenter" data-num="03">
   <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Modelo de negócio</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">Como a <b>rede</b> funciona</div><h1>Um ciclo que se <span class="accent">reforça.</span></h1>
-  <p class="sub">Cada transação gera dados que melhoram o crédito — e aceleram a rede.</p>
-  <span class="tag-pill">Funding: FIDC R$ 500M · off-balance</span></div>
-  <div class="chartframe reveal"><svg class="chart" viewBox="0 0 1240 560" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="fwa" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0C0C0C"/></marker></defs>
-<circle cx="620" cy="288" r="130" fill="none" stroke="#E4E4E4" stroke-width="1.4"/>
-<path d="M 685.0 175.4 A 130 130 0 0 1 732.6 223.0" fill="none" stroke="#0C0C0C" stroke-width="2.2" marker-end="url(#fwa)"/>
-<path d="M 732.6 353.0 A 130 130 0 0 1 685.0 400.6" fill="none" stroke="#0C0C0C" stroke-width="2.2" marker-end="url(#fwa)"/>
-<path d="M 555.0 400.6 A 130 130 0 0 1 507.4 353.0" fill="none" stroke="#0C0C0C" stroke-width="2.2" marker-end="url(#fwa)"/>
-<path d="M 507.4 223.0 A 130 130 0 0 1 555.0 175.4" fill="none" stroke="#0C0C0C" stroke-width="2.2" marker-end="url(#fwa)"/>
-<circle cx="620" cy="288" r="60" fill="#0C0C0C"/>
-<text x="620" y="286" text-anchor="middle" font-family="Geist,sans-serif" font-weight="800" font-size="23" fill="#fff">robbin</text>
-<text x="620" y="305" text-anchor="middle" font-family="Geist Mono,monospace" font-size="8" letter-spacing="0.12em" fill="#9a9a9a">ORQUESTRA A REDE</text>
-<circle cx="620.0" cy="158.0" r="13" fill="#0C0C0C" stroke="#FAFAFA" stroke-width="2.5"/>
-<text x="620.0" y="161.5" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#fff">1</text>
-<text x="620.0" y="100.0" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="17" fill="#0C0C0C">Âncoras co-brandam</text>
-<text x="620.0" y="119.0" text-anchor="middle" font-family="Geist,sans-serif" font-size="13" fill="#5A5A5A">distribuição, marca</text>
-<text x="620.0" y="135.0" text-anchor="middle" font-family="Geist,sans-serif" font-size="13" fill="#5A5A5A">e dados de sell-out</text>
-<circle cx="750.0" cy="288.0" r="13" fill="#0C0C0C" stroke="#FAFAFA" stroke-width="2.5"/>
-<text x="750.0" y="291.5" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#fff">2</text>
-<text x="780.0" y="280.0" text-anchor="start" font-family="Geist,sans-serif" font-weight="700" font-size="17" fill="#0C0C0C">Crédito no rail do PIX</text>
-<text x="780.0" y="299.0" text-anchor="start" font-family="Geist,sans-serif" font-size="13" fill="#5A5A5A">underwriting com dados ·</text>
-<text x="780.0" y="315.0" text-anchor="start" font-family="Geist,sans-serif" font-size="13" fill="#5A5A5A">T+0 · 0% interchange</text>
-<circle cx="620.0" cy="418.0" r="13" fill="#0C0C0C" stroke="#FAFAFA" stroke-width="2.5"/>
-<text x="620.0" y="421.5" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#fff">3</text>
-<text x="620.0" y="458.0" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="17" fill="#0C0C0C">PMEs compram mais</text>
-<text x="620.0" y="477.0" text-anchor="middle" font-family="Geist,sans-serif" font-size="13" fill="#5A5A5A">crédito instantâneo</text>
-<text x="620.0" y="493.0" text-anchor="middle" font-family="Geist,sans-serif" font-size="13" fill="#5A5A5A">e barato</text>
-<circle cx="490.0" cy="288.0" r="13" fill="#0C0C0C" stroke="#FAFAFA" stroke-width="2.5"/>
-<text x="490.0" y="291.5" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="11" fill="#fff">4</text>
-<text x="460.0" y="280.0" text-anchor="end" font-family="Geist,sans-serif" font-weight="700" font-size="17" fill="#0C0C0C">Fornecedores vendem mais</text>
-<text x="460.0" y="299.0" text-anchor="end" font-family="Geist,sans-serif" font-size="13" fill="#5A5A5A">mais transações</text>
-<text x="460.0" y="315.0" text-anchor="end" font-family="Geist,sans-serif" font-size="13" fill="#5A5A5A">→ mais dados</text>
-</svg></div>
-  <div class="illus">Modelo de negócio · network flywheel · Robbin no centro</div>
+  <div class="slide-head reveal"><div class="slide-kicker">Quem está na <b>orquestra</b></div><h1>A Robbin <span class="accent">orquestra a rede.</span></h1>
+  <p class="sub">Conectamos âncoras, lojistas e funding num só fluxo de crédito no PIX.</p></div>
+  <div class="biz-stage reveal">
+    <svg class="biz-links" viewBox="0 0 1000 560" preserveAspectRatio="none">
+      <line x1="500" y1="280" x2="500" y2="67"  stroke="#0C0C0C" stroke-width="1.5"/>
+      <line x1="500" y1="280" x2="190" y2="476" stroke="#0C0C0C" stroke-width="1.5"/>
+      <line x1="500" y1="280" x2="810" y2="476" stroke="#0C0C0C" stroke-width="1.5"/>
+    </svg>
+    <div class="biz-hub"><img src="robbin-logo-white.svg" alt="Robbin"><span>orquestra a rede</span></div>
+    <div class="biz-node biz-anchors"><div class="bn-tag">Âncoras · fornecedores</div><h4>Marcas que co-brandam</h4><p>Trazem distribuição, marca e <b>dados de sell-out</b> — Cantu, Intelbras, Chilli Beans, JSM…</p></div>
+    <div class="biz-node biz-smes"><div class="bn-tag">PMEs · lojistas (tomadores)</div><h4>Compram a prazo</h4><p>Crédito instantâneo no <b>rail do PIX (T+0)</b> e compram mais dos fornecedores.</p></div>
+    <div class="biz-node biz-funding"><div class="bn-tag">Bancos · FIDC</div><h4>Abastecem a rede</h4><p><b>FIDC R$ 500M</b> off-balance e escalável — XP + banco tier-1.</p></div>
+    <div class="biz-link-lbl biz-lbl-a">dados + co-brand</div>
+    <div class="biz-link-lbl biz-lbl-s">crédito no PIX</div>
+    <div class="biz-link-lbl biz-lbl-f">funding R$ 500M</div>
+  </div>
+  <div class="illus">Modelo de negócio · a Robbin orquestra âncoras, lojistas e funding</div>
 </section>
+
 
 <section class="slide theme-light" data-num="04">
   <div class="chapter-mark">
