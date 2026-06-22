@@ -267,45 +267,39 @@ def metric(k, v, s, wip=False):
 
 
 # ---------- monthly TPV / origination by rail (real) ----------
-tpv_months = ptm(["may/24","jun/24","jul/24","aug/24","sep/24","oct/24","nov/24","dec/24","jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"])
-tpv_order = ["Rail legado","Rails PIX"]   # Rail legado = Cartão · Rails PIX = Boleto + Pix
-TPV_COL = {"Rail legado":"#CBCBCB","Rails PIX":"#0C0C0C"}
-tpv_data = {
-  "Rail legado":[0.26,0.49,0.91,1.43,4.93,4.54,3.66,3.14,2.8,3.54,5.51,4.95,5.48,6.06,6.63,8.21,12.12,8.31,9.23,8.02,5.99,3.12,3.33,2.34,0.34],
-  "Rails PIX":[0.0,0.0,0.0,0.17,0.48,2.25,1.56,2.56,2.26,2.66,2.75,2.23,2.28,1.99,1.72,2.81,3.59,4.59,3.74,3.15,2.57,3.16,5.49,3.45,5.69],
-}
+# ---------- BNPL (PIX+Boleto) — sempre desde mai/25 · FIDC live mar/26 ----------
+bnpl_labels = ["mai/25","jun/25","jul/25","ago/25","set/25","out/25","nov/25","dez/25","jan/26","fev/26","mar/26","abr/26","mai/26"]
+bnpl_carteira = [4.99,5.33,5.26,6.07,5.97,6.51,6.90,6.48,7.33,9.19,11.66,12.93,15.11]   # saldo BNPL (R$M)
+bnpl_fidc     = [0,0,0,0,0,0,0,0,0,0,8.32,9.85,12.13]                                     # cedido ao FIDC (mar/26 →)
+bnpl_orig     = [1.93,1.82,1.46,2.27,2.22,2.55,2.47,2.69,3.40,3.95,5.25,4.23,5.19]        # originação BNPL (R$M)
+BNPL_FIDC_IDX = bnpl_labels.index("mar/26")
 
 def tpv_chart():
-    WD, HD = 1040, 440; Lx, Rx, Tx, Bx = 40, 12, 24, 46
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 17; n = len(tpv_months); slot = pw/n; bw = slot*0.6
-    base = Tx+ph; di = tpv_months.index("dez/25"); xd = Lx+slot*di
+    # BNPL origination (PIX + Boleto), R$M, sempre desde mai/25 · FIDC live mar/26
+    WD, HD = 1040, 432; Lx, Rx, Tx, Bx = 34, 8, 36, 44
+    n = len(bnpl_labels); pw, ph = WD-Lx-Rx, HD-Tx-Bx; slot = pw/n; bw = slot*0.62; ymax = 6
+    base = Tx+ph; di = BNPL_FIDC_IDX; xd = Lx+slot*di
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{base-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
-    for t in (0,4,8,12,16):
-        y = Tx+ph - t/ymax*ph
+    for t in (0,2,4,6):
+        y = base - t/ymax*ph
         s.append(f'<text x="{Lx-6}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
     for i in range(n):
-        cx = Lx+slot*i+slot/2; x = cx-bw/2; ytop = Tx+ph
-        total = sum(tpv_data[r][i] for r in tpv_order) or 0
-        for rail in tpv_order:
-            v = tpv_data[rail][i]
-            if v <= 0: continue
-            hh = v/ymax*ph; y = ytop-hh
-            s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{TPV_COL[rail]}"/>')
-            if hh >= 16:
-                tcol = "#fff" if rail == "Rails PIX" else "#3A3A3A"
-                s.append(f'<text x="{cx:.1f}" y="{y+hh/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="{tcol}">{round(v/total*100)}%</text>')
-            ytop = y
-        if total > 0:
-            s.append(f'<text x="{cx:.1f}" y="{ytop-6:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="9.5" fill="#0C0C0C">{total:.1f}</text>')
-        s.append(f'<text x="{cx:.1f}" y="{HD-16}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="7.8" fill="#5A5A5A">{tpv_months[i]}</text>')
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; v = bnpl_orig[i]; y = base - v/ymax*ph; last = i == n-1
+        col = "#0C0C0C" if i >= di else "#B9B9B9"
+        s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{base-y:.1f}" rx="2" fill="{col}"/>')
+        s.append(f'<text x="{cx:.1f}" y="{y-7:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 600}" font-size="{12 if last else 11}" fill="{"#0C0C0C" if i>=di else "#5A5A5A"}">{v:.1f}</text>')
+        s.append(f'<text x="{cx:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{bnpl_labels[i]}</text>')
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{base:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{Tx+10:.1f}" font-family="Geist Mono,monospace" font-size="10" letter-spacing="0.06em" fill="#3A3A3A">FIDC ativo →</text>')
+    s.append(f'<text x="{xd+7:.1f}" y="16" font-family="Geist Mono,monospace" font-size="11" letter-spacing="0.06em" fill="#3A3A3A">FIDC ativo →</text>')
     s.append('</svg>')
     return "\n".join(s)
 
 tpv_svg = tpv_chart()
-tpv_legend = "".join(f'<span><i style="background:{TPV_COL[r]}"></i>{r}</span>' for r in tpv_order)
+tpv_legend = ('<span><i style="background:#B9B9B9"></i>pré-FIDC</span>'
+              '<span><i style="background:#0C0C0C"></i>FIDC (mar/26 →)</span>'
+              '<span style="color:#8a8a8a">originação BNPL (PIX+Boleto) · R$M/mês</span>')
 
 
 # ---------- credit portfolio (outstanding balance) by source over time (real) ----------
@@ -367,49 +361,37 @@ port_svg = portfolio_stack()
 port_legend = "".join(f'<span><i style="background:{PORT_COL[g]}"></i>{g}</span>' for g in port_order)
 
 def portfolio_total_bars():
-    WD, HD = 1040, 432; Lx, Rx, Tx, Bx = 30, 6, 44, 42
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 46; n = len(_pm); slot = pw/n; bw = slot*0.78
+    WD, HD = 1040, 432; Lx, Rx, Tx, Bx = 30, 8, 44, 42
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 16; n = len(bnpl_labels); slot = pw/n; bw = slot*0.62
     def Y(v): return Tx+ph - v/ymax*ph
-    ybase = Y(0)
-    di = _pm.index(FIDC_FROM); xd = Lx + slot*di
-    totals = [round(sum(port_data[g][i] for g in port_order), 2) for i in range(n)]
-    # FIDC (off-balance) portion mapped onto the portfolio months; carried flat to the last month
-    fidc = [0.0]*n
-    for k in range(len(lt_labels)):
-        fidc[di+k] = round(sum(lt_data[g][k] for g in lt_data), 2)
-    if di+len(lt_labels) < n:
-        fidc[di+len(lt_labels)] = fidc[di+len(lt_labels)-1]
+    ybase = Y(0); xd = Lx + slot*BNPL_FIDC_IDX
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
     s.append(f'<rect x="{xd:.1f}" y="{Tx}" width="{WD-Rx-xd:.1f}" height="{ybase-Tx:.1f}" fill="#0C0C0C" opacity="0.05"/>')
-    for t in (0,10,20,30,40):
-        y = Y(t)
-        s.append(f'<text x="{Lx-7}" y="{y+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    for t in (0,4,8,12,16):
+        s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
-        cx = Lx+slot*i+slot/2; x = cx-bw/2; v = totals[i]; f = min(fidc[i], v)
-        if v <= 0.05: continue
-        # FIDC portion (dark, bottom) + on-balance remainder (grey, top)
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; v = bnpl_carteira[i]; f = min(bnpl_fidc[i], v)
         hf = f/ymax*ph; yf = ybase-hf
         if f > 0.02:
             s.append(f'<rect x="{x:.1f}" y="{yf:.1f}" width="{bw:.1f}" height="{hf:.1f}" fill="#0C0C0C"/>')
-            if hf >= 15:   # FIDC share of total, inside the black segment
-                s.append(f'<text x="{cx:.1f}" y="{yf+hf/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="8.5" fill="#fff">{f/v*100:.0f}%</text>')
+            if hf >= 15:
+                s.append(f'<text x="{cx:.1f}" y="{yf+hf/2+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="9" fill="#fff">{f/v*100:.0f}%</text>')
         on = v-f; hon = on/ymax*ph; yon = yf-hon
         if on > 0.02:
             s.append(f'<rect x="{x:.1f}" y="{yon:.1f}" width="{bw:.1f}" height="{hon:.1f}" rx="2" fill="#B9B9B9"/>')
         last = i == n-1
-        s.append(f'<text x="{cx:.1f}" y="{Y(v)-7:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 600}" font-size="{12 if last else 11}" fill="{"#0C0C0C" if last else "#5A5A5A"}">{v:.1f}</text>')
-    # FIDC divider + label (in the top margin, clear of the bar value labels)
+        s.append(f'<text x="{cx:.1f}" y="{Y(v)-7:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 600}" font-size="{13 if last else 11}" fill="{"#0C0C0C" if last else "#5A5A5A"}">{v:.1f}</text>')
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
-    s.append(f'<text x="{xd+7:.1f}" y="{16:.1f}" font-family="Geist Mono,monospace" font-size="11" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
-    for i in range(0, n, 3):
-        s.append(f'<text x="{Lx+slot*i+slot/2:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{port_labels[i]}</text>')
+    s.append(f'<text x="{xd+7:.1f}" y="16" font-family="Geist Mono,monospace" font-size="11" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
+    for i in range(n):
+        s.append(f'<text x="{Lx+slot*i+slot/2:.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9" fill="#5A5A5A">{bnpl_labels[i]}</text>')
     s.append('</svg>')
     return "\n".join(s)
 
 port_total_svg = portfolio_total_bars()
 port_total_legend = ('<span><i style="background:#B9B9B9"></i>On-balance · Pré-FIDC</span>'
-                     '<span><i style="background:#0C0C0C"></i>Financiado por FIDC · off-balance (dez/25 →)</span>'
-                     '<span style="color:#8a8a8a">total na carteira · R$M · % = FIDC ÷ total</span>')
+                     '<span><i style="background:#0C0C0C"></i>Financiado por FIDC (mar/26 →)</span>'
+                     '<span style="color:#8a8a8a">carteira BNPL · R$M · % = FIDC ÷ total</span>')
 
 # consolidated (corporate) charts
 PORT_FIDC = _pm.index("2025-12")
@@ -470,9 +452,9 @@ cohort_svg = cohort_lines()
 
 # ---------- delinquency (90+) over time, by partner (calendar) ----------
 # Point-in-time 90+ ratio (over90 balance / total balance) per CALENDAR month.
-# inadimplência consolidada vai só até o início do FIDC (mar/26)
-dq_labels = ptm(["jan/25","feb/25","mar/25","apr/25","may/25","jun/25","jul/25","aug/25",
-             "sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26"])
+# inadimplência BNPL — desde mai/25 e só até o início do FIDC (mar/26)
+dq_labels = ptm(["may/25","jun/25","jul/25","aug/25","sep/25","oct/25","nov/25",
+             "dec/25","jan/26","feb/26","mar/26"])
 dq_order = ["Chilli Beans","Juntos Somos Mais","Cantu","Brinox","Malwee","Moura"]
 N = None
 dq_data = {
@@ -484,7 +466,7 @@ dq_data = {
     "Brinox":           [N,N,N,N,N,N,N,N,0.0,0.0,0.0,0.0,0.0,2.7,5.8,5.5,5.1],
 }
 # company-wide point-in-time 90+ ratio
-dq_agg = [1.2,1.4,1.8,1.9,2.1,3.4,3.5,4.1,3.6,3.7,2.0,3.3,5.5,6.6,8.9]  # over90 ÷ saldo da carteira · até início do FIDC (mar/26)
+dq_agg = [2.1,3.4,3.5,4.1,3.6,3.7,2.0,3.3,5.5,6.6,8.9]  # over90 ÷ saldo BNPL · mai/25 → início do FIDC (mar/26)
 DQ_FIDC = dq_labels.index("dez/25")  # FIDC went live Dec/25
 dq_legend = ('<span><i style="background:#0C0C0C;height:3px;border-radius:2px"></i>Agregado da companhia</span>'
              + "".join(f'<span><i style="background:{ANCHOR_COL[g]}"></i>{g}</span>' for g in dq_order))
@@ -545,7 +527,7 @@ def dq_lines():
         s.append(f'<text x="{xe+20:.1f}" y="{ly+3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="7.5" fill="#fff">{val}</text>')
     s.append('</svg>')
     return "\n".join(s)
-dq_svg = dq_lines()
+# dq_svg = dq_lines()  # per-partner chart removido
 
 # ---------- consolidated 90+ only (company aggregate line) ----------
 def dq_cons():
@@ -563,7 +545,7 @@ def dq_cons():
     d = f"M {pts[0][0]:.1f},{base:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in pts) + f" L {pts[-1][0]:.1f},{base:.1f} Z"
     s.append(f'<path d="{d}" fill="url(#dqcG)"/>')
     s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>' % " ".join(f"{x:.1f},{y:.1f}" for x,y in pts))
-    for j in (6,8,12,n-1):
+    for j in (1, n//2, n-1):
         x,y = pts[j]
         s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" fill="#0C0C0C"/>')
         s.append(f'<text x="{x:.1f}" y="{y-8:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="10.5" fill="#0C0C0C">{dq_agg[j]:.0f}%</text>')
@@ -1016,6 +998,9 @@ STYLE = """<style>
 .slide-kicker { font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#9A9A9A; display:flex; align-items:center; gap:.7em; margin-bottom:1.1vh; }
 .slide-kicker b { color:#C0143C; font-weight:600; }
 .slide-kicker::before { content:''; width:22px; height:1px; background:#C0143C; flex-shrink:0; }
+.inv-group { margin-bottom:2.6vh; }
+.inv-sublabel { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:#8a8a8a; margin:0 0 1.2vh; }
+.inv-sublabel b { color:#0C0C0C; font-weight:700; }
 .slide-head .sub { white-space:nowrap; max-width:none; }
 .slide-head h1 { max-width:86%; }
 .legend { display:flex; gap:1.2vw; flex-wrap:wrap; margin-top:1vh; font-family:var(--font-mono); font-size:11px; color:#2E2E2E; }
@@ -1124,21 +1109,21 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">O ponto de <b>partida</b></div><h1>A carteira de <span class="accent">crédito.</span></h1>
-  <p class="sub">Carteira de crédito (R$M) — pico de R$ 44M, R$ 34M hoje.</p>
-  <span class="tag-pill">Hoje ~R$ 15M (≈46%) no FIDC · restante on-balance</span></div>
+  <p class="sub">Carteira BNPL (PIX + Boleto), R$M — R$ 15M hoje · FIDC live mar/26.</p>
+  <span class="tag-pill">FIDC live mar/26 · ~80% da carteira já cedida</span></div>
   <div class="blegend reveal">{port_total_legend}</div>
   <div class="chartframe reveal">{port_total_svg}</div>
-  <div class="illus">Fonte: Robbin Data · mar/24–jun/26</div>
+  <div class="illus">Fonte: Robbin Data · carteira BNPL · mai/25–mai/26</div>
 </section>
 
 <!-- ORIGINATION -->
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Originação</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">De onde vem a <b>carteira</b></div><h1>Originação no <span class="accent">rail PIX.</span></h1>
-  <p class="sub">Originação mensal (R$M) — migração para Boleto/Pix parcelado em fase final.</p></div>
+  <p class="sub">Originação BNPL (PIX + Boleto), R$M/mês — FIDC live mar/26.</p></div>
   <div class="blegend reveal">{tpv_legend}</div>
   <div class="chartframe reveal">{tpv_svg}</div>
-  <div class="illus">Fonte: Robbin Data · TPV mensal · mar/24–mai/26 (jun/26 parcial, excluído)</div>
+  <div class="illus">Fonte: Robbin Data · originação BNPL · mai/25–mai/26</div>
 </section>
 
 <!-- WHY WE PERFORM BETTER THAN BANKS (iso stack) -->
