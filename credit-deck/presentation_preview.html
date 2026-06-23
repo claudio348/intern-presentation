@@ -8398,20 +8398,16 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 .wip-title { font-family:var(--font-sans); font-weight:700; font-size:clamp(20px,1.7vw,26px); color:var(--ink); margin-top:1.8vh; letter-spacing:-.01em; }
 .wip-sub { font-family:var(--font-sans); font-size:clamp(13px,1.05vw,16px); color:#5A5A5A; line-height:1.55; margin:1vh auto 0; max-width:48ch; }
 /* cedentes & sacados */
-.cs-grid { flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1.6fr 1fr; gap:3vw; align-items:stretch; margin-top:2.4vh; }
-.cs-cedentes, .cs-sacados { display:flex; flex-direction:column; min-height:0; }
-.cs-lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; display:flex; align-items:center; gap:.9vw; margin-bottom:1.8vh; }
-.cs-hi { font-family:var(--font-mono); font-size:9px; letter-spacing:.04em; text-transform:none; color:#3A3A3A; border:1px solid rgba(12,12,12,.18); border-radius:100px; padding:3px 10px; }
-.cs-feat { display:grid; grid-template-columns:1fr 1fr; gap:1.2vw; flex:0.9 1 0; min-height:0; }
-.cs-feat-card { position:relative; border:1.6px solid #0C0C0C; border-radius:16px; padding:2vh 1.4vw; display:flex; align-items:center; justify-content:center; }
-.cs-feat-card img { max-height:6.5vh; max-width:74%; width:auto; }
-.cs-feat-tag { position:absolute; top:-9px; left:14px; background:#0C0C0C; color:#fff; font-family:var(--font-mono); font-size:8px; letter-spacing:.12em; text-transform:uppercase; padding:3px 9px; border-radius:100px; }
-.cedente-wall { display:grid; grid-template-columns:repeat(3,1fr); gap:1vw; flex:1.1 1 0; min-height:0; margin-top:1vw; }
-.cd { border:1px solid rgba(12,12,12,.14); border-radius:13px; display:flex; align-items:center; justify-content:center; padding:1.2vh 1vw; }
-.cd img { max-height:4.4vh; max-width:80%; width:auto; }
-.cd-more { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#9a9a9a; border-style:dashed; }
-.cs-metrics { display:flex; flex-direction:column; gap:1.4vh; flex:1 1 auto; min-height:0; }
-.cs-metric { border:1px solid rgba(12,12,12,.14); border-radius:14px; padding:1.8vh 1.4vw; flex:1 1 0; display:flex; flex-direction:column; justify-content:center; }
+.cs-wrap { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:3vh; margin-top:2.4vh; }
+.cs-block { display:flex; flex-direction:column; min-height:0; }
+.cs-block:first-child { flex:1.35 1 0; }
+.cs-block:last-child { flex:1 1 0; }
+.cs-lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; margin-bottom:1.4vh; }
+.cedente-wall { display:grid; grid-template-columns:repeat(4,1fr); gap:1.1vw; flex:1 1 auto; min-height:0; }
+.cd { border:1px solid rgba(12,12,12,.14); border-radius:13px; display:flex; align-items:center; justify-content:center; padding:1.4vh 1.2vw; }
+.cd img { max-height:5.4vh; max-width:78%; width:auto; }
+.cs-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:1.4vw; flex:1 1 auto; min-height:0; }
+.cs-metric { border:1px solid rgba(12,12,12,.14); border-radius:14px; padding:1.8vh 1.4vw; display:flex; flex-direction:column; justify-content:center; }
 .csm-k { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:#9a9a9a; }
 .csm-v { font-family:var(--font-sans); font-weight:800; font-size:clamp(26px,2.4vw,38px); letter-spacing:-.02em; line-height:1; color:var(--ink); margin-top:.7vh; }
 .csm-v em { font-style:normal; font-weight:600; font-size:.4em; color:#7a7a7a; margin-left:.15em; }
@@ -8777,23 +8773,21 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Originação · cedentes</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Quem <b>origina</b> e quem <b>toma</b></div><h1>Cedentes & <span class="accent">sacados.</span></h1>
   <p class="sub">Marcas líderes cedem recebíveis; suas PMEs tomam crédito no rail PIX.</p></div>
-  <div class="cs-grid">
-    <div class="cs-cedentes">
-      <div class="cs-lbl">Cedentes · âncoras <span class="cs-hi">melhores do mercado: Intelbras &amp; Cantu</span></div>
-      <div class="cs-feat reveal" data-stagger>
-        <div class="cs-feat-card"><span class="cs-feat-tag">cedente destaque</span><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMzAgOTYiPgogIDx0ZXh0IHg9IjAiIHk9Ijc0IiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iODAwIiBmb250LXNpemU9Ijc4IiBsZXR0ZXItc3BhY2luZz0iLTMiIGZpbGw9IiMwQzBDMEMiPmludGVsYnJhczwvdGV4dD4KPC9zdmc+Cg==" alt="Intelbras"></div>
-        <div class="cs-feat-card"><span class="cs-feat-tag">cedente destaque</span><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgOTYiPgogIDx0ZXh0IHg9IjAiIHk9IjcyIiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iODAwIiBmb250LXN0eWxlPSJpdGFsaWMiIGZvbnQtc2l6ZT0iNzAiIGxldHRlci1zcGFjaW5nPSItMSIgZmlsbD0iIzBDMEMwQyI+Q0FOVFU8L3RleHQ+CiAgPHRleHQgeD0iMjUyIiB5PSI0NCIgZm9udC1mYW1pbHk9IkdlaXN0LCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zdHlsZT0iaXRhbGljIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMEMwQzBDIj5JTkM8L3RleHQ+Cjwvc3ZnPgo=" alt="Cantu"></div>
-      </div>
+  <div class="cs-wrap">
+    <div class="cs-block">
+      <div class="cs-lbl">Cedentes · âncoras</div>
       <div class="cedente-wall reveal" data-stagger>
+        <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMzAgOTYiPgogIDx0ZXh0IHg9IjAiIHk9Ijc0IiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iODAwIiBmb250LXNpemU9Ijc4IiBsZXR0ZXItc3BhY2luZz0iLTMiIGZpbGw9IiMwQzBDMEMiPmludGVsYnJhczwvdGV4dD4KPC9zdmc+Cg==" alt="Intelbras"></div>
+        <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgOTYiPgogIDx0ZXh0IHg9IjAiIHk9IjcyIiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iODAwIiBmb250LXN0eWxlPSJpdGFsaWMiIGZvbnQtc2l6ZT0iNzAiIGxldHRlci1zcGFjaW5nPSItMSIgZmlsbD0iIzBDMEMwQyI+Q0FOVFU8L3RleHQ+CiAgPHRleHQgeD0iMjUyIiB5PSI0NCIgZm9udC1mYW1pbHk9IkdlaXN0LCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zdHlsZT0iaXRhbGljIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMEMwQzBDIj5JTkM8L3RleHQ+Cjwvc3ZnPgo=" alt="Cantu"></div>
         <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MzAgOTYiPgogIDx0ZXh0IHg9IjAiIHk9IjcyIiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjY0IiBsZXR0ZXItc3BhY2luZz0iLTMiIGZpbGw9IiMwQzBDMEMiPkNISUxMSUJFQU5TPC90ZXh0Pgo8L3N2Zz4K" alt="Chilli Beans"></div>
+        <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NzAgMTAwIj4KICA8IS0tIHNsYW50ZWQtYmFyIG1hcmsgLS0+CiAgPHBvbHlnb24gcG9pbnRzPSI2LDkyIDM0LDkyIDU2LDEyIDI4LDEyIiBmaWxsPSIjQzJDMkMyIi8+CiAgPHBvbHlnb24gcG9pbnRzPSI0MCw5MiA2OCw5MiA5MCwxMiA2MiwxMiIgZmlsbD0iIzhBOEE4QSIvPgogIDxwb2x5Z29uIHBvaW50cz0iNzQsOTIgMTAyLDkyIDEyNCwxMiA5NiwxMiIgZmlsbD0iIzVBNUE1QSIvPgogIDxwb2x5Z29uIHBvaW50cz0iMTA4LDkyIDEzNiw5MiAxNTgsMTIgMTMwLDEyIiBmaWxsPSIjMEMwQzBDIi8+CiAgPHRleHQgeD0iMTkwIiB5PSI4MCIgZm9udC1mYW1pbHk9IkdlaXN0LCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1zaXplPSI3NCIgbGV0dGVyLXNwYWNpbmc9Ii0yIiBmaWxsPSIjMEMwQzBDIj5tb3VyYTwvdGV4dD4KPC9zdmc+Cg==" alt="Moura"></div>
         <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNjAgOTYiPgogIDxyZWN0IHg9IjAiIHk9IjYiIHdpZHRoPSI4NCIgaGVpZ2h0PSI4NCIgZmlsbD0iIzBDMEMwQyIvPgogIDx0ZXh0IHg9IjQyIiB5PSI2MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkdlaXN0LCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1zaXplPSI0MCIgbGV0dGVyLXNwYWNpbmc9Ii0zIiBmaWxsPSIjRkZGRkZGIj5HRzwvdGV4dD4KICA8dGV4dCB4PSIxMDAiIHk9IjY4IiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iODAwIiBmb250LXNpemU9IjU2IiBsZXR0ZXItc3BhY2luZz0iLTEiIGZpbGw9IiMwQzBDMEMiPkdFUkRBVTwvdGV4dD4KPC9zdmc+Cg==" alt="Gerdau"></div>
         <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgOTYiPgogIDx0ZXh0IHg9IjAiIHk9Ijc0IiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjgwIiBsZXR0ZXItc3BhY2luZz0iLTEiIGZpbGw9IiMwQzBDMEMiPm1hbHdlZTwvdGV4dD4KPC9zdmc+Cg==" alt="Malwee"></div>
         <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODAgMTEyIj4KICA8IS0tIFYgc3dvb3NoOiBsZWZ0IGJsYWRlIChkYXJrKSArIHJpZ2h0IGZsYXJlZCBibGFkZSAobWlkLWdyYXkpIC0tPgogIDxwb2x5Z29uIHBvaW50cz0iMTQsMjAgMzQsMTcgNjAsODQgNDIsOTIiIGZpbGw9IiMwQzBDMEMiLz4KICA8cG9seWdvbiBwb2ludHM9IjQ4LDkwIDM4LDcwIDgyLDE2IDEwNCwxOCA2NCw5MiIgZmlsbD0iIzhBOEE4QSIvPgogIDx0ZXh0IHg9IjEyNiIgeT0iNTQiIGZvbnQtZmFtaWx5PSJHZWlzdCwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtc2l6ZT0iMzQiIGxldHRlci1zcGFjaW5nPSIwLjUiIGZpbGw9IiMwQzBDMEMiPlZPVE9SQU5USU08L3RleHQ+CiAgPHRleHQgeD0iMTI2IiB5PSI5NCIgZm9udC1mYW1pbHk9IkdlaXN0LCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSIzNCIgbGV0dGVyLXNwYWNpbmc9IjAuNSIgZmlsbD0iIzBDMEMwQyI+Y2ltZW50b3M8L3RleHQ+Cjwvc3ZnPgo=" alt="Votorantim Cimentos"></div>
         <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NzAgMTEwIj4KICA8dGV4dCB4PSIwIiB5PSI2MCIgZm9udC1mYW1pbHk9IkdlaXN0LCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgZm9udC1zaXplPSI0NCIgbGV0dGVyLXNwYWNpbmc9IjIiIGZpbGw9IiMwQzBDMEMiPkdSVVBPIEJSSU5PWDwvdGV4dD4KICA8dGV4dCB4PSI0NjYiIHk9IjkyIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiBmb250LXN0eWxlPSJpdGFsaWMiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiMwQzBDMEMiPkhvdXNld2FyZTwvdGV4dD4KPC9zdmc+Cg==" alt="Grupo Brinox"></div>
-        <div class="cd cd-more">+ novos cedentes</div>
       </div>
     </div>
-    <div class="cs-sacados">
+    <div class="cs-block">
       <div class="cs-lbl">Sacados · PMEs tomadoras</div>
       <div class="cs-metrics reveal" data-stagger>
         <div class="cs-metric"><div class="csm-k">Idade média do tomador</div><div class="csm-v">— <em>anos</em></div><div class="csm-s">a confirmar</div></div>
