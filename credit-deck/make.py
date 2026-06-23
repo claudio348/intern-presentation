@@ -1070,7 +1070,7 @@ STYLE = """<style>
 .cs-lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; margin-bottom:1.4vh; }
 .cedente-wall { display:grid; grid-template-columns:repeat(4,1fr); gap:1.1vw; flex:1 1 auto; min-height:0; }
 .cd { border:1px solid rgba(12,12,12,.14); border-radius:13px; display:flex; align-items:center; justify-content:center; padding:1.4vh 1.2vw; }
-.cd img { max-height:5.4vh; max-width:78%; width:auto; }
+.cd img { max-height:6vh; max-width:82%; width:auto; object-fit:contain; }
 .cs-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:1.4vw; flex:1 1 auto; min-height:0; }
 .cs-metric { border:1px solid rgba(12,12,12,.14); border-radius:14px; padding:1.8vh 1.4vw; display:flex; flex-direction:column; justify-content:center; }
 .csm-k { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:#9a9a9a; }
@@ -1187,14 +1187,14 @@ SLIDES = STYLE + f"""
     <div class="cs-block">
       <div class="cs-lbl">Cedentes · âncoras</div>
       <div class="cedente-wall reveal" data-stagger>
-        <div class="cd"><img src="intelbras-logo.svg" alt="Intelbras"></div>
-        <div class="cd"><img src="cantu-logo.svg" alt="Cantu"></div>
-        <div class="cd"><img src="chillibeans-logo.svg" alt="Chilli Beans"></div>
-        <div class="cd"><img src="moura-logo.svg" alt="Moura"></div>
-        <div class="cd"><img src="gerdau-logo.svg" alt="Gerdau"></div>
-        <div class="cd"><img src="malwee-logo.svg" alt="Malwee"></div>
-        <div class="cd"><img src="votorantim-logo.svg" alt="Votorantim Cimentos"></div>
-        <div class="cd"><img src="brinox-logo.svg" alt="Grupo Brinox"></div>
+        <div class="cd"><img src="logos/intelbras.png" alt="Intelbras"></div>
+        <div class="cd"><img src="logos/cantu.png" alt="Cantu"></div>
+        <div class="cd"><img src="logos/chillibeans.png" alt="Chilli Beans"></div>
+        <div class="cd"><img src="logos/moura.png" alt="Moura"></div>
+        <div class="cd"><img src="logos/gerdau.png" alt="Gerdau"></div>
+        <div class="cd"><img src="logos/malwee.png" alt="Malwee"></div>
+        <div class="cd"><img src="logos/votorantim.png" alt="Votorantim Cimentos"></div>
+        <div class="cd"><img src="logos/brinox.png" alt="Grupo Brinox"></div>
       </div>
     </div>
     <div class="cs-block">
