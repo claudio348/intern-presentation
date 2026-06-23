@@ -101,6 +101,25 @@
 .wip-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:#C0143C; }
 .wip-title { font-family:var(--font-sans); font-weight:700; font-size:clamp(20px,1.7vw,26px); color:var(--ink); margin-top:1.8vh; letter-spacing:-.01em; }
 .wip-sub { font-family:var(--font-sans); font-size:clamp(13px,1.05vw,16px); color:#5A5A5A; line-height:1.55; margin:1vh auto 0; max-width:48ch; }
+/* cedentes & sacados */
+.cs-grid { flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1.6fr 1fr; gap:3vw; align-items:stretch; margin-top:2.4vh; }
+.cs-cedentes, .cs-sacados { display:flex; flex-direction:column; min-height:0; }
+.cs-lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; display:flex; align-items:center; gap:.9vw; margin-bottom:1.8vh; }
+.cs-hi { font-family:var(--font-mono); font-size:9px; letter-spacing:.04em; text-transform:none; color:#3A3A3A; border:1px solid rgba(12,12,12,.18); border-radius:100px; padding:3px 10px; }
+.cs-feat { display:grid; grid-template-columns:1fr 1fr; gap:1.2vw; flex:1 1 auto; min-height:0; }
+.cs-feat-card { position:relative; border:1.6px solid #0C0C0C; border-radius:16px; padding:2vh 1.4vw; display:flex; align-items:center; justify-content:center; }
+.cs-feat-card img { max-height:7vh; max-width:78%; width:auto; }
+.cs-feat-tag { position:absolute; top:-9px; left:14px; background:#0C0C0C; color:#fff; font-family:var(--font-mono); font-size:8px; letter-spacing:.12em; text-transform:uppercase; padding:3px 9px; border-radius:100px; }
+.cedente-wall { display:grid; grid-template-columns:1fr 1fr; gap:1.2vw; flex:1 1 auto; min-height:0; margin-top:1.2vw; }
+.cd { border:1px solid rgba(12,12,12,.14); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:1.6vh 1.2vw; }
+.cd img { max-height:5vh; max-width:72%; width:auto; }
+.cd-more { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#9a9a9a; border-style:dashed; }
+.cs-metrics { display:flex; flex-direction:column; gap:1.4vh; flex:1 1 auto; min-height:0; }
+.cs-metric { border:1px solid rgba(12,12,12,.14); border-radius:14px; padding:1.8vh 1.4vw; flex:1 1 0; display:flex; flex-direction:column; justify-content:center; }
+.csm-k { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:#9a9a9a; }
+.csm-v { font-family:var(--font-sans); font-weight:800; font-size:clamp(26px,2.4vw,38px); letter-spacing:-.02em; line-height:1; color:var(--ink); margin-top:.7vh; }
+.csm-v em { font-style:normal; font-weight:600; font-size:.4em; color:#7a7a7a; margin-left:.15em; }
+.csm-s { font-family:var(--font-mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:#C0143C; margin-top:.7vh; }
 .bp-badge { display:inline-flex; align-items:center; gap:.5em; background:#0C0C0C; color:#FAFAFA; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; padding:.9vh 1vw; border-radius:8px; margin-bottom:1.4vh; }
 .bp-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:#FAFAFA; }
 .metrics.vstack { grid-template-columns:1fr; gap:0; margin-top:1.2vh; }
@@ -457,9 +476,40 @@
   <div class="illus">Fonte: Robbin Data · originação BNPL · mai/25–mai/26</div>
 </section>
 
-<!-- WHY WE PERFORM BETTER THAN BANKS (iso stack) -->
+<!-- CEDENTES & SACADOS -->
 <section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">O diferencial</span></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Originação · cedentes</span></div>
+  <div class="slide-head reveal"><div class="slide-kicker">Quem <b>origina</b> e quem <b>toma</b></div><h1>Cedentes & <span class="accent">sacados.</span></h1>
+  <p class="sub">Marcas líderes cedem recebíveis; suas PMEs tomam crédito no rail PIX.</p></div>
+  <div class="cs-grid">
+    <div class="cs-cedentes">
+      <div class="cs-lbl">Cedentes · âncoras <span class="cs-hi">melhores do mercado: Intelbras &amp; Cantu</span></div>
+      <div class="cs-feat reveal" data-stagger>
+        <div class="cs-feat-card"><span class="cs-feat-tag">cedente destaque</span><img src="intelbras-logo.svg" alt="Intelbras"></div>
+        <div class="cs-feat-card"><span class="cs-feat-tag">cedente destaque</span><img src="cantu-logo.svg" alt="Cantu"></div>
+      </div>
+      <div class="cedente-wall reveal" data-stagger>
+        <div class="cd"><img src="chillibeans-logo.svg" alt="Chilli Beans"></div>
+        <div class="cd"><img src="gerdau-logo.svg" alt="Gerdau"></div>
+        <div class="cd"><img src="brinox-logo.svg" alt="Grupo Brinox"></div>
+        <div class="cd cd-more">+ novos cedentes</div>
+      </div>
+    </div>
+    <div class="cs-sacados">
+      <div class="cs-lbl">Sacados · PMEs tomadoras</div>
+      <div class="cs-metrics reveal" data-stagger>
+        <div class="cs-metric"><div class="csm-k">Idade média do tomador</div><div class="csm-v">— <em>anos</em></div><div class="csm-s">a confirmar</div></div>
+        <div class="cs-metric"><div class="csm-k">Ticket médio</div><div class="csm-v">R$ —</div><div class="csm-s">a confirmar</div></div>
+        <div class="cs-metric"><div class="csm-k">Limite médio aprovado</div><div class="csm-v">R$ —</div><div class="csm-s">a confirmar</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="illus">Fonte: Robbin Data · cedentes e sacados</div>
+</section>
+
+<!-- WHY WE PERFORM BETTER THAN BANKS (iso stack) -->
+<section class="slide theme-light vcenter" data-num="08">
+  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">O diferencial</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">A nossa <b>vantagem</b></div><h1>Por que performamos melhor que os <span class="accent">bancos.</span></h1>
   <p class="sub">Três vantagens estruturais — cada uma reforçando a anterior.</p></div>
   <div class="pyr-wrap reveal">
@@ -492,8 +542,8 @@
 <!-- 4 — CDR BY VINTAGE (removed per request) -->
 
 <!-- 5 — FPD -->
-<section class="slide theme-light vcenter" data-num="08">
-  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
+<section class="slide theme-light vcenter" data-num="09">
+  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Melhoramos o jeito de fazer <b>crédito</b></div><h1>FPD 30 <span class="accent">por safra.</span></h1>
   <p class="sub">FPD 30 por safra (PIX Rails, até mar/26) — novo critério de elegibilidade e governança; régua de PDD do FIDC ajustada.</p></div>
   <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Média 4,4%</b></span><span style="color:#8a8a8a">Meta &le; 5%</span><span style="color:#8a8a8a">Régua de PDD do FIDC ajustada</span></div>
@@ -547,8 +597,8 @@
 <!-- CREDIT PORTFOLIO PER PARTNER (removido) -->
 
 <!-- DELINQUENCY — CONSOLIDATED 90+ + COMPOSITION TABLE -->
-<section class="slide theme-light vcenter" data-num="09">
-  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
+<section class="slide theme-light vcenter" data-num="10">
+  <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">O comportamento da <b>inadimplência</b></div><h1>Inadimplência <span class="accent">consolidada.</span></h1>
   <p class="sub">Visão consolidada de 90+ — em revisão.</p></div>
   <div class="wip-wrap reveal">
@@ -564,8 +614,8 @@
 <!-- AGING DA CARTEIRA — removido a pedido -->
 
 <!-- FIDC LOAN BOOK GROWTH (off-balance, total only) -->
-<section class="slide theme-light vcenter" data-num="10">
-  <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
+<section class="slide theme-light vcenter" data-num="11">
+  <div class="chapter-mark light-mark"><span class="chapter-num">10</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Estruturamos um <b>FIDC</b> para escalar</div><h1>Crescimento da carteira <span class="accent">do FIDC.</span></h1>
   <p class="sub">Saldo total em aberto no FIDC (R$M) — carve-out off-balance desde dez/25.</p></div>
   <div class="blegend reveal"><span><i style="background:#0C0C0C"></i>total off-balance · R$M</span></div>
@@ -603,8 +653,8 @@
 <!-- INCREASING DIVERSIFICATION (removido) -->
 
 <!-- 8 — TENOR & DURATION -->
-<section class="slide theme-light vcenter" data-num="11">
-  <div class="chapter-mark light-mark"><span class="chapter-num">10</span><span class="chapter-divider"></span><span class="chapter-year">Carteira · prazo</span></div>
+<section class="slide theme-light vcenter" data-num="12">
+  <div class="chapter-mark light-mark"><span class="chapter-num">11</span><span class="chapter-divider"></span><span class="chapter-year">Carteira · prazo</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Curta e de <b>giro rápido</b></div><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
   <p class="sub">As métricas-chave da carteira BNPL.</p></div>
   <div class="giro-wrap"><div class="giro-lede reveal">O mesmo capital <span class="accent">gira ~3,5×</span> ao ano — carteira curta e recorrente.</div><div class="giro-stats reveal" data-stagger><div class="giro-stat"><div class="gk">Prazo médio</div><div class="gv">3,5<em>meses</em></div><div class="gs">parcelas médias por contrato</div></div><div class="giro-stat"><div class="gk">Duration</div><div class="gv">2,3<em>meses</em></div><div class="gs">vida média ponderada por saldo</div></div><div class="giro-stat"><div class="gk">Taxa média</div><div class="gv">44,6%<em>a.a.</em></div><div class="gs">ponderada pelo principal</div></div><div class="giro-stat"><div class="gk">Giro da carteira</div><div class="gv">3,5×<em>ao ano</em></div><div class="gs">recicla e reempresta rápido</div></div></div></div>
@@ -612,8 +662,8 @@
 </section>
 
 <!-- NIMAL DO FIDC — conclusão da performance (antes do corporativo) -->
-<section class="slide theme-light vcenter" data-num="12">
-  <div class="chapter-mark light-mark"><span class="chapter-num">11</span><span class="chapter-divider"></span><span class="chapter-year">Performance · conclusão</span></div>
+<section class="slide theme-light vcenter" data-num="13">
+  <div class="chapter-mark light-mark"><span class="chapter-num">12</span><span class="chapter-divider"></span><span class="chapter-year">Performance · conclusão</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Conclusão da <b>performance</b></div><h1>NIMAL do <span class="accent">FIDC.</span></h1>
   <p class="sub">Do yield ao NIMAL — NIM % (a.a.) do FIDC, 1T26.</p></div>
   <div class="chartframe reveal"><svg class="chart" viewBox="0 0 1000 504" xmlns="http://www.w3.org/2000/svg">
@@ -645,8 +695,8 @@
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
-<section class="slide theme-light vcenter" data-num="13">
-  <div class="chapter-mark light-mark"><span class="chapter-num">12</span><span class="chapter-divider"></span><span class="chapter-year">Companhia</span></div>
+<section class="slide theme-light vcenter" data-num="14">
+  <div class="chapter-mark light-mark"><span class="chapter-num">13</span><span class="chapter-divider"></span><span class="chapter-year">Companhia</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Para <b>onde vamos</b></div><h1>Alavancagem com <span class="accent">lastro corporativo.</span></h1>
   <p class="sub">Receita run-rate e o balanço por trás da alavancagem — em revisão.</p></div>
   <div class="wip-wrap reveal">
@@ -660,7 +710,7 @@
 </section>
 
 <!-- 11 — Q&A -->
-<section class="slide theme-dark closing2 has-ts" data-num="14">
+<section class="slide theme-dark closing2 has-ts" data-num="15">
   <div class="closing2-bg"><div class="closing2-grid"></div><div class="closing2-glow"></div></div>
   <div class="closing2-inner">
     <div class="cl-left">
