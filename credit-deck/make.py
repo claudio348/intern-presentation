@@ -370,15 +370,13 @@ def portfolio_total_bars():
     for t in (0,4,8,12,16):
         s.append(f'<text x="{Lx-7}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
     for i in range(n):
-        cx = Lx+slot*i+slot/2; x = cx-bw/2; v = bnpl_carteira[i]; f = min(bnpl_fidc[i], v)
-        hf = f/ymax*ph; yf = ybase-hf
-        if f > 0.02:
-            s.append(f'<rect x="{x:.1f}" y="{yf:.1f}" width="{bw:.1f}" height="{hf:.1f}" fill="#0C0C0C"/>')
-        on = v-f; hon = on/ymax*ph; yon = yf-hon
-        if on > 0.02:
-            s.append(f'<rect x="{x:.1f}" y="{yon:.1f}" width="{bw:.1f}" height="{hon:.1f}" rx="2" fill="#B9B9B9"/>')
+        cx = Lx+slot*i+slot/2; x = cx-bw/2; v = bnpl_carteira[i]
+        h = v/ymax*ph; y = ybase-h
+        live = i >= BNPL_FIDC_IDX
+        col = "#0C0C0C" if live else "#B9B9B9"
+        s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="2" fill="{col}"/>')
         last = i == n-1
-        s.append(f'<text x="{cx:.1f}" y="{Y(v)-7:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 600}" font-size="{13 if last else 11}" fill="{"#0C0C0C" if last else "#5A5A5A"}">{v:.1f}</text>')
+        s.append(f'<text x="{cx:.1f}" y="{Y(v)-7:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="{700 if last else 600}" font-size="{13 if last else 11}" fill="{"#0C0C0C" if (last or live) else "#5A5A5A"}">{v:.1f}</text>')
     s.append(f'<line x1="{xd:.1f}" y1="{Tx}" x2="{xd:.1f}" y2="{ybase:.1f}" stroke="#0C0C0C" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.55"/>')
     s.append(f'<text x="{xd+7:.1f}" y="16" font-family="Geist Mono,monospace" font-size="11" letter-spacing="0.08em" fill="#3A3A3A">FIDC ativo →</text>')
     for i in range(n):
@@ -387,8 +385,8 @@ def portfolio_total_bars():
     return "\n".join(s)
 
 port_total_svg = portfolio_total_bars()
-port_total_legend = ('<span><i style="background:#B9B9B9"></i>On-balance · Pré-FIDC</span>'
-                     '<span><i style="background:#0C0C0C"></i>Financiado por FIDC (mar/26 →)</span>'
+port_total_legend = ('<span><i style="background:#B9B9B9"></i>On-balance · pré-FIDC</span>'
+                     '<span><i style="background:#0C0C0C"></i>No FIDC (mar/26 →)</span>'
                      '<span style="color:#8a8a8a">carteira BNPL · R$M</span>')
 
 # consolidated (corporate) charts
@@ -640,38 +638,56 @@ kpi_dur   = [2.09,2.15,2.18,2.08,2.09,1.97,1.97,1.93,2.07,2.20,2.30,2.22,2.34]
 kpi_rate  = [47.3,46.1,46.6,46.1,46.6,47.4,48.7,47.8,46.5,45.9,45.5,45.1,44.6]
 kpi_turn  = [3.40,3.47,3.53,3.60,3.77,3.86,3.93,3.84,3.60,3.55,3.51,3.51,3.48]
 
-def spark(vals, gid):
-    W, H = 300, 56; L, R, T, B = 3, 6, 7, 7
-    pw, ph = W-L-R, H-T-B; n = len(vals)
-    lo, hi = min(vals), max(vals); rng = (hi-lo) or 1
-    ymin, ymax = lo-rng*0.5, hi+rng*0.5
-    X = lambda i: L + i/(n-1)*pw
-    Y = lambda v: T+ph - (v-ymin)/(ymax-ymin)*ph
-    xs = [X(i) for i in range(n)]; ys = [Y(v) for v in vals]; base = T+ph
-    s = [f'<svg class="kc-spark-svg" viewBox="0 0 {W} {H}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">']
-    s.append(f'<defs><linearGradient id="{gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C0C0C" stop-opacity="0.10"/><stop offset="1" stop-color="#0C0C0C" stop-opacity="0"/></linearGradient></defs>')
-    d = f"M {xs[0]:.1f},{base:.1f} " + " ".join(f"L {x:.1f},{y:.1f}" for x,y in zip(xs,ys)) + f" L {xs[-1]:.1f},{base:.1f} Z"
-    s.append(f'<path d="{d}" fill="url(#{gid})"/>')
-    s.append('<polyline points="%s" fill="none" stroke="#0C0C0C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' % " ".join(f"{x:.1f},{y:.1f}" for x,y in zip(xs,ys)))
-    s.append(f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="3.4" fill="#0C0C0C"/>')
+def giro_visual():
+    # capital-recycling timeline: the same R$ turns over ~3.5x within 12 months
+    W, H = 1060, 300
+    L, R, T, B = 50, 50, 100, 60
+    pw = W-L-R
+    axisY = H-B
+    mX = lambda m: L + m/12*pw
+    cyc = 12/3.5  # ≈ 3,43 meses por ciclo
+    barH = 72; barY = axisY - 24 - barH
+    s = [f'<svg class="chart" viewBox="0 0 {W} {H}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">']
+    # cycle blocks along the year
+    start = 0.0; idx = 0
+    while start < 11.98:
+        w = min(cyc, 12-start)
+        x0 = mX(start); x1 = mX(start+w); cx = (x0+x1)/2
+        partial = w < cyc - 0.05
+        fill = "#0C0C0C" if idx % 2 == 0 else "#6E6E6E"
+        s.append(f'<rect x="{x0+4:.1f}" y="{barY:.1f}" width="{x1-x0-8:.1f}" height="{barH}" rx="11" fill="{fill}"/>')
+        s.append(f'<text x="{cx:.1f}" y="{barY+barH/2-3:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="700" font-size="13.5" fill="#fff">Ciclo {idx+1}</text>')
+        sub = "≈ 3,5 meses" if not partial else "≈ ½ ciclo"
+        s.append(f'<text x="{cx:.1f}" y="{barY+barH/2+14:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" fill="#d2d2d2">{sub}</text>')
+        idx += 1; start += cyc
+    # year axis
+    s.append(f'<line x1="{L}" y1="{axisY:.1f}" x2="{W-R}" y2="{axisY:.1f}" stroke="#C8C8C8" stroke-width="1.2"/>')
+    for m in (0,3,6,9,12):
+        x = mX(m)
+        s.append(f'<line x1="{x:.1f}" y1="{axisY:.1f}" x2="{x:.1f}" y2="{axisY+6:.1f}" stroke="#C8C8C8" stroke-width="1.2"/>')
+        s.append(f'<text x="{x:.1f}" y="{axisY+23:.1f}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="10" fill="#5A5A5A">mês {m}</text>')
+    # recycle arc over the top (end → start)
+    ax0 = mX(12)-7; ax1 = mX(0)+7; topY = 34
+    s.append(f'<path d="M {ax0:.1f} {barY-10:.1f} C {ax0:.1f} {topY:.1f}, {ax1:.1f} {topY:.1f}, {ax1:.1f} {barY-10:.1f}" fill="none" stroke="#0C0C0C" stroke-width="1.6" stroke-dasharray="5 5"/>')
+    s.append(f'<path d="M {ax1-5:.1f} {barY-18:.1f} L {ax1:.1f} {barY-9:.1f} L {ax1+5:.1f} {barY-18:.1f}" fill="none" stroke="#0C0C0C" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>')
+    s.append(f'<text x="{(ax0+ax1)/2:.1f}" y="{topY-7:.1f}" text-anchor="middle" font-family="Geist,sans-serif" font-weight="600" font-size="13" fill="#0C0C0C">o mesmo capital recicla ~3,5× ao ano</text>')
     s.append('</svg>')
-    return "".join(s)
+    return "\n".join(s)
 
-def kpi_card(k, v, sub, vals, gid, rng):
-    return (f'<div class="kpi-card">'
-            f'<div class="kc-k">{k}</div>'
-            f'<div class="kc-v">{v}</div>'
-            f'<div class="kc-s">{sub}</div>'
-            f'<div class="kc-spark">{spark(vals, gid)}</div>'
-            f'<div class="kc-range"><span>{kpi_labels[0]}</span><span>faixa {rng}</span><span>{kpi_labels[-1]}</span></div>'
-            f'</div>')
+giro_svg = giro_visual()
 
-kpi_grid = ('<div class="kpi-board reveal" data-stagger>'
-    + kpi_card("Prazo médio","3,5 <em>meses</em>","parcelas médias por contrato", kpi_tenor, "spT", "3,1–3,5")
-    + kpi_card("Duration","~2,3 <em>meses</em>","vida média ponderada por saldo", kpi_dur, "spD", "1,9–2,3")
-    + kpi_card("Taxa média","44,6% <em>/ano</em>","ponderada pelo principal", kpi_rate, "spR", "45–49%")
-    + kpi_card("Giro","~3,5× <em>/ano</em>","a carteira recicla rápido", kpi_turn, "spG", "3,4–3,9×")
-    + '</div>')
+def _gstat(k, v, u, sub):
+    return (f'<div class="giro-stat"><div class="gk">{k}</div>'
+            f'<div class="gv">{v}<em>{u}</em></div><div class="gs">{sub}</div></div>')
+
+giro_block = ('<div class="giro-wrap">'
+    '<div class="giro-hero reveal">' + giro_svg + '</div>'
+    '<div class="giro-stats reveal" data-stagger>'
+    + _gstat("Prazo médio","3,5","meses","parcelas médias por contrato")
+    + _gstat("Duration","2,3","meses","vida média ponderada por saldo")
+    + _gstat("Taxa média","44,6%","a.a.","ponderada pelo principal")
+    + _gstat("Giro","3,5×","a.a.","a carteira recicla rápido")
+    + '</div></div>')
 
 # ---------- delinquency composition: balance by days-past-due bucket (real loan tape) ----------
 ag_labels = ptm(['nov/24','dec/24','jan/25','feb/25','mar/25','apr/25','may/25','jun/25','jul/25','aug/25','sep/25','oct/25','nov/25','dec/25','jan/26','feb/26','mar/26','apr/26','may/26'])
@@ -998,15 +1014,27 @@ STYLE = """<style>
 .closing2.has-ts .closing2-inner { display:grid; grid-template-columns:0.78fr 1.12fr; gap:4.5vw; align-items:center; text-align:left; max-width:1500px; width:90vw; padding:5vh 5vw; }
 .closing2.has-ts .cl-left { display:flex; flex-direction:column; align-items:flex-start; gap:3vh; }
 .closing2.has-ts .closing2-line { font-size:clamp(46px,6.5vw,104px) !important; }
-.ts-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.16); border-radius:16px; padding:2.6vh 2vw; }
-.ts-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; border-bottom:1px solid rgba(255,255,255,.2); padding-bottom:1.3vh; margin-bottom:.4vh; }
-.ts-title { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.25vw,19px); color:#fff; }
-.ts-tag { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:#C9A227; white-space:nowrap; }
-.ts-row { display:grid; grid-template-columns:33% 1fr; gap:1vw; padding:0.95vh 0; border-bottom:1px solid rgba(255,255,255,.08); }
+.ts-card { background:linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.16); border-radius:18px; padding:2.6vh 2vw; box-shadow:0 20px 60px rgba(0,0,0,.35); }
+.ts-head { display:flex; align-items:center; justify-content:space-between; gap:1vw; }
+.ts-title { font-family:var(--font-sans); font-weight:700; font-size:clamp(17px,1.4vw,22px); color:#fff; letter-spacing:-.01em; }
+.ts-tag { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:#E9C75A; border:1px solid rgba(201,162,39,.5); border-radius:100px; padding:3px 10px; white-space:nowrap; }
+.ts-sub { font-family:var(--font-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#8a8a8a; margin-top:.8vh; }
+.ts-hero { display:flex; align-items:stretch; justify-content:space-between; gap:1.2vw; margin:1.7vh 0; padding:1.9vh 1.5vw; border-radius:13px; background:linear-gradient(180deg,rgba(201,162,39,.14),rgba(201,162,39,.03)); border:1px solid rgba(201,162,39,.32); }
+.ts-hero-main { display:flex; flex-direction:column; gap:.5vh; justify-content:center; }
+.ts-hero-k { font-family:var(--font-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#E9C75A; }
+.ts-hero-v { font-family:var(--font-sans); font-weight:800; font-size:clamp(28px,2.5vw,40px); color:#fff; line-height:1; letter-spacing:-.02em; }
+.ts-hero-v span { color:#E9C75A; }
+.ts-hero-v i { font-style:normal; font-weight:600; font-size:.36em; color:#9a9a9a; margin-left:.1em; }
+.ts-hero-side { display:flex; flex-direction:column; justify-content:center; gap:.8vh; padding-left:1.2vw; border-left:1px solid rgba(255,255,255,.16); }
+.ts-hero-side > div { display:flex; align-items:baseline; gap:.7vw; justify-content:space-between; }
+.ts-hero-side .k { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#9a9a9a; }
+.ts-hero-side .v { font-family:var(--font-sans); font-weight:700; font-size:clamp(13px,1.05vw,16px); color:#fff; }
+.ts-row { display:grid; grid-template-columns:34% 1fr; gap:1vw; padding:0.9vh 0; border-bottom:1px solid rgba(255,255,255,.08); }
+.ts-row:last-child { border-bottom:none; }
 .ts-row .k { font-family:var(--font-mono); font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:#9a9a9a; align-self:center; }
 .ts-row .v { font-family:var(--font-sans); font-size:clamp(12px,0.98vw,14.5px); color:#E6E6E6; line-height:1.4; }
 .ts-row .v b { color:#fff; font-weight:700; }
-.ts-foot { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7a7a7a; margin-top:1.3vh; }
+.ts-foot { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7a7a7a; margin-top:1.4vh; border-top:1px solid rgba(255,255,255,.1); padding-top:1.2vh; }
 .biz-body { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:3.4vh; }
 .biz-flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch; gap:0; }
 .bf-step { position:relative; background:var(--paper); border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:3vh 1.7vw 2.6vh; display:flex; flex-direction:column; }
@@ -1054,16 +1082,23 @@ STYLE = """<style>
 .metrics.compact .metric { padding:1.5vh 1vw; border-radius:12px; }
 .metrics.compact .k { font-size:9px; }
 .metrics.compact .v { font-size:clamp(18px,1.7vw,28px); }
-.kpi-board { display:grid; grid-template-columns:1fr 1fr; grid-auto-rows:1fr; gap:2.4vh 2.6vw; margin-top:2.8vh; flex:1 1 auto; min-height:0; }
-.kpi-card { border:1px solid rgba(12,12,12,.13); border-radius:16px; padding:2.4vh 2vw 2vh; display:flex; flex-direction:column; }
-.kpi-card .kc-k { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:#9a9a9a; }
-.kpi-card .kc-v { font-family:var(--font-sans); font-weight:800; font-size:clamp(34px,3.6vw,54px); letter-spacing:-.025em; line-height:1; color:var(--ink); margin-top:1vh; }
-.kpi-card .kc-v em { font-style:normal; font-weight:600; font-size:.36em; color:#7a7a7a; letter-spacing:0; margin-left:.15em; }
-.kpi-card .kc-s { font-family:var(--font-sans); font-size:13px; color:#5A5A5A; margin-top:.7vh; }
-.kpi-card .kc-spark { margin-top:auto; padding-top:2vh; }
-.kpi-card .kc-spark-svg { width:100%; height:46px; display:block; }
-.kpi-card .kc-range { display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.06em; color:#b0b0b0; margin-top:.9vh; }
-.kpi-card .kc-range span:nth-child(2) { color:#5A5A5A; }
+/* giro / prazo / taxa — capital-recycling visual */
+.giro-wrap { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:3vh; }
+.giro-hero { display:flex; justify-content:center; }
+.giro-hero svg { width:100%; max-width:1060px; height:auto; aspect-ratio:auto; max-height:42vh; display:block; }
+.giro-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:2.4vw; }
+.giro-stat { border-top:2px solid #0C0C0C; padding-top:1.4vh; }
+.giro-stat .gk { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
+.giro-stat .gv { font-family:var(--font-sans); font-weight:800; font-size:clamp(30px,3vw,46px); letter-spacing:-.025em; line-height:1; color:var(--ink); margin-top:.8vh; }
+.giro-stat .gv em { font-style:normal; font-weight:600; font-size:.36em; color:#7a7a7a; margin-left:.18em; }
+.giro-stat .gs { font-family:var(--font-sans); font-size:12.5px; color:#5A5A5A; margin-top:.7vh; }
+/* work-in-progress placeholder */
+.wip-wrap { flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center; }
+.wip-card { text-align:center; border:1px dashed rgba(12,12,12,.28); border-radius:18px; padding:6vh 5vw; max-width:680px; background:rgba(12,12,12,.015); }
+.wip-badge { display:inline-flex; align-items:center; gap:.6em; font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#fff; background:#0C0C0C; border-radius:100px; padding:.7vh 1.1vw; }
+.wip-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:#C0143C; }
+.wip-title { font-family:var(--font-sans); font-weight:700; font-size:clamp(20px,1.7vw,26px); color:var(--ink); margin-top:1.8vh; letter-spacing:-.01em; }
+.wip-sub { font-family:var(--font-sans); font-size:clamp(13px,1.05vw,16px); color:#5A5A5A; line-height:1.55; margin:1vh auto 0; max-width:48ch; }
 .bp-badge { display:inline-flex; align-items:center; gap:.5em; background:#0C0C0C; color:#FAFAFA; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; padding:.9vh 1vw; border-radius:8px; margin-bottom:1.4vh; }
 .bp-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:#FAFAFA; }
 .metrics.vstack { grid-template-columns:1fr; gap:0; margin-top:1.2vh; }
@@ -1149,7 +1184,7 @@ SLIDES = STYLE + f"""
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">O ponto de <b>partida</b></div><h1>A carteira de <span class="accent">crédito.</span></h1>
   <p class="sub">Carteira BNPL (PIX + Boleto), R$M — R$ 15M hoje · FIDC live mar/26.</p>
-  <span class="tag-pill">FIDC live mar/26 · ~80% da carteira já cedida</span></div>
+  <span class="tag-pill">FIDC live mar/26 · carteira originada no rail PIX</span></div>
   <div class="blegend reveal">{port_total_legend}</div>
   <div class="chartframe reveal">{port_total_svg}</div>
   <div class="illus">Fonte: Robbin Data · carteira BNPL · mai/25–mai/26</div>
@@ -1201,22 +1236,18 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="07">
   <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">O comportamento da <b>inadimplência</b></div><h1>Inadimplência <span class="accent">consolidada.</span></h1>
-  <p class="sub">90+ consolidado (% do saldo) até o início do FIDC (mar/26) · de onde vem o 90+ por origem.</p></div>
-  <div class="reveal"><div class="arr-cap" style="margin-top:.4vh">90+ consolidado · % do saldo</div><div class="dq-line">{dq_cons_svg}</div></div>
-  <div class="reveal" style="margin-top:1.2vh">{conc_ctab_html}</div>
-  <div class="blegend reveal" style="margin-top:.6vh"><span style="color:#8a8a8a">chip = CDR (90+ ÷ principal originado) · mais escuro = maior</span></div>
-  <div class="illus">Fonte: Robbin Data · 90+ ÷ saldo (linha) e over90 por origem mai/26 (tabela)</div>
+  <p class="sub">Visão consolidada de 90+ — em revisão.</p></div>
+  <div class="wip-wrap reveal">
+    <div class="wip-card">
+      <div class="wip-badge">Work in progress</div>
+      <div class="wip-title">Inadimplência consolidada</div>
+      <p class="wip-sub">Estamos consolidando a metodologia de 90+ por origem. Os números serão atualizados em breve.</p>
+    </div>
+  </div>
+  <div class="illus">Fonte: Robbin Data · em revisão</div>
 </section>
 
-<!-- AGING DA CARTEIRA (composition chart) -->
-<section class="slide theme-light vcenter" data-num="08">
-  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Risco · aging</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">… e como ela <b>envelhece</b></div><h1>Aging da <span class="accent">carteira.</span></h1>
-  <p class="sub">Saldo por faixa de atraso — participação ao longo do tempo, R$M no topo.</p></div>
-  <div class="blegend reveal">{ag_legend}</div>
-  <div class="chartframe reveal">{aging_svg}</div>
-  <div class="illus">Fonte: Robbin Data · saldo por faixa de atraso · mensal · região 90+ acima da linha</div>
-</section>
+<!-- AGING DA CARTEIRA — removido a pedido -->
 
 <!-- FIDC LOAN BOOK GROWTH (off-balance, total only) -->
 <section class="slide theme-light vcenter" data-num="06">
@@ -1234,9 +1265,9 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="08">
   <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Carteira · prazo</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Curta e de <b>giro rápido</b></div><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
-  <p class="sub">Uma carteira curta e de giro rápido — métricas-chave, mês a mês.</p></div>
-  {kpi_grid}
-  <div class="illus">Fonte: Robbin Data · mensal · mai/25–mai/26</div>
+  <p class="sub">Carteira curta: o mesmo capital recicla ~3,5× ao ano.</p></div>
+  {giro_block}
+  <div class="illus">Fonte: Robbin Data · médias mai/25–mai/26</div>
 </section>
 
 <!-- NIMAL DO FIDC — conclusão da performance (antes do corporativo) -->
@@ -1284,15 +1315,22 @@ SLIDES = STYLE + f"""
       <div class="closing2-logo reveal"><img src="robbin-logo-white.svg" alt="Robbin" style="height:42px;width:auto;"></div>
     </div>
     <div class="ts-card reveal">
-      <div class="ts-head"><span class="ts-title">Term sheet — dívida corporativa</span><span class="ts-tag">indicativo · ilustrativo</span></div>
-      <div class="ts-row"><span class="k">Instrumento</span><span class="v">Dívida corporativa (debênture)</span></div>
-      <div class="ts-row"><span class="k">Emissor</span><span class="v">Robbin</span></div>
-      <div class="ts-row"><span class="k">Remuneração</span><span class="v"><b>CDI + 5,0%</b> a.a.</span></div>
-      <div class="ts-row"><span class="k">Garantia</span><span class="v">Cessão fiduciária das <b>cotas subordinadas (Jr) do FIDC</b></span></div>
-      <div class="ts-row"><span class="k">Montante</span><span class="v">R$ 50M (ilustrativo)</span></div>
-      <div class="ts-row"><span class="k">Prazo</span><span class="v">36 meses</span></div>
-      <div class="ts-row"><span class="k">Amortização</span><span class="v">Bullet · juros semestrais</span></div>
-      <div class="ts-row"><span class="k">Uso dos recursos</span><span class="v">Capitalizar a cota Jr · crescer a carteira</span></div>
+      <div class="ts-head"><span class="ts-title">Term sheet</span><span class="ts-tag">indicativo · ilustrativo</span></div>
+      <div class="ts-sub">Dívida corporativa garantida por cotas Jr do FIDC</div>
+      <div class="ts-hero">
+        <div class="ts-hero-main"><span class="ts-hero-k">Remuneração</span><span class="ts-hero-v">CDI <span>+ 5,0%</span> <i>a.a.</i></span></div>
+        <div class="ts-hero-side">
+          <div><span class="k">Montante</span><span class="v">R$ 50M</span></div>
+          <div><span class="k">Prazo</span><span class="v">36 meses</span></div>
+        </div>
+      </div>
+      <div class="ts-rows">
+        <div class="ts-row"><span class="k">Instrumento</span><span class="v">Debênture</span></div>
+        <div class="ts-row"><span class="k">Emissor</span><span class="v">Robbin</span></div>
+        <div class="ts-row"><span class="k">Garantia</span><span class="v">Cessão fiduciária das <b>cotas subordinadas (Jr) do FIDC</b></span></div>
+        <div class="ts-row"><span class="k">Amortização</span><span class="v">Bullet · juros semestrais</span></div>
+        <div class="ts-row"><span class="k">Uso dos recursos</span><span class="v">Capitalizar a cota Jr · crescer a carteira</span></div>
+      </div>
       <div class="ts-foot">Termo meramente ilustrativo · não vinculante</div>
     </div>
   </div>
