@@ -1246,25 +1246,15 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="10">
   <div class="chapter-mark light-mark"><span class="chapter-num">09</span><span class="chapter-divider"></span><span class="chapter-year">Companhia</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Para <b>onde vamos</b></div><h1>Alavancagem com <span class="accent">lastro corporativo.</span></h1>
-  <p class="sub">Receita run-rate (US$k) e o balanço por trás da alavancagem.</p></div>
-  <div class="two-col reveal" style="grid-template-columns:1.45fr 1fr; align-items:center;">
-    <div>
-      <div class="arr-cap">Receita run-rate · US$ mil · câmbio R$ 5,00/US$</div>
-      <div class="chartframe">{arr_svg}</div>
-    </div>
-    <div>
-      <div class="metrics vstack" data-stagger>
-        {metric("Runway","18 <span style='font-size:.5em'>meses</span>","ao burn atual")}
-        {metric("Posição de caixa","R$ 25M","atual")}
-      </div>
-      <span class="bp-badge" style="margin-top:1.8vh">Premissas do Business Plan</span>
-      <div class="metrics vstack" data-stagger>
-        {metric("TPV esperado","R$ 25M <span style='font-size:.5em'>/mês</span>","até dez/26")}
-        {metric("Carteira de crédito","R$ 71M","esperado · dez/26")}
-      </div>
+  <p class="sub">Receita run-rate e o balanço por trás da alavancagem — em revisão.</p></div>
+  <div class="wip-wrap reveal">
+    <div class="wip-card">
+      <div class="wip-badge">Work in progress</div>
+      <div class="wip-title">Alavancagem com lastro corporativo</div>
+      <p class="wip-sub">Estamos consolidando o run-rate de receita e o plano de alavancagem. Os números serão atualizados em breve.</p>
     </div>
   </div>
-  <div class="illus">Receita run-rate (real) · projeções conforme o Business Plan</div>
+  <div class="illus">Fonte: Robbin Data · em revisão</div>
 </section>
 
 <!-- 11 — Q&A -->
