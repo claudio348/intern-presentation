@@ -698,7 +698,7 @@ giro_block = ('<div class="giro-wrap">'
     + _gstat("Duration","2,3","meses","vida média ponderada por saldo")
     + _gstat("Taxa média","44,6%","a.a.","ponderada pelo principal")
     + _gstat("Giro da carteira","3,5×","ao ano","recicla e reempresta rápido")
-    + _gstat("Inadimplência","XX","(TBD)","90+ · a confirmar")
+    + _gstat("Inadimplência","2,49%","PDD","provisão · % da carteira")
     + '</div></div>')
 
 # ---------- delinquency composition: balance by days-past-due bucket (real loan tape) ----------
@@ -1314,7 +1314,7 @@ SLIDES = STYLE + f"""
   <div class="slide-head reveal"><div class="slide-kicker">Os números da <b>carteira</b></div><h1>Robbin KPIs de <span class="accent">Crédito.</span></h1>
   <p class="sub">Carteira curta, de giro rápido — prazo, taxa, giro e inadimplência.</p></div>
   {giro_block}
-  <div class="illus">Fonte: Robbin Data · médias mai/25–mai/26 · inadimplência a confirmar</div>
+  <div class="illus">Fonte: Robbin Data · médias mai/25–mai/26 · PDD 2,49% da carteira</div>
 </section>
 
 <!-- NIMAL DO FIDC — conclusão da performance (antes do corporativo) -->
