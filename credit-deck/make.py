@@ -131,7 +131,7 @@ def vintage_chart():
     s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx:.1f}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
     for m in range(0, mobmax+1):
         s.append(f'<text x="{X(m):.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" fill="#5A5A5A">M{m}</text>')
-    s.append(f'<text x="{WD-Rx:.1f}" y="{Tx-2:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">inadimplência % · por meses de originação (MOB)</text>')
+    s.append(f'<text x="{WD-Rx:.1f}" y="{Tx-2:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">CDR acumulado % · por meses de originação (MOB)</text>')
     ends = []
     for name, era, vals, col in vint_series:
         hl = col == "#0C0C0C"
@@ -1283,11 +1283,11 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="05">
   <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Melhoramos o nosso <b>underwriting</b></div><h1>Safras de <span class="accent">crédito.</span></h1>
-  <p class="sub">Inadimplência por safra ao longo da maturação — as políticas de crédito v1 (mar/25) e v2 (ago/25) derrubam cada safra.</p></div>
+  <p class="sub">CDR acumulado por safra ao longo da maturação — as políticas de crédito v1 (mar/25) e v2 (ago/25) derrubam cada safra.</p></div>
   <div class="blegend reveal" style="gap:1.6vw">{fpd_vint_legend}</div>
   <div class="chartframe reveal">{fpd_vintage_svg}</div>
-  <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Política v1 · mar/25</b></span><span style="color:#3A3A3A"><b style="color:#0C0C0C">Política v2 · ago/25</b></span><span style="color:#8a8a8a">com o FIDC: novos critérios + governança + régua de PDD ⇒ FPD 30 menor esperado</span></div>
-  <div class="illus">Fonte: Robbin Data · inadimplência por safra · MOB · PIX Rails</div>
+  <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Política v1 · mar/25</b></span><span style="color:#3A3A3A"><b style="color:#0C0C0C">Política v2 · ago/25</b></span><span style="color:#8a8a8a">com o FIDC: novos critérios + governança + régua de PDD ⇒ CDR menor nas próximas safras</span></div>
+  <div class="illus">Fonte: Robbin Data · CDR acumulado por safra · MOB · PIX Rails</div>
 </section>
 
 <!-- CREDIT PORTFOLIO PER PARTNER (removido) -->
