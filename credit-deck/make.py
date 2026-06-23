@@ -1007,28 +1007,28 @@ STYLE = """<style>
 .ts-row .v { font-family:var(--font-sans); font-size:clamp(12px,0.98vw,14.5px); color:#E6E6E6; line-height:1.4; }
 .ts-row .v b { color:#fff; font-weight:700; }
 .ts-foot { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7a7a7a; margin-top:1.3vh; }
-.biz-stage { position:relative; height:60vh; margin-top:2vh; }
-.biz-links { position:absolute; inset:0; width:100%; height:100%; z-index:0; }
-.biz-hub { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; background:#0C0C0C; border-radius:20px; padding:2.6vh 1.8vw; display:flex; flex-direction:column; align-items:center; gap:1.1vh; min-width:clamp(150px,13vw,196px); }
-.biz-hub img { height:clamp(22px,1.7vw,30px); width:auto; }
-.biz-hub span { font-family:var(--font-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
-.biz-hub-fns { display:flex; flex-wrap:wrap; gap:4px 5px; justify-content:center; max-width:clamp(168px,15vw,210px); margin-top:.5vh; }
-.biz-hub-fns em { font-style:normal; font-family:var(--font-mono); font-size:8px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.2); border-radius:5px; padding:2.5px 6px; }
-.biz-node { position:absolute; transform:translate(-50%,-50%); z-index:2; width:clamp(230px,21vw,300px); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:14px; padding:1.7vh 1.2vw; }
-.biz-node .bn-num { position:absolute; top:-12px; right:-12px; width:28px; height:28px; border-radius:50%; background:#0C0C0C; color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-sans); font-weight:800; font-size:13px; box-shadow:0 0 0 4px var(--paper); }
-.biz-node .bn-head { display:flex; align-items:center; gap:.7vw; margin-bottom:.6vh; }
-.biz-node .bn-ic { width:34px; height:34px; border-radius:9px; background:#0C0C0C; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.biz-node .bn-ic svg { width:19px; height:19px; stroke:#fff; fill:none; stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; }
-.biz-node .bn-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a8a8a; }
-.biz-node h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.2vw,19px); margin:.2vh 0 .5vh; color:var(--ink); }
-.biz-node .bn-logos { display:flex; align-items:center; gap:1vw; margin-top:1.1vh; }
-.biz-node .bn-logos img { height:clamp(15px,1.2vw,19px); width:auto; opacity:.9; }
-.biz-node p { font-family:var(--font-sans); font-size:clamp(11.5px,.92vw,14px); color:#3A3A3A; line-height:1.45; margin:0; }
-.biz-node p b { color:var(--ink); font-weight:600; }
-.biz-link-lbl { position:absolute; transform:translate(-50%,-50%); z-index:1; background:var(--paper); padding:3px 10px; border-radius:100px; border:1px solid rgba(12,12,12,.14); font-family:var(--font-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:#5A5A5A; white-space:nowrap; }
-.biz-anchors{left:21%;top:23%} .biz-smes{left:79%;top:23%} .biz-funding{left:50%;top:87%}
-.biz-lbl-a{left:35%;top:37%} .biz-lbl-s{left:65%;top:37%} .biz-lbl-f{left:50%;top:69%}
-.biz-lbl-cb{left:50%;top:22.5%; color:#8a8a8a; border-style:dashed;}
+.biz-body { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:3.4vh; }
+.biz-flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch; gap:0; }
+.bf-step { position:relative; background:var(--paper); border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:3vh 1.7vw 2.6vh; display:flex; flex-direction:column; }
+.bf-num { position:absolute; top:-15px; left:1.7vw; width:32px; height:32px; border-radius:50%; background:#0C0C0C; color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-sans); font-weight:800; font-size:15px; box-shadow:0 0 0 5px var(--paper); }
+.bf-ic { width:48px; height:48px; border-radius:12px; background:#0C0C0C; display:flex; align-items:center; justify-content:center; margin-bottom:1.6vh; }
+.bf-ic svg { width:27px; height:27px; stroke:#fff; fill:none; stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; }
+.bf-tag { font-family:var(--font-mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:#8a8a8a; }
+.bf-step h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(18px,1.6vw,25px); margin:.5vh 0 .9vh; color:var(--ink); letter-spacing:-.015em; }
+.bf-step p { font-family:var(--font-sans); font-size:clamp(12.5px,1.02vw,15.5px); color:#4A4A4A; line-height:1.5; margin:0; }
+.bf-step p b { color:var(--ink); font-weight:600; }
+.bf-arrow { display:flex; align-items:center; justify-content:center; padding:0 .9vw; }
+.bf-arrow svg { width:clamp(34px,3vw,46px); height:auto; display:block; }
+.biz-fund { display:flex; align-items:center; gap:1.8vw; background:#0C0C0C; border-radius:16px; padding:2.6vh 2vw; }
+.bz-brand { display:flex; flex-direction:column; gap:.7vh; padding-right:1.8vw; border-right:1px solid rgba(255,255,255,.16); flex-shrink:0; }
+.bz-brand img { height:clamp(22px,1.8vw,30px); width:auto; display:block; }
+.bz-brand span { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
+.bz-fns { display:flex; flex-wrap:wrap; gap:6px 8px; flex:1 1 auto; }
+.bz-fns em { font-style:normal; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.22); border-radius:6px; padding:4px 9px; }
+.bz-funding { display:flex; flex-direction:column; gap:.6vh; align-items:flex-end; text-align:right; flex-shrink:0; padding-left:1.8vw; border-left:1px solid rgba(255,255,255,.16); }
+.bz-funding-tag { font-family:var(--font-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
+.bz-funding-txt { font-family:var(--font-sans); font-size:clamp(12.5px,1vw,15px); color:#FAFAFA; }
+.bz-funding-txt b { font-weight:700; }
 .inv-group { margin-bottom:3vh; }
 .inv-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; padding-bottom:1.1vh; border-bottom:1px solid rgba(12,12,12,.14); margin:0 0 1.8vh; }
 .inv-tag { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; }

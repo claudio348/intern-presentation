@@ -8321,28 +8321,28 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 .ts-row .v { font-family:var(--font-sans); font-size:clamp(12px,0.98vw,14.5px); color:#E6E6E6; line-height:1.4; }
 .ts-row .v b { color:#fff; font-weight:700; }
 .ts-foot { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7a7a7a; margin-top:1.3vh; }
-.biz-stage { position:relative; height:60vh; margin-top:2vh; }
-.biz-links { position:absolute; inset:0; width:100%; height:100%; z-index:0; }
-.biz-hub { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; background:#0C0C0C; border-radius:20px; padding:2.6vh 1.8vw; display:flex; flex-direction:column; align-items:center; gap:1.1vh; min-width:clamp(150px,13vw,196px); }
-.biz-hub img { height:clamp(22px,1.7vw,30px); width:auto; }
-.biz-hub span { font-family:var(--font-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
-.biz-hub-fns { display:flex; flex-wrap:wrap; gap:4px 5px; justify-content:center; max-width:clamp(168px,15vw,210px); margin-top:.5vh; }
-.biz-hub-fns em { font-style:normal; font-family:var(--font-mono); font-size:8px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.2); border-radius:5px; padding:2.5px 6px; }
-.biz-node { position:absolute; transform:translate(-50%,-50%); z-index:2; width:clamp(230px,21vw,300px); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:14px; padding:1.7vh 1.2vw; }
-.biz-node .bn-num { position:absolute; top:-12px; right:-12px; width:28px; height:28px; border-radius:50%; background:#0C0C0C; color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-sans); font-weight:800; font-size:13px; box-shadow:0 0 0 4px var(--paper); }
-.biz-node .bn-head { display:flex; align-items:center; gap:.7vw; margin-bottom:.6vh; }
-.biz-node .bn-ic { width:34px; height:34px; border-radius:9px; background:#0C0C0C; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.biz-node .bn-ic svg { width:19px; height:19px; stroke:#fff; fill:none; stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; }
-.biz-node .bn-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a8a8a; }
-.biz-node h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(15px,1.2vw,19px); margin:.2vh 0 .5vh; color:var(--ink); }
-.biz-node .bn-logos { display:flex; align-items:center; gap:1vw; margin-top:1.1vh; }
-.biz-node .bn-logos img { height:clamp(15px,1.2vw,19px); width:auto; opacity:.9; }
-.biz-node p { font-family:var(--font-sans); font-size:clamp(11.5px,.92vw,14px); color:#3A3A3A; line-height:1.45; margin:0; }
-.biz-node p b { color:var(--ink); font-weight:600; }
-.biz-link-lbl { position:absolute; transform:translate(-50%,-50%); z-index:1; background:var(--paper); padding:3px 10px; border-radius:100px; border:1px solid rgba(12,12,12,.14); font-family:var(--font-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:#5A5A5A; white-space:nowrap; }
-.biz-anchors{left:21%;top:23%} .biz-smes{left:79%;top:23%} .biz-funding{left:50%;top:87%}
-.biz-lbl-a{left:35%;top:37%} .biz-lbl-s{left:65%;top:37%} .biz-lbl-f{left:50%;top:69%}
-.biz-lbl-cb{left:50%;top:22.5%; color:#8a8a8a; border-style:dashed;}
+.biz-body { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:3.4vh; }
+.biz-flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch; gap:0; }
+.bf-step { position:relative; background:var(--paper); border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:3vh 1.7vw 2.6vh; display:flex; flex-direction:column; }
+.bf-num { position:absolute; top:-15px; left:1.7vw; width:32px; height:32px; border-radius:50%; background:#0C0C0C; color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-sans); font-weight:800; font-size:15px; box-shadow:0 0 0 5px var(--paper); }
+.bf-ic { width:48px; height:48px; border-radius:12px; background:#0C0C0C; display:flex; align-items:center; justify-content:center; margin-bottom:1.6vh; }
+.bf-ic svg { width:27px; height:27px; stroke:#fff; fill:none; stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; }
+.bf-tag { font-family:var(--font-mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:#8a8a8a; }
+.bf-step h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(18px,1.6vw,25px); margin:.5vh 0 .9vh; color:var(--ink); letter-spacing:-.015em; }
+.bf-step p { font-family:var(--font-sans); font-size:clamp(12.5px,1.02vw,15.5px); color:#4A4A4A; line-height:1.5; margin:0; }
+.bf-step p b { color:var(--ink); font-weight:600; }
+.bf-arrow { display:flex; align-items:center; justify-content:center; padding:0 .9vw; }
+.bf-arrow svg { width:clamp(34px,3vw,46px); height:auto; display:block; }
+.biz-fund { display:flex; align-items:center; gap:1.8vw; background:#0C0C0C; border-radius:16px; padding:2.6vh 2vw; }
+.bz-brand { display:flex; flex-direction:column; gap:.7vh; padding-right:1.8vw; border-right:1px solid rgba(255,255,255,.16); flex-shrink:0; }
+.bz-brand img { height:clamp(22px,1.8vw,30px); width:auto; display:block; }
+.bz-brand span { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:#9a9a9a; }
+.bz-fns { display:flex; flex-wrap:wrap; gap:6px 8px; flex:1 1 auto; }
+.bz-fns em { font-style:normal; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.22); border-radius:6px; padding:4px 9px; }
+.bz-funding { display:flex; flex-direction:column; gap:.6vh; align-items:flex-end; text-align:right; flex-shrink:0; padding-left:1.8vw; border-left:1px solid rgba(255,255,255,.16); }
+.bz-funding-tag { font-family:var(--font-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
+.bz-funding-txt { font-family:var(--font-sans); font-size:clamp(12.5px,1vw,15px); color:#FAFAFA; }
+.bz-funding-txt b { font-weight:700; }
 .inv-group { margin-bottom:3vh; }
 .inv-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; padding-bottom:1.1vh; border-bottom:1px solid rgba(12,12,12,.14); margin:0 0 1.8vh; }
 .inv-tag { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; }
@@ -8538,45 +8538,42 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 <section class="slide theme-light vcenter" data-num="03">
   <div class="chapter-mark light-mark"><span class="chapter-num">02</span><span class="chapter-divider"></span><span class="chapter-year">Modelo de negócio</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">O que <b>fazemos</b></div><h1>Como a Robbin <span class="accent">funciona.</span></h1>
-  <p class="sub">As âncoras trazem suas PMEs (cartão co-branded) · a Robbin dá o crédito no PIX · o FIDC banca.</p></div>
-  <div class="biz-stage reveal">
-    <svg class="biz-links" viewBox="0 0 1000 560" preserveAspectRatio="none">
-      <path d="M 305 129 H 695" fill="none" stroke="#9a9a9a" stroke-width="1.4" stroke-dasharray="5 5"/>
-      <line x1="210" y1="150" x2="500" y2="282" stroke="#0C0C0C" stroke-width="1.4"/>
-      <line x1="790" y1="150" x2="500" y2="282" stroke="#0C0C0C" stroke-width="1.4"/>
-      <line x1="500" y1="487" x2="500" y2="335" stroke="#0C0C0C" stroke-width="1.4"/>
-    </svg>
-    <div class="biz-node biz-anchors">
-      <div class="bn-num">1</div>
-      <div class="bn-head"><span class="bn-ic"><svg viewBox="0 0 24 24"><path d="M3 8 l9 -4 9 4 v9 l-9 4 -9 -4 Z"/><path d="M3 8 l9 4 9 -4 M12 12 v9"/></svg></span><span class="bn-tag">Âncoras · fornecedores</span></div>
-      <h4>Trazem suas PMEs</h4>
-      <p>Co-brandam o cartão e abrem sua <b>base de PMEs</b> — marca, distribuição e dados.</p>
+  <p class="sub">Âncoras trazem suas PMEs via cartão co-branded · a Robbin dá o crédito no PIX · o FIDC banca.</p></div>
+  <div class="biz-body">
+  <div class="biz-flow reveal" data-stagger>
+    <div class="bf-step">
+      <div class="bf-num">1</div>
+      <div class="bf-ic"><svg viewBox="0 0 24 24"><path d="M3 8 l9 -4 9 4 v9 l-9 4 -9 -4 Z"/><path d="M3 8 l9 4 9 -4 M12 12 v9"/></svg></div>
+      <div class="bf-tag">Âncoras · fornecedores</div>
+      <h4>Co-brandam o cartão</h4>
+      <p>Trazem sua <b>base de PMEs</b> — marca, distribuição e dados.</p>
     </div>
-    <div class="biz-node biz-smes">
-      <div class="bn-num">2</div>
-      <div class="bn-head"><span class="bn-ic"><svg viewBox="0 0 24 24"><path d="M4 9 h16 M4 9 l1.3 -4 h13.4 l1.3 4 M5 9 v11 h14 V9 M10 20 v-6 h4 v6"/></svg></span><span class="bn-tag">Sacados · lojistas (PMEs)</span></div>
+    <div class="bf-arrow"><svg viewBox="0 0 40 24"><path d="M3 12 H35 M27 5 l8 7 -8 7" fill="none" stroke="#c0c0c0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="bf-step">
+      <div class="bf-num">2</div>
+      <div class="bf-ic"><svg viewBox="0 0 24 24"><path d="M4 9 h16 M4 9 l1.3 -4 h13.4 l1.3 4 M5 9 v11 h14 V9 M10 20 v-6 h4 v6"/></svg></div>
+      <div class="bf-tag">PMEs · sacados</div>
       <h4>Tomam crédito no PIX</h4>
-      <p>Pelo cartão co-branded, compram a prazo com <b>liquidação T+0</b>.</p>
+      <p>Compram a prazo pelo cartão co-branded, com <b>liquidação T+0</b>.</p>
     </div>
-    <div class="biz-hub">
-      <img src="robbin-logo-white.svg" alt="Robbin">
-      <span>orquestra a rede</span>
-      <div class="biz-hub-fns"><em>Originação</em><em>Underwriting</em><em>Emissão</em><em>Servicing</em><em>Liquidação T+0</em></div>
+    <div class="bf-arrow"><svg viewBox="0 0 40 24"><path d="M3 12 H35 M27 5 l8 7 -8 7" fill="none" stroke="#c0c0c0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="bf-step">
+      <div class="bf-num">3</div>
+      <div class="bf-ic"><svg viewBox="0 0 24 24"><path d="M13 3 L5 13 h5 l-2 8 9-12 h-6 Z"/></svg></div>
+      <div class="bf-tag">Robbin · originador</div>
+      <h4>Dá o crédito</h4>
+      <p>Origina, faz <b>underwriting</b>, emite e cuida do servicing da carteira.</p>
     </div>
-    <div class="biz-node biz-funding">
-      <div class="bn-num">3</div>
-      <div class="bn-head"><span class="bn-ic"><svg viewBox="0 0 24 24"><path d="M3 9 l9 -5 9 5 M4 9 h16 M5.5 9 v9 M9.5 9 v9 M14.5 9 v9 M18.5 9 v9 M3 20 h18"/></svg></span><span class="bn-tag">Funding · FIDC</span></div>
-      <h4>O FIDC banca o crédito</h4>
-      <p>Crédito financiado por <b>FIDC R$ 500M</b> — off-balance e escalável.</p>
-      <div class="bn-logos"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAABKtJREFUeAHtWEtoFEsUvdOT7yzy4G0e+AgEHnngUvGHvwkKLkRdiPgBURAX4hcUIaDMGAwqgp+NoKALRVwpggpB0BhBMaAoKIhZuFEDLgTxF5PMTLfndqoyd6q7M78WAtaBoqqr6966derWvdVNZGFhYWFhYWFRNxKJRB5VAcVV9StjSFa812MeqHezjXeBAv1uMpm8jnYGJY3nj+VkaiiFpqammTQd4TjObppYsKdKAX0H+V1bW9vfIEST4al6XIjPNmSnKkz2e+jsRLtf6Ky3MLknaDoDC89RKYnai7X3SvJ7hWg1BPu64c2DjY2NW6uUi9THepqbm/+j6YyGhoaFZBAJIvqU90oPHJVyIGq+IccL7kM5wgWbcZqKx3hSNwhZZZyMmr0Xtq+g8kioUikcihsg9DxNvWBeTEbKgOB5ZGwMyi45prW1dX3ImAzIz1F9BLvQ8VzPg3aGRC7BBvZhTTfERnLJw+YFFA7OD3nOGVQ8bSybpjigJo7yKvbe+yEyYQTvDFEv9foEQ98nqp1gn8SWlpYuMUeGgqfJDVnHdzJIg+Pcp4iQxRvEp5mqQKj753K5QXjBBaVYwp8olUrtDxHzyumH8V0wkpvmEf2Lagcv/MH4+PhU3hUWFhKe56VA2BbdgXC1I5/Pd1EELxjvFAqFFdjMpVQv4JFzOdOTETNR7kWNJ8ODIX+HJryJw0AGi3lq6kPWX1tHDHaVbBr6vwhzAh6M99dEvyvkf2ghdTJdIfOWJk5Yv3pmD75JMWEhFH4mgxD0hV6DQgiuhJwhELzBSKBVJTaUA7Apq9oakmAm5lPUO0PODHGTXq+uf2mKCzDqMgUJ0x4TAAieQ1Xcg1Vi43k+UI3xl21B2Fmu5o0kWJ0kjSyVJzhyndUi6gqyyHXdzRQetxIRXhx29fGMNpPyFaScxIasRP0I88yg6q5NGkxCN2LioQrGehWMSZYIABQDogg+StH3xQRIOYgjs1F2IjGaO87esY8mDE92dHSkQOhK2H0KpX1sbOwuEsoiqo1cD5v8BuUldKVr1GFC2l/xXRmOsoNUnqlkPGf6xRS84jwP+dB4aIjOomAM2wN9T1D7/zjUvTKOz2IODYt18hHzadQUIow1cnuGfgeH6gaZl0g4JWxYJhI0J8ABKgPHzOjquRHKDlPwC2/Si8NuESh7ITdI8f1r8EnBvFcjCKmX4FtUeovgdhb9A1T8YfUOa0r7ZDnOCAVvWd0kCS15cJzDKvTo48GhqAd1Dse5V91hdWzieHwxSpfug0wTxQcODR7i7jZlHMUJbNxZEutDKOQFHzHC0L/wZv9qh/fNFAwlJeuVpDhQlBUC7L082TFhQNYwoBULPuUPxiWcfj882HCFSv/iVSRXySA4UT8+Ns5R0StLdLBHg9w1IyMjz7gDnnxTjGO++CTflkINor1EeWtRo+dxnM0LA3qhFFV+cpdAsl9D8Xv09xhGcXj4ifIPxQQk0+O6jQX36PklYONDaQt/MMDr9eMATUE4ku/e9vb2E8PDw9tB9v+jo6OrUffhS/F1Z2fnmaGhoW96LOZYhyoL0jdhjsd4vgT7XpCFhYWFhYWFhYXFH45fJ+cKqh2Z2rwAAAAASUVORK5CYII=" alt="XP"></div>
-    </div>
-    <div class="biz-link-lbl biz-lbl-cb">cartão co-branded</div>
-    <div class="biz-link-lbl biz-lbl-a">marca + dados</div>
-    <div class="biz-link-lbl biz-lbl-s">crédito no PIX</div>
-    <div class="biz-link-lbl biz-lbl-f">FIDC banca</div>
   </div>
-  <div class="illus">Como funciona · 1 âncoras trazem PMEs · 2 crédito no PIX · 3 FIDC banca</div>
+  <div class="biz-fund reveal">
+    <div class="bz-brand"><img src="robbin-logo-white.svg" alt="Robbin"><span>orquestra a rede de ponta a ponta</span></div>
+    <div class="bz-fns"><em>Originação</em><em>Underwriting</em><em>Emissão</em><em>Servicing</em><em>Liquidação T+0</em></div>
+    <div class="bz-funding"><span class="bz-funding-tag">Funding</span><span class="bz-funding-txt">Bancado por <b>FIDC R$ 500M</b> · off-balance e escalável</span></div>
+  </div>
+  </div>
+  <div class="illus">Como funciona · 1 âncoras co-brandam · 2 PMEs tomam crédito no PIX · 3 a Robbin dá o crédito, bancado pelo FIDC</div>
 </section>
+
 
 <section class="slide theme-light" data-num="04">
   <div class="chapter-mark">
