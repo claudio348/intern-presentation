@@ -108,6 +108,60 @@ fpd_svg = fpd_bars()
 fpd_scale = ('<span><i style="background:#2E7D46"></i>dentro da meta (&le; 5%)</span>'
              '<span><i style="background:#C0143C"></i>acima da meta (&gt; 5%)</span>')
 
+# ---------- FPD / inadimplência por SAFRA (vintage curves over months-on-book) ----------
+# real loan tape (cdr dict above): cumulative bad rate (%) by origination quarter × MOB
+vint_series = [
+    ("Safra Q1/25", "pré-políticas", cdr["Vintage 2025-Q1"], "#CFCFCF"),
+    ("Safra Q2/25", "pós-v1 · mar/25", cdr["Vintage 2025-Q2"], "#9A9A9A"),
+    ("Safra Q3/25", "pós-v2 · ago/25", cdr["Vintage 2025-Q3"], "#5A5A5A"),
+    ("Safra Q4/25", "pós-v2 · ago/25", cdr["Vintage 2025-Q4"], "#0C0C0C"),
+]
+
+def vintage_chart():
+    WD, HD = 1040, 432; Lx, Rx, Tx, Bx = 46, 150, 28, 46
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 18; mobmax = 8
+    X = lambda i: Lx + i/mobmax*pw
+    Y = lambda v: Tx+ph - v/ymax*ph
+    base = Y(0)
+    s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
+    # axes
+    for t in (0,6,12,18):
+        s.append(f'<text x="{Lx-8}" y="{Y(t)+3:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#9a9a9a">{t}</text>')
+    s.append(f'<line x1="{Lx}" y1="{Tx:.1f}" x2="{Lx}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    s.append(f'<line x1="{Lx}" y1="{base:.1f}" x2="{WD-Rx:.1f}" y2="{base:.1f}" stroke="#C8C8C8" stroke-width="1"/>')
+    for m in range(0, mobmax+1):
+        s.append(f'<text x="{X(m):.1f}" y="{HD-15}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="9.5" fill="#5A5A5A">M{m}</text>')
+    s.append(f'<text x="{WD-Rx:.1f}" y="{Tx-2:.1f}" text-anchor="end" font-family="Geist Mono,monospace" font-size="10" fill="#8a8a8a">inadimplência % · por meses de originação (MOB)</text>')
+    ends = []
+    for name, era, vals, col in vint_series:
+        hl = col == "#0C0C0C"
+        pts = " ".join(f"{X(i):.1f},{Y(v):.1f}" for i,v in enumerate(vals))
+        s.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{3 if hl else 2}" stroke-linejoin="round" stroke-linecap="round"/>')
+        li = len(vals)-1
+        if hl:
+            s.append(f'<circle cx="{X(li):.1f}" cy="{Y(vals[li]):.1f}" r="3.4" fill="{col}"/>')
+        ends.append({"y": Y(vals[li]), "x": X(li), "v": vals[li], "col": col, "name": name, "era": era})
+    # de-clutter endpoint labels
+    ends.sort(key=lambda e: e["y"]); prev = -99
+    for e in ends:
+        if e["y"] < prev + 30: e["y"] = prev + 30
+        prev = e["y"]
+    for e in ends:
+        lx = WD-Rx+10
+        s.append(f'<text x="{lx:.1f}" y="{e["y"]-3:.1f}" font-family="Geist,sans-serif" font-weight="700" font-size="12" fill="{e["col"]}">{e["name"]} · {e["v"]:.1f}%</text>')
+        s.append(f'<text x="{lx:.1f}" y="{e["y"]+10:.1f}" font-family="Geist Mono,monospace" font-size="8.5" letter-spacing="0.04em" fill="#9a9a9a">{e["era"]}</text>')
+    # improvement arrow (worst -> best)
+    ax = X(mobmax) - 16
+    s.append(f'<line x1="{ax:.1f}" y1="{Y(16.0):.1f}" x2="{ax:.1f}" y2="{Y(6.5):.1f}" stroke="#0C0C0C" stroke-width="1.4" marker-end=""/>')
+    s.append(f'<path d="M {ax-5:.1f} {Y(7.6):.1f} L {ax:.1f} {Y(6.4):.1f} L {ax+5:.1f} {Y(7.6):.1f}" fill="none" stroke="#0C0C0C" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>')
+    s.append(f'<text x="{ax-9:.1f}" y="{Y(11.0):.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">cada safra,</text>')
+    s.append(f'<text x="{ax-9:.1f}" y="{Y(9.6):.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">menor inadimplência</text>')
+    s.append('</svg>')
+    return "\n".join(s)
+fpd_vintage_svg = vintage_chart()
+fpd_vint_legend = "".join(
+    f'<span><i style="background:{c}"></i>{n} · {era}</span>' for n, era, v, c in vint_series)
+
 # ---------- Portfolio over90 vs smoothed trend (real loan tape) ----------
 jr_months= ["jun/25","jul/25","aug/25","sep/25","oct/25","nov/25","dec/25","jan/26","feb/26","mar/26","apr/26","may/26"]
 jr_obs   = [4.2,10.9,13.8,21.4,23.7,22.6,24.9,25.3,22.4,19.4,20.1,17.6]
@@ -1231,12 +1285,12 @@ SLIDES = STYLE + f"""
 <!-- 5 — FPD -->
 <section class="slide theme-light vcenter" data-num="05">
   <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">Melhoramos o jeito de fazer <b>crédito</b></div><h1>FPD 30 <span class="accent">por safra.</span></h1>
-  <p class="sub">FPD 30 por safra (PIX Rails, até mar/26) — novo critério de elegibilidade e governança; régua de PDD do FIDC ajustada.</p></div>
-  <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Média 4,4%</b></span><span style="color:#8a8a8a">Meta &le; 5%</span><span style="color:#8a8a8a">Régua de PDD do FIDC ajustada</span></div>
-  <div class="chartframe reveal">{fpd_svg}</div>
-  <div class="blegend reveal">{fpd_scale}</div>
-  <div class="illus">Fonte: Robbin Data · FPD 30 por safra · PIX Rails · PDD · mai/25–mar/26</div>
+  <div class="slide-head reveal"><div class="slide-kicker">Melhoramos o nosso <b>underwriting</b></div><h1>FPD 30 <span class="accent">por safra.</span></h1>
+  <p class="sub">Inadimplência por safra ao longo da maturação — as políticas de crédito v1 (mar/25) e v2 (ago/25) derrubam cada safra.</p></div>
+  <div class="blegend reveal" style="gap:1.6vw">{fpd_vint_legend}</div>
+  <div class="chartframe reveal">{fpd_vintage_svg}</div>
+  <div class="blegend reveal" style="gap:1.6vw"><span><b style="color:#0C0C0C">Política v1 · mar/25</b></span><span style="color:#3A3A3A"><b style="color:#0C0C0C">Política v2 · ago/25</b></span><span style="color:#8a8a8a">com o FIDC: novos critérios + governança + régua de PDD ⇒ FPD 30 menor esperado</span></div>
+  <div class="illus">Fonte: Robbin Data · inadimplência por safra · MOB · PIX Rails</div>
 </section>
 
 <!-- CREDIT PORTFOLIO PER PARTNER (removido) -->
