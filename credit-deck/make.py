@@ -1363,7 +1363,7 @@ SLIDES = STYLE + f"""
       </div>
       <div class="ts-rows">
         <div class="ts-row"><span class="k">Instrumento</span><span class="v">Nota comercial (escritural)</span></div>
-        <div class="ts-row"><span class="k">Emissor</span><span class="v">Robbin S.A.</span></div>
+        <div class="ts-row"><span class="k">Emissor</span><span class="v">Robbin Pagamentos LTDA</span></div>
         <div class="ts-row"><span class="k">Garantia</span><span class="v">Cessão fiduciária das <b>cotas subordinadas (Jr) do FIDC</b></span></div>
         <div class="ts-row"><span class="k">Amortização</span><span class="v">Bullet · juros semestrais</span></div>
         <div class="ts-row"><span class="k">Distribuição</span><span class="v">Oferta pública restrita (CVM 160) · investidores profissionais</span></div>
