@@ -8402,13 +8402,13 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
 .cs-cedentes, .cs-sacados { display:flex; flex-direction:column; min-height:0; }
 .cs-lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; display:flex; align-items:center; gap:.9vw; margin-bottom:1.8vh; }
 .cs-hi { font-family:var(--font-mono); font-size:9px; letter-spacing:.04em; text-transform:none; color:#3A3A3A; border:1px solid rgba(12,12,12,.18); border-radius:100px; padding:3px 10px; }
-.cs-feat { display:grid; grid-template-columns:1fr 1fr; gap:1.2vw; flex:1 1 auto; min-height:0; }
+.cs-feat { display:grid; grid-template-columns:1fr 1fr; gap:1.2vw; flex:0.9 1 0; min-height:0; }
 .cs-feat-card { position:relative; border:1.6px solid #0C0C0C; border-radius:16px; padding:2vh 1.4vw; display:flex; align-items:center; justify-content:center; }
-.cs-feat-card img { max-height:7vh; max-width:78%; width:auto; }
+.cs-feat-card img { max-height:6.5vh; max-width:74%; width:auto; }
 .cs-feat-tag { position:absolute; top:-9px; left:14px; background:#0C0C0C; color:#fff; font-family:var(--font-mono); font-size:8px; letter-spacing:.12em; text-transform:uppercase; padding:3px 9px; border-radius:100px; }
-.cedente-wall { display:grid; grid-template-columns:1fr 1fr; gap:1.2vw; flex:1 1 auto; min-height:0; margin-top:1.2vw; }
-.cd { border:1px solid rgba(12,12,12,.14); border-radius:14px; display:flex; align-items:center; justify-content:center; padding:1.6vh 1.2vw; }
-.cd img { max-height:5vh; max-width:72%; width:auto; }
+.cedente-wall { display:grid; grid-template-columns:repeat(3,1fr); gap:1vw; flex:1.1 1 0; min-height:0; margin-top:1vw; }
+.cd { border:1px solid rgba(12,12,12,.14); border-radius:13px; display:flex; align-items:center; justify-content:center; padding:1.2vh 1vw; }
+.cd img { max-height:4.4vh; max-width:80%; width:auto; }
 .cd-more { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#9a9a9a; border-style:dashed; }
 .cs-metrics { display:flex; flex-direction:column; gap:1.4vh; flex:1 1 auto; min-height:0; }
 .cs-metric { border:1px solid rgba(12,12,12,.14); border-radius:14px; padding:1.8vh 1.4vw; flex:1 1 0; display:flex; flex-direction:column; justify-content:center; }
@@ -8787,6 +8787,8 @@ img[alt="CFA Institute"] { filter: grayscale(1); }
       <div class="cedente-wall reveal" data-stagger>
         <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MzAgOTYiPgogIDx0ZXh0IHg9IjAiIHk9IjcyIiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjY0IiBsZXR0ZXItc3BhY2luZz0iLTMiIGZpbGw9IiMwQzBDMEMiPkNISUxMSUJFQU5TPC90ZXh0Pgo8L3N2Zz4K" alt="Chilli Beans"></div>
         <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNjAgOTYiPgogIDxyZWN0IHg9IjAiIHk9IjYiIHdpZHRoPSI4NCIgaGVpZ2h0PSI4NCIgZmlsbD0iIzBDMEMwQyIvPgogIDx0ZXh0IHg9IjQyIiB5PSI2MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkdlaXN0LCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjgwMCIgZm9udC1zaXplPSI0MCIgbGV0dGVyLXNwYWNpbmc9Ii0zIiBmaWxsPSIjRkZGRkZGIj5HRzwvdGV4dD4KICA8dGV4dCB4PSIxMDAiIHk9IjY4IiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iODAwIiBmb250LXNpemU9IjU2IiBsZXR0ZXItc3BhY2luZz0iLTEiIGZpbGw9IiMwQzBDMEMiPkdFUkRBVTwvdGV4dD4KPC9zdmc+Cg==" alt="Gerdau"></div>
+        <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgOTYiPgogIDx0ZXh0IHg9IjAiIHk9Ijc0IiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjgwIiBsZXR0ZXItc3BhY2luZz0iLTEiIGZpbGw9IiMwQzBDMEMiPm1hbHdlZTwvdGV4dD4KPC9zdmc+Cg==" alt="Malwee"></div>
+        <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODAgMTEyIj4KICA8IS0tIFYgc3dvb3NoOiBsZWZ0IGJsYWRlIChkYXJrKSArIHJpZ2h0IGZsYXJlZCBibGFkZSAobWlkLWdyYXkpIC0tPgogIDxwb2x5Z29uIHBvaW50cz0iMTQsMjAgMzQsMTcgNjAsODQgNDIsOTIiIGZpbGw9IiMwQzBDMEMiLz4KICA8cG9seWdvbiBwb2ludHM9IjQ4LDkwIDM4LDcwIDgyLDE2IDEwNCwxOCA2NCw5MiIgZmlsbD0iIzhBOEE4QSIvPgogIDx0ZXh0IHg9IjEyNiIgeT0iNTQiIGZvbnQtZmFtaWx5PSJHZWlzdCwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtc2l6ZT0iMzQiIGxldHRlci1zcGFjaW5nPSIwLjUiIGZpbGw9IiMwQzBDMEMiPlZPVE9SQU5USU08L3RleHQ+CiAgPHRleHQgeD0iMTI2IiB5PSI5NCIgZm9udC1mYW1pbHk9IkdlaXN0LCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSIzNCIgbGV0dGVyLXNwYWNpbmc9IjAuNSIgZmlsbD0iIzBDMEMwQyI+Y2ltZW50b3M8L3RleHQ+Cjwvc3ZnPgo=" alt="Votorantim Cimentos"></div>
         <div class="cd"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NzAgMTEwIj4KICA8dGV4dCB4PSIwIiB5PSI2MCIgZm9udC1mYW1pbHk9IkdlaXN0LCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgZm9udC1zaXplPSI0NCIgbGV0dGVyLXNwYWNpbmc9IjIiIGZpbGw9IiMwQzBDMEMiPkdSVVBPIEJSSU5PWDwvdGV4dD4KICA8dGV4dCB4PSI0NjYiIHk9IjkyIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LWZhbWlseT0iR2Vpc3QsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiBmb250LXN0eWxlPSJpdGFsaWMiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiMwQzBDMEMiPkhvdXNld2FyZTwvdGV4dD4KPC9zdmc+Cg==" alt="Grupo Brinox"></div>
         <div class="cd cd-more">+ novos cedentes</div>
       </div>
