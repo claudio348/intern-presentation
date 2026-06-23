@@ -150,12 +150,6 @@ def vintage_chart():
         lx = WD-Rx+10
         s.append(f'<text x="{lx:.1f}" y="{e["y"]-3:.1f}" font-family="Geist,sans-serif" font-weight="700" font-size="12" fill="{e["col"]}">{e["name"]} · {e["v"]:.1f}%</text>')
         s.append(f'<text x="{lx:.1f}" y="{e["y"]+10:.1f}" font-family="Geist Mono,monospace" font-size="8.5" letter-spacing="0.04em" fill="#9a9a9a">{e["era"]}</text>')
-    # improvement arrow (worst -> best)
-    ax = X(mobmax) - 16
-    s.append(f'<line x1="{ax:.1f}" y1="{Y(16.0):.1f}" x2="{ax:.1f}" y2="{Y(6.5):.1f}" stroke="#0C0C0C" stroke-width="1.4" marker-end=""/>')
-    s.append(f'<path d="M {ax-5:.1f} {Y(7.6):.1f} L {ax:.1f} {Y(6.4):.1f} L {ax+5:.1f} {Y(7.6):.1f}" fill="none" stroke="#0C0C0C" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>')
-    s.append(f'<text x="{ax-9:.1f}" y="{Y(11.0):.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">cada safra,</text>')
-    s.append(f'<text x="{ax-9:.1f}" y="{Y(9.6):.1f}" text-anchor="end" font-family="Geist,sans-serif" font-weight="600" font-size="11" fill="#0C0C0C">menor inadimplência</text>')
     s.append('</svg>')
     return "\n".join(s)
 fpd_vintage_svg = vintage_chart()
@@ -696,14 +690,15 @@ def _gstat(k, v, u, sub):
     return (f'<div class="giro-stat"><div class="gk">{k}</div>'
             f'<div class="gv">{v}<em>{u}</em></div><div class="gs">{sub}</div></div>')
 
-# simple, bold editorial layout — one insight, four large numbers (no charts)
+# bold editorial KPI board — concise lede + five large numbers (no charts)
 giro_block = ('<div class="giro-wrap">'
-    '<div class="giro-lede reveal">O mesmo capital <span class="accent">gira ~3,5×</span> ao ano — carteira curta e recorrente.</div>'
-    '<div class="giro-stats reveal" data-stagger>'
+    '<div class="giro-lede reveal">Carteira curta, de <span class="accent">giro rápido</span>.</div>'
+    '<div class="giro-stats five reveal" data-stagger>'
     + _gstat("Prazo médio","3,5","meses","parcelas médias por contrato")
     + _gstat("Duration","2,3","meses","vida média ponderada por saldo")
     + _gstat("Taxa média","44,6%","a.a.","ponderada pelo principal")
     + _gstat("Giro da carteira","3,5×","ao ano","recicla e reempresta rápido")
+    + _gstat("Inadimplência","5,7%","90+","% do principal originado")
     + '</div></div>')
 
 # ---------- delinquency composition: balance by days-past-due bucket (real loan tape) ----------
@@ -1104,6 +1099,8 @@ STYLE = """<style>
 .giro-lede { font-family:var(--font-sans); font-weight:700; font-size:clamp(30px,3.6vw,56px); line-height:1.08; letter-spacing:-.025em; color:var(--ink); max-width:22ch; }
 .giro-lede .accent { color:#C0143C; }
 .giro-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:2.6vw; }
+.giro-stats.five { grid-template-columns:repeat(5,1fr); gap:1.8vw; }
+.giro-stats.five .gv { font-size:clamp(28px,2.8vw,46px); }
 .giro-stat { border-top:2px solid #0C0C0C; padding-top:1.6vh; }
 .giro-stat .gk { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
 .giro-stat .gv { font-family:var(--font-sans); font-weight:800; font-size:clamp(34px,3.4vw,52px); letter-spacing:-.025em; line-height:1; color:var(--ink); margin-top:1vh; }
@@ -1285,7 +1282,7 @@ SLIDES = STYLE + f"""
 <!-- 5 — FPD -->
 <section class="slide theme-light vcenter" data-num="05">
   <div class="chapter-mark light-mark"><span class="chapter-num">04</span><span class="chapter-divider"></span><span class="chapter-year">Risco · originação</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">Melhoramos o nosso <b>underwriting</b></div><h1>FPD 30 <span class="accent">por safra.</span></h1>
+  <div class="slide-head reveal"><div class="slide-kicker">Melhoramos o nosso <b>underwriting</b></div><h1>Safras de <span class="accent">crédito.</span></h1>
   <p class="sub">Inadimplência por safra ao longo da maturação — as políticas de crédito v1 (mar/25) e v2 (ago/25) derrubam cada safra.</p></div>
   <div class="blegend reveal" style="gap:1.6vw">{fpd_vint_legend}</div>
   <div class="chartframe reveal">{fpd_vintage_svg}</div>
@@ -1295,20 +1292,7 @@ SLIDES = STYLE + f"""
 
 <!-- CREDIT PORTFOLIO PER PARTNER (removido) -->
 
-<!-- DELINQUENCY — CONSOLIDATED 90+ + COMPOSITION TABLE -->
-<section class="slide theme-light vcenter" data-num="07">
-  <div class="chapter-mark light-mark"><span class="chapter-num">06</span><span class="chapter-divider"></span><span class="chapter-year">Risco · inadimplência</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">O comportamento da <b>inadimplência</b></div><h1>Inadimplência <span class="accent">consolidada.</span></h1>
-  <p class="sub">Visão consolidada de 90+ — em revisão.</p></div>
-  <div class="wip-wrap reveal">
-    <div class="wip-card">
-      <div class="wip-badge">Work in progress</div>
-      <div class="wip-title">Inadimplência consolidada</div>
-      <p class="wip-sub">Estamos consolidando a metodologia de 90+ por origem. Os números serão atualizados em breve.</p>
-    </div>
-  </div>
-  <div class="illus">Fonte: Robbin Data · em revisão</div>
-</section>
+<!-- DELINQUENCY page removed — inadimplência now a KPI card on Robbin KPIs de Crédito -->
 
 <!-- AGING DA CARTEIRA — removido a pedido -->
 
@@ -1326,11 +1310,11 @@ SLIDES = STYLE + f"""
 
 <!-- 8 — TENOR & DURATION -->
 <section class="slide theme-light vcenter" data-num="08">
-  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Carteira · prazo</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">Curta e de <b>giro rápido</b></div><h1>Prazo, taxa & <span class="accent">giro.</span></h1>
-  <p class="sub">As métricas-chave da carteira BNPL.</p></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">07</span><span class="chapter-divider"></span><span class="chapter-year">Carteira · KPIs</span></div>
+  <div class="slide-head reveal"><div class="slide-kicker">Os números da <b>carteira</b></div><h1>Robbin KPIs de <span class="accent">Crédito.</span></h1>
+  <p class="sub">Carteira curta, de giro rápido — prazo, taxa, giro e inadimplência.</p></div>
   {giro_block}
-  <div class="illus">Fonte: Robbin Data · médias mai/25–mai/26</div>
+  <div class="illus">Fonte: Robbin Data · médias mai/25–mai/26 · 90+ ÷ principal</div>
 </section>
 
 <!-- NIMAL DO FIDC — conclusão da performance (antes do corporativo) -->
