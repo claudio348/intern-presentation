@@ -1182,7 +1182,7 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Originação · cedentes</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Quem <b>origina</b> e quem <b>toma</b></div><h1>Cedentes & <span class="accent">sacados.</span></h1>
-  <p class="sub">Marcas líderes cedem recebíveis; suas PMEs tomam crédito no rail PIX.</p></div>
+  <p class="sub">Fortune 500 do Brasil como cedentes. PMEs como sacados tomando crédito no PIX.</p></div>
   <div class="cs-wrap">
     <div class="cs-block">
       <div class="cs-lbl">Cedentes · âncoras</div>
