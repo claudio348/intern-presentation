@@ -776,12 +776,12 @@ comp_tbl = comp_table()
 
 # ---------- credit economics waterfall ----------
 # (label, y0, y1, color, value, label_pos)
-wf_steps = [("Yield agregado",0,95.8,"#0C0C0C","95,8%","top"),
-            ("Custos diretos",87.8,95.8,"#C0143C","−8,0%","bot"),
-            ("Custo de funding",64.8,87.8,"#C0143C","−23,0%","bot"),
-            ("NIM",0,64.8,"#0C0C0C","64,8%","top"),
-            ("Perdas",39.8,64.8,"#C0143C","−25,0%","bot"),
-            ("NIMAL",0,39.8,"#0C0C0C","39,8%","top")]
+wf_steps = [("Yield agregado",0,95.8,"#0C0C0C","TBD","top"),
+            ("Custos diretos",87.8,95.8,"#C0143C","−TBD","bot"),
+            ("Custo de funding",64.8,87.8,"#C0143C","−TBD","bot"),
+            ("NIM",0,64.8,"#0C0C0C","TBD","top"),
+            ("Perdas",39.8,64.8,"#C0143C","−TBD","bot"),
+            ("NIMAL",0,39.8,"#0C0C0C","TBD","top")]
 wf_levels = [95.8,87.8,64.8,64.8,39.8]   # connector level between bar i and i+1
 def waterfall():
     WD, HD = 1000, 504; Lx, Rx, Tx, Bx = 18, 18, 44, 48
@@ -1320,15 +1320,10 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="09">
   <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Performance · conclusão</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Conclusão da <b>performance</b></div><h1>NIMAL do <span class="accent">FIDC.</span></h1>
-  <p class="sub">Do yield ao NIMAL — NIM % (a.a.) do FIDC — em revisão.</p></div>
-  <div class="wip-wrap reveal">
-    <div class="wip-card">
-      <div class="wip-badge">Work in progress</div>
-      <div class="wip-title">NIMAL do FIDC</div>
-      <p class="wip-sub">Estamos consolidando o waterfall do yield ao NIMAL (NII após perdas). Os números serão atualizados em breve.</p>
-    </div>
-  </div>
-  <div class="illus">Fonte: Robbin Data · em revisão</div>
+  <p class="sub">Do yield ao NIMAL — NIM % (a.a.) do FIDC.</p></div>
+  <div class="blegend reveal"><span style="color:#8a8a8a">do yield às deduções até o NIMAL · valores a confirmar (TBD)</span></div>
+  <div class="chartframe reveal">{wf_svg}</div>
+  <div class="illus">FIDC · valores anualizados (a.a.) · NIMAL = NII após perdas · TBD</div>
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
