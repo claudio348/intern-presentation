@@ -4,7 +4,7 @@
 .dq-line { margin-top:.3vh; }
 .dq-line svg { width:100%; height:auto; aspect-ratio:auto; display:block; }
 .slide { padding-left:3vw; padding-right:3vw; }
-.slide.vcenter { justify-content:flex-start; padding-top:5.5vh; padding-bottom:3.5vh; }
+.slide.vcenter { justify-content:flex-start; padding-top:5.5vh !important; padding-bottom:6.5vh !important; }
 .slide.vcenter > * { flex-shrink:0; }
 .slide.vcenter .slide-head { margin-bottom:1.6vh; }
 .slide.vcenter .chartframe { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; }
@@ -39,8 +39,9 @@
 .ts-foot { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7a7a7a; margin-top:1.4vh; border-top:1px solid rgba(255,255,255,.1); padding-top:1.2vh; }
 /* business model — 3-layer architecture (demand → engine → capital) */
 .biz2-stack { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:0; margin-top:1.6vh; }
-.biz2-layer { display:flex; align-items:center; gap:1.6vw; border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:2vh 1.8vw; flex:1 1 0; min-height:0; }
+.biz2-layer { display:flex; align-items:center; gap:1.6vw; border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:1.4vh 1.8vw; flex:1 1 0; min-height:0; }
 .biz2-layer.engine { background:#0C0C0C; border-color:#0C0C0C; flex:1.12 1 0; }
+.biz2-layer.funding { border-style:dashed; border-color:rgba(12,12,12,.38); }
 .bl-ic { width:clamp(46px,3.6vw,60px); aspect-ratio:1; border-radius:15px; border:1.6px solid rgba(12,12,12,.85); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .bl-ic svg { width:54%; height:54%; stroke:#0C0C0C; fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round; }
 .biz2-layer.engine .bl-ic { border-color:rgba(255,255,255,.5); }
@@ -62,7 +63,7 @@
 .bl-chips span { font-family:var(--font-mono); font-size:9px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.22); border-radius:6px; padding:4px 9px; }
 .bl-main.between { display:flex; align-items:center; justify-content:space-between; gap:2vw; }
 .bl-big { font-family:var(--font-sans); font-weight:800; font-size:clamp(22px,2vw,32px); letter-spacing:-.02em; color:var(--ink); white-space:nowrap; }
-.biz2-conn { display:flex; align-items:center; justify-content:center; gap:.8vw; flex:0 0 auto; padding:1.1vh 0; }
+.biz2-conn { display:flex; align-items:center; justify-content:center; gap:.8vw; flex:0 0 auto; padding:.5vh 0; }
 .bc-dot { width:26px; height:26px; border-radius:50%; background:#0C0C0C; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0; }
 .bc-lbl { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a8a8a; display:inline-flex; align-items:center; }
 .bc-lbl svg { width:14px; height:14px; stroke:#8a8a8a; fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round; margin-right:6px; }
@@ -92,7 +93,7 @@
 .metrics.compact .k { font-size:9px; }
 .metrics.compact .v { font-size:clamp(18px,1.7vw,28px); }
 /* giro / prazo / taxa — bold editorial layout */
-.giro-wrap { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:6vh; }
+.giro-wrap { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:3.5vh; }
 .giro-lede { font-family:var(--font-sans); font-weight:700; font-size:clamp(30px,3.6vw,56px); line-height:1.08; letter-spacing:-.025em; color:var(--ink); max-width:22ch; }
 .giro-lede .accent { color:#C0143C; }
 .giro-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:2.6vw; }
@@ -111,16 +112,16 @@
 .wip-title { font-family:var(--font-sans); font-weight:700; font-size:clamp(20px,1.7vw,26px); color:var(--ink); margin-top:1.8vh; letter-spacing:-.01em; }
 .wip-sub { font-family:var(--font-sans); font-size:clamp(13px,1.05vw,16px); color:#5A5A5A; line-height:1.55; margin:1vh auto 0; max-width:48ch; }
 /* cedentes & sacados */
-.cs-wrap { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:3vh; margin-top:2.4vh; }
+.cs-wrap { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:2vh; margin-top:1.8vh; }
 .cs-block { display:flex; flex-direction:column; min-height:0; }
 .cs-block:first-child { flex:1.35 1 0; }
 .cs-block:last-child { flex:1 1 0; }
 .cs-lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; margin-bottom:1.4vh; }
 .cedente-wall { display:grid; grid-template-columns:repeat(4,1fr); gap:1.1vw; flex:1 1 auto; min-height:0; }
-.cd { border:1px solid rgba(12,12,12,.14); border-radius:13px; display:flex; align-items:center; justify-content:center; padding:1.4vh 1.2vw; }
+.cd { border:1px solid rgba(12,12,12,.14); border-radius:13px; display:flex; align-items:center; justify-content:center; padding:1vh 1.2vw; }
 .cd img { max-height:6vh; max-width:82%; width:auto; object-fit:contain; }
 .cs-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:1.4vw; flex:1 1 auto; min-height:0; }
-.cs-metric { border:1px solid rgba(12,12,12,.14); border-radius:14px; padding:1.8vh 1.4vw; display:flex; flex-direction:column; justify-content:center; }
+.cs-metric { border:1px solid rgba(12,12,12,.14); border-radius:14px; padding:1.3vh 1.4vw; display:flex; flex-direction:column; justify-content:center; }
 .csm-k { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:#9a9a9a; }
 .csm-v { font-family:var(--font-sans); font-weight:800; font-size:clamp(26px,2.4vw,38px); letter-spacing:-.02em; line-height:1; color:var(--ink); margin-top:.7vh; }
 .csm-v em { font-style:normal; font-weight:600; font-size:.4em; color:#7a7a7a; margin-left:.15em; }
@@ -309,7 +310,7 @@
     <div class="biz2-conn"><span class="bc-dot">↑</span><span class="bc-lbl"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/></svg>FIDC banca o crédito originado</span></div>
     <div class="biz2-layer funding reveal">
       <div class="bl-ic"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.66 3.13 3 7 3s7-1.34 7-3V6M5 12c0 1.66 3.13 3 7 3s7-1.34 7-3"/></svg></div>
-      <div class="bl-side"><span class="bl-tag">Capital · Funding</span><h4>FIDC banca o crédito</h4></div>
+      <div class="bl-side"><span class="bl-tag">Capital · Funding</span><h4>Funding providers</h4></div>
       <div class="bl-main between">
         <p>Off-balance e <b>escalável</b> — sem consumir o caixa da Robbin.</p>
         <span class="bl-big">FIDC R$ 500M</span>
@@ -685,7 +686,7 @@
       <div class="ts-hero">
         <div class="ts-hero-main"><span class="ts-hero-k">Remuneração</span><span class="ts-hero-v">CDI <span>+ 5,0%</span> <i>a.a.</i></span></div>
         <div class="ts-hero-side">
-          <div><span class="k">Montante</span><span class="v">R$ 30M</span></div>
+          <div><span class="k">Montante</span><span class="v">R$ 15M</span></div>
           <div><span class="k">Prazo</span><span class="v">24 meses</span></div>
         </div>
       </div>
