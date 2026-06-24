@@ -347,7 +347,7 @@ def tpv_chart():
 tpv_svg = tpv_chart()
 tpv_legend = ('<span><i style="background:#B9B9B9"></i>pré-FIDC</span>'
               '<span><i style="background:#0C0C0C"></i>FIDC (mar/26 →)</span>'
-              '<span style="color:#8a8a8a">originação BNPL (PIX+Boleto) · R$M/mês</span>')
+              '<span style="color:#8a8a8a">originação PIX Parcelado · R$M/mês</span>')
 
 
 # ---------- credit portfolio (outstanding balance) by source over time (real) ----------
@@ -435,7 +435,7 @@ def portfolio_total_bars():
 port_total_svg = portfolio_total_bars()
 port_total_legend = ('<span><i style="background:#B9B9B9"></i>On-balance · pré-FIDC</span>'
                      '<span><i style="background:#0C0C0C"></i>No FIDC (mar/26 →)</span>'
-                     '<span style="color:#8a8a8a">carteira BNPL · R$M</span>')
+                     '<span style="color:#8a8a8a">carteira PIX Parcelado · R$M</span>')
 
 # consolidated (corporate) charts
 PORT_FIDC = _pm.index("2025-12")
@@ -1047,36 +1047,27 @@ STYLE = """<style>
 .ts-row .v { font-family:var(--font-sans); font-size:clamp(12px,0.98vw,14.5px); color:#E6E6E6; line-height:1.4; }
 .ts-row .v b { color:#fff; font-weight:700; }
 .ts-foot { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7a7a7a; margin-top:1.4vh; border-top:1px solid rgba(255,255,255,.1); padding-top:1.2vh; }
-/* business model — 3-layer architecture (demand → engine → capital) */
-.biz2-stack { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:0; margin-top:1.6vh; }
-.biz2-layer { display:flex; align-items:center; gap:1.6vw; border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:1.4vh 1.8vw; flex:1 1 0; min-height:0; }
-.biz2-layer.engine { background:#0C0C0C; border-color:#0C0C0C; flex:1.12 1 0; }
-.biz2-layer.funding { border-style:dashed; border-color:rgba(12,12,12,.38); }
-.bl-ic { width:clamp(46px,3.6vw,60px); aspect-ratio:1; border-radius:15px; border:1.6px solid rgba(12,12,12,.85); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.bl-ic svg { width:54%; height:54%; stroke:#0C0C0C; fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round; }
-.biz2-layer.engine .bl-ic { border-color:rgba(255,255,255,.5); }
-.biz2-layer.engine .bl-ic svg { stroke:#fff; fill:none; }
-.bl-side { flex:0 0 25%; display:flex; flex-direction:column; gap:.5vh; padding-right:1.8vw; border-right:1px solid rgba(12,12,12,.12); }
-.biz2-layer.engine .bl-side { border-right-color:rgba(255,255,255,.18); align-items:flex-start; }
-.bl-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
-.bl-tag.light { color:#cfcfcf; margin-top:.7vh; }
-.bl-side h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(16px,1.35vw,22px); margin:0; color:var(--ink); letter-spacing:-.015em; line-height:1.12; }
-.bl-robbin { height:clamp(20px,1.7vw,28px); width:auto; display:block; }
-.bl-main { flex:1 1 auto; min-width:0; }
-.bl-main p { font-family:var(--font-sans); font-size:clamp(13px,1.08vw,16.5px); color:#3A3A3A; line-height:1.5; margin:0; }
-.bl-main p b { color:var(--ink); font-weight:600; }
-.biz2-layer.engine .bl-main p { color:#E6E6E6; }
-.biz2-layer.engine .bl-main p b { color:#fff; }
-.bl-logos { display:flex; align-items:center; flex-wrap:wrap; gap:1.4vh 1.6vw; margin-top:1.6vh; }
-.bl-logos img { width:clamp(92px,9vw,128px); height:clamp(24px,2.4vw,34px); object-fit:contain; object-position:center; filter:grayscale(1); opacity:.6; }
-.bl-chips { display:flex; flex-wrap:wrap; gap:6px 8px; margin-top:1.4vh; }
-.bl-chips span { font-family:var(--font-mono); font-size:9px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.22); border-radius:6px; padding:4px 9px; }
-.bl-main.between { display:flex; align-items:center; justify-content:space-between; gap:2vw; }
-.bl-big { font-family:var(--font-sans); font-weight:800; font-size:clamp(22px,2vw,32px); letter-spacing:-.02em; color:var(--ink); white-space:nowrap; }
-.biz2-conn { display:flex; align-items:center; justify-content:center; gap:.8vw; flex:0 0 auto; padding:.5vh 0; }
-.bc-dot { width:26px; height:26px; border-radius:50%; background:#0C0C0C; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0; }
-.bc-lbl { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a8a8a; display:inline-flex; align-items:center; }
-.bc-lbl svg { width:14px; height:14px; stroke:#8a8a8a; fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round; margin-right:6px; }
+/* business model — 3-stakeholder triangle (Robbin · Âncora · PME) */
+.biz3-stage { flex:1 1 auto; min-height:0; position:relative; margin-top:2vh; }
+.biz3-links { position:absolute; inset:0; width:100%; height:100%; z-index:0; }
+.biz3-node { position:absolute; z-index:2; width:clamp(210px,22vw,300px); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:16px; padding:2.2vh 1.5vw; display:flex; flex-direction:column; gap:.5vh; box-shadow:0 8px 30px rgba(0,0,0,.05); }
+.biz3-node.robbin { left:50%; top:0; transform:translateX(-50%); background:#0C0C0C; border-color:#0C0C0C; align-items:flex-start; }
+.biz3-node.anchor { left:1%; bottom:0; }
+.biz3-node.pme { right:1%; bottom:0; }
+.b3-ic { width:clamp(42px,3.2vw,54px); aspect-ratio:1; border-radius:13px; border:1.6px solid rgba(12,12,12,.85); display:flex; align-items:center; justify-content:center; margin-bottom:.4vh; }
+.b3-ic svg { width:52%; height:52%; stroke:#0C0C0C; fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round; }
+.b3-robbin { height:clamp(22px,1.9vw,30px); width:auto; display:block; margin-bottom:.6vh; }
+.b3-tag { font-family:var(--font-mono); font-size:9px; letter-spacing:.13em; text-transform:uppercase; color:#9a9a9a; }
+.b3-tag.light { color:#cfcfcf; }
+.biz3-node h4 { font-family:var(--font-sans); font-weight:700; font-size:clamp(16px,1.4vw,22px); margin:0; color:var(--ink); letter-spacing:-.015em; }
+.biz3-node p { font-family:var(--font-sans); font-size:clamp(12px,.98vw,15px); color:#4A4A4A; line-height:1.45; margin:.2vh 0 0; }
+.biz3-node p b { color:var(--ink); font-weight:600; }
+.biz3-node.robbin p { color:#cfcfcf; }
+.biz3-node.robbin p b { color:#fff; }
+.biz3-edge { position:absolute; z-index:1; transform:translate(-50%,-50%); background:var(--paper); border:1px solid rgba(12,12,12,.16); border-radius:100px; padding:5px 13px; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:#5A5A5A; white-space:nowrap; }
+.biz3-edge.e-left { left:30%; top:49%; }
+.biz3-edge.e-right { left:70%; top:49%; }
+.biz3-edge.e-bottom { left:50%; top:86%; color:#8a8a8a; border-style:dashed; }
 .inv-group { margin-bottom:3vh; }
 .inv-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; padding-bottom:1.1vh; border-bottom:1px solid rgba(12,12,12,.14); margin:0 0 1.8vh; }
 .inv-tag { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; }
@@ -1220,21 +1211,21 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Carteira</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">O ponto de <b>partida</b></div><h1>A carteira de <span class="accent">crédito.</span></h1>
-  <p class="sub">Carteira BNPL (PIX + Boleto), R$M — R$ 15M hoje · FIDC live mar/26.</p>
+  <p class="sub">Carteira PIX Parcelado, R$M — R$ 15M hoje · FIDC live mar/26.</p>
   <span class="tag-pill">FIDC live mar/26 · carteira originada no rail PIX</span></div>
   <div class="blegend reveal">{port_total_legend}</div>
   <div class="chartframe reveal">{port_total_svg}</div>
-  <div class="illus">Fonte: Robbin Data · carteira BNPL · mai/25–mai/26</div>
+  <div class="illus">Fonte: Robbin Data · carteira PIX Parcelado · mai/25–mai/26</div>
 </section>
 
 <!-- ORIGINATION -->
 <section class="slide theme-light vcenter" data-num="02">
   <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Originação</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">De onde vem a <b>carteira</b></div><h1>Originação no <span class="accent">rail PIX.</span></h1>
-  <p class="sub">Originação BNPL (PIX + Boleto), R$M/mês — FIDC live mar/26.</p></div>
+  <p class="sub">Originação no PIX Parcelado, R$M/mês — FIDC live mar/26.</p></div>
   <div class="blegend reveal">{tpv_legend}</div>
   <div class="chartframe reveal">{tpv_svg}</div>
-  <div class="illus">Fonte: Robbin Data · originação BNPL · mai/25–mai/26</div>
+  <div class="illus">Fonte: Robbin Data · originação PIX Parcelado · mai/25–mai/26</div>
 </section>
 
 <!-- CEDENTES & SACADOS -->
@@ -1259,8 +1250,8 @@ SLIDES = STYLE + f"""
     <div class="cs-block">
       <div class="cs-lbl">Sacados · PMEs tomadoras</div>
       <div class="cs-metrics reveal" data-stagger>
-        <div class="cs-metric"><div class="csm-k">Idade mínima do tomador</div><div class="csm-v">25 <em>anos</em></div><div class="csm-s">exigência da política de crédito</div></div>
-        <div class="cs-metric"><div class="csm-k">Ticket médio</div><div class="csm-v">R$ 18 <em>mil</em></div><div class="csm-s">por contrato</div></div>
+        <div class="cs-metric"><div class="csm-k">Idade média da empresa</div><div class="csm-v">XX <em>(TBD)</em></div><div class="csm-s">a confirmar</div></div>
+        <div class="cs-metric"><div class="csm-k">Ticket médio</div><div class="csm-v">R$ 6 <em>mil</em></div><div class="csm-s">por contrato</div></div>
         <div class="cs-metric"><div class="csm-k">Limite médio aprovado</div><div class="csm-v">R$ 55 <em>mil</em></div><div class="csm-s">por tomador</div></div>
       </div>
     </div>
@@ -1367,21 +1358,20 @@ SLIDES = STYLE + f"""
     </div>
     <div class="ts-card reveal">
       <div class="ts-head"><span class="ts-title">Term sheet</span><span class="ts-tag">indicativo · ilustrativo</span></div>
-      <div class="ts-sub">Nota comercial garantida por cotas Jr do FIDC</div>
+      <div class="ts-sub">Nota comercial garantida pela carteira de crédito</div>
       <div class="ts-hero">
-        <div class="ts-hero-main"><span class="ts-hero-k">Remuneração</span><span class="ts-hero-v">CDI <span>+ 5,0%</span> <i>a.a.</i></span></div>
+        <div class="ts-hero-main"><span class="ts-hero-k">Remuneração</span><span class="ts-hero-v">CDI <span>+ 5,5%</span> <i>a.a.</i></span></div>
         <div class="ts-hero-side">
-          <div><span class="k">Montante</span><span class="v">R$ 15M</span></div>
-          <div><span class="k">Prazo</span><span class="v">24 meses</span></div>
+          <div><span class="k">Montante</span><span class="v">R$ 30M</span></div>
+          <div><span class="k">Prazo</span><span class="v">40 meses</span></div>
         </div>
       </div>
       <div class="ts-rows">
-        <div class="ts-row"><span class="k">Instrumento</span><span class="v">Nota comercial (escritural)</span></div>
+        <div class="ts-row"><span class="k">Instrumento</span><span class="v">Nota comercial</span></div>
         <div class="ts-row"><span class="k">Emissor</span><span class="v">Robbin Pagamentos LTDA</span></div>
-        <div class="ts-row"><span class="k">Garantia</span><span class="v">Cessão fiduciária das <b>cotas subordinadas (Jr) do FIDC</b></span></div>
-        <div class="ts-row"><span class="k">Amortização</span><span class="v">Bullet · juros semestrais</span></div>
-        <div class="ts-row"><span class="k">Distribuição</span><span class="v">Oferta pública restrita (CVM 160) · investidores profissionais</span></div>
-        <div class="ts-row"><span class="k">Uso dos recursos</span><span class="v">Capitalizar a cota Jr · crescer a carteira</span></div>
+        <div class="ts-row"><span class="k">Garantia</span><span class="v">Cessão fiduciária da carteira · <b>LTV 0,70</b></span></div>
+        <div class="ts-row"><span class="k">Amortização</span><span class="v">Bullet · juros mensais</span></div>
+        <div class="ts-row"><span class="k">Uso dos recursos</span><span class="v">Crescer a carteira de crédito</span></div>
       </div>
       <div class="ts-foot">Termo meramente ilustrativo · não vinculante</div>
     </div>
