@@ -696,7 +696,7 @@ giro_block = ('<div class="giro-wrap">'
     '<div class="giro-stats five reveal" data-stagger>'
     + _gstat("Prazo médio","3,5","meses","parcelas médias por contrato")
     + _gstat("Duration","2,3","meses","vida média ponderada por saldo")
-    + _gstat("Taxa média","44,6%","a.a.","ponderada pelo principal")
+    + _gstat("Taxa média","38,6%","a.a.","yield ponderado pelo principal")
     + _gstat("Giro da carteira","3,5×","ao ano","recicla e reempresta rápido")
     + _gstat("Inadimplência","2,49%","PDD","provisão · % da carteira")
     + '</div></div>')
