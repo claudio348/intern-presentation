@@ -1049,9 +1049,13 @@ STYLE = """<style>
 .ts-foot { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7a7a7a; margin-top:1.4vh; border-top:1px solid rgba(255,255,255,.1); padding-top:1.2vh; }
 /* business model — 3-layer architecture (demand → engine → capital) */
 .biz2-stack { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:0; margin-top:1.5vh; }
-.biz2-layer { display:flex; align-items:center; gap:2vw; border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:2.4vh 2vw; }
-.biz2-layer.engine { background:#0C0C0C; border-color:#0C0C0C; padding:3vh 2vw; }
-.bl-side { flex:0 0 28%; display:flex; flex-direction:column; gap:.5vh; padding-right:2vw; border-right:1px solid rgba(12,12,12,.12); }
+.biz2-layer { display:flex; align-items:center; gap:1.6vw; border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:2.4vh 1.8vw; }
+.biz2-layer.engine { background:#0C0C0C; border-color:#0C0C0C; padding:3vh 1.8vw; }
+.bl-ic { width:clamp(46px,3.6vw,60px); aspect-ratio:1; border-radius:15px; border:1.6px solid rgba(12,12,12,.85); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.bl-ic svg { width:54%; height:54%; stroke:#0C0C0C; fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round; }
+.biz2-layer.engine .bl-ic { border-color:rgba(255,255,255,.5); }
+.biz2-layer.engine .bl-ic svg { stroke:#fff; fill:none; }
+.bl-side { flex:0 0 25%; display:flex; flex-direction:column; gap:.5vh; padding-right:1.8vw; border-right:1px solid rgba(12,12,12,.12); }
 .biz2-layer.engine .bl-side { border-right-color:rgba(255,255,255,.18); align-items:flex-start; }
 .bl-tag { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:#9a9a9a; }
 .bl-tag.light { color:#cfcfcf; margin-top:.7vh; }
@@ -1070,7 +1074,8 @@ STYLE = """<style>
 .bl-big { font-family:var(--font-sans); font-weight:800; font-size:clamp(22px,2vw,32px); letter-spacing:-.02em; color:var(--ink); white-space:nowrap; }
 .biz2-conn { display:flex; align-items:center; justify-content:center; gap:.8vw; height:5vh; }
 .bc-dot { width:26px; height:26px; border-radius:50%; background:#0C0C0C; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0; }
-.bc-lbl { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a8a8a; }
+.bc-lbl { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a8a8a; display:inline-flex; align-items:center; }
+.bc-lbl svg { width:14px; height:14px; stroke:#8a8a8a; fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round; margin-right:6px; }
 .inv-group { margin-bottom:3vh; }
 .inv-head { display:flex; align-items:baseline; justify-content:space-between; gap:1vw; padding-bottom:1.1vh; border-bottom:1px solid rgba(12,12,12,.14); margin:0 0 1.8vh; }
 .inv-tag { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8a8a; }
@@ -1323,9 +1328,15 @@ SLIDES = STYLE + f"""
 <section class="slide theme-light vcenter" data-num="09">
   <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Performance · conclusão</span></div>
   <div class="slide-head reveal"><div class="slide-kicker">Conclusão da <b>performance</b></div><h1>NIMAL do <span class="accent">FIDC.</span></h1>
-  <p class="sub">Do yield ao NIMAL — NIM % (a.a.) do FIDC, 1T26.</p></div>
-  <div class="chartframe reveal">{wf_svg}</div>
-  <div class="illus">FIDC · 1T26 · valores anualizados (a.a.) · NIMAL = NII após perdas</div>
+  <p class="sub">Do yield ao NIMAL — NIM % (a.a.) do FIDC — em revisão.</p></div>
+  <div class="wip-wrap reveal">
+    <div class="wip-card">
+      <div class="wip-badge">Work in progress</div>
+      <div class="wip-title">NIMAL do FIDC</div>
+      <p class="wip-sub">Estamos consolidando o waterfall do yield ao NIMAL (NII após perdas). Os números serão atualizados em breve.</p>
+    </div>
+  </div>
+  <div class="illus">Fonte: Robbin Data · em revisão</div>
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
