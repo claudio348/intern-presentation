@@ -776,16 +776,15 @@ comp_tbl = comp_table()
 
 # ---------- credit economics waterfall ----------
 # (label, y0, y1, color, value, label_pos)
-wf_steps = [("Yield agregado",0,95.8,"#0C0C0C","TBD","top"),
-            ("Custos diretos",87.8,95.8,"#C0143C","−TBD","bot"),
-            ("Custo de funding",64.8,87.8,"#C0143C","−TBD","bot"),
-            ("NIM",0,64.8,"#0C0C0C","TBD","top"),
-            ("Perdas",39.8,64.8,"#C0143C","−TBD","bot"),
-            ("NIMAL",0,39.8,"#0C0C0C","TBD","top")]
-wf_levels = [95.8,87.8,64.8,64.8,39.8]   # connector level between bar i and i+1
+wf_steps = [("Yield",0,38.6,"#0C0C0C","38,6%","top"),
+            ("Funding Costs (All-in)",15.8,38.6,"#C0143C","−22,8%","bot"),
+            ("NIM",0,15.8,"#0C0C0C","15,8%","top"),
+            ("Credit Losses",11.22,15.8,"#C0143C","−4,58%","bot"),
+            ("NIMAL",0,11.22,"#0C0C0C","11,2%","top")]
+wf_levels = [38.6,15.8,15.8,11.22]   # connector level between bar i and i+1
 def waterfall():
     WD, HD = 1000, 504; Lx, Rx, Tx, Bx = 18, 18, 44, 48
-    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 104; n = len(wf_steps); slot = pw/n; bw = slot*0.54
+    pw, ph = WD-Lx-Rx, HD-Tx-Bx; ymax = 44; n = len(wf_steps); slot = pw/n; bw = slot*0.54
     def Y(v): return Tx+ph - v/ymax*ph
     def Cx(i): return Lx+slot*i+slot/2
     s = [f'<svg class="chart" viewBox="0 0 {WD} {HD}" xmlns="http://www.w3.org/2000/svg">']
@@ -1318,12 +1317,12 @@ SLIDES = STYLE + f"""
 
 <!-- NIMAL DO FIDC — conclusão da performance (antes do corporativo) -->
 <section class="slide theme-light vcenter" data-num="09">
-  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Performance · conclusão</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">Conclusão da <b>performance</b></div><h1>NIMAL do <span class="accent">FIDC.</span></h1>
-  <p class="sub">Do yield ao NIMAL — NIM % (a.a.) do FIDC.</p></div>
-  <div class="blegend reveal"><span style="color:#8a8a8a">do yield às deduções até o NIMAL · valores a confirmar (TBD)</span></div>
+  <div class="chapter-mark light-mark"><span class="chapter-num">08</span><span class="chapter-divider"></span><span class="chapter-year">Economics · crédito</span></div>
+  <div class="slide-head reveal"><div class="slide-kicker">A economia da <b>operação</b></div><h1>Economics da operação de <span class="accent">crédito.</span></h1>
+  <p class="sub">Do yield ao NIMAL — % anualizado (a.a.).</p></div>
+  <div class="blegend reveal"><span style="color:#8a8a8a">do yield às deduções (funding + perdas) até o NIMAL · % a.a.</span></div>
   <div class="chartframe reveal">{wf_svg}</div>
-  <div class="illus">FIDC · valores anualizados (a.a.) · NIMAL = NII após perdas · TBD</div>
+  <div class="illus">Valores anualizados (a.a.) · NIM = yield − funding · NIMAL = NIM − perdas</div>
 </section>
 
 <!-- COMPANY — RUN RATE + CORPORATE BACKING -->
