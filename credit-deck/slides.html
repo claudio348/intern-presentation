@@ -38,9 +38,9 @@
 .ts-row .v b { color:#fff; font-weight:700; }
 .ts-foot { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7a7a7a; margin-top:1.4vh; border-top:1px solid rgba(255,255,255,.1); padding-top:1.2vh; }
 /* business model — 3-layer architecture (demand → engine → capital) */
-.biz2-stack { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center; gap:0; margin-top:1.5vh; }
-.biz2-layer { display:flex; align-items:center; gap:1.6vw; border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:2.4vh 1.8vw; }
-.biz2-layer.engine { background:#0C0C0C; border-color:#0C0C0C; padding:3vh 1.8vw; }
+.biz2-stack { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:0; margin-top:1.6vh; }
+.biz2-layer { display:flex; align-items:center; gap:1.6vw; border:1px solid rgba(12,12,12,.15); border-radius:16px; padding:2vh 1.8vw; flex:1 1 0; min-height:0; }
+.biz2-layer.engine { background:#0C0C0C; border-color:#0C0C0C; flex:1.12 1 0; }
 .bl-ic { width:clamp(46px,3.6vw,60px); aspect-ratio:1; border-radius:15px; border:1.6px solid rgba(12,12,12,.85); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .bl-ic svg { width:54%; height:54%; stroke:#0C0C0C; fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round; }
 .biz2-layer.engine .bl-ic { border-color:rgba(255,255,255,.5); }
@@ -56,13 +56,13 @@
 .bl-main p b { color:var(--ink); font-weight:600; }
 .biz2-layer.engine .bl-main p { color:#E6E6E6; }
 .biz2-layer.engine .bl-main p b { color:#fff; }
-.bl-logos { display:flex; align-items:center; flex-wrap:wrap; gap:1.6vw; margin-top:1.4vh; }
-.bl-logos img { height:clamp(15px,1.4vw,21px); width:auto; filter:grayscale(1); opacity:.62; }
+.bl-logos { display:flex; align-items:center; flex-wrap:wrap; gap:1vh 1.8vw; margin-top:1.6vh; }
+.bl-logos img { height:clamp(17px,1.7vw,26px); width:auto; filter:grayscale(1); opacity:.6; }
 .bl-chips { display:flex; flex-wrap:wrap; gap:6px 8px; margin-top:1.4vh; }
 .bl-chips span { font-family:var(--font-mono); font-size:9px; letter-spacing:.05em; text-transform:uppercase; color:#d4d4d4; border:1px solid rgba(255,255,255,.22); border-radius:6px; padding:4px 9px; }
 .bl-main.between { display:flex; align-items:center; justify-content:space-between; gap:2vw; }
 .bl-big { font-family:var(--font-sans); font-weight:800; font-size:clamp(22px,2vw,32px); letter-spacing:-.02em; color:var(--ink); white-space:nowrap; }
-.biz2-conn { display:flex; align-items:center; justify-content:center; gap:.8vw; height:5vh; }
+.biz2-conn { display:flex; align-items:center; justify-content:center; gap:.8vw; flex:0 0 auto; padding:1.1vh 0; }
 .bc-dot { width:26px; height:26px; border-radius:50%; background:#0C0C0C; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0; }
 .bc-lbl { font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a8a8a; display:inline-flex; align-items:center; }
 .bc-lbl svg { width:14px; height:14px; stroke:#8a8a8a; fill:none; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round; margin-right:6px; }
@@ -293,7 +293,7 @@
       <div class="bl-main">
         <p>Marcas líderes <b>co-brandam o cartão</b> e abrem sua base de PMEs.</p>
         <div class="bl-logos">
-          <img src="logos/intelbras.png" alt="Intelbras"><img src="logos/cantu.png" alt="Cantu"><img src="logos/chillibeans.png" alt="Chilli Beans"><img src="logos/votorantim.png" alt="Votorantim"><img src="logos/gerdau.png" alt="Gerdau">
+          <img src="logos/intelbras.png" alt="Intelbras"><img src="logos/cantu.png" alt="Cantu"><img src="logos/chillibeans.png" alt="Chilli Beans"><img src="logos/moura.png" alt="Moura"><img src="logos/gerdau.png" alt="Gerdau"><img src="logos/malwee.png" alt="Malwee"><img src="logos/votorantim.png" alt="Votorantim"><img src="logos/brinox.png" alt="Grupo Brinox">
         </div>
       </div>
     </div>
