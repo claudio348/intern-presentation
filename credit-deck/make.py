@@ -1217,15 +1217,7 @@ SLIDES = STYLE + f"""
   <div class="illus">Fonte: Robbin Data · carteira PIX Parcelado · mai/25–mai/26</div>
 </section>
 
-<!-- ORIGINATION -->
-<section class="slide theme-light vcenter" data-num="02">
-  <div class="chapter-mark light-mark"><span class="chapter-num">01</span><span class="chapter-divider"></span><span class="chapter-year">Originação</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">De onde vem a <b>carteira</b></div><h1>Originação no <span class="accent">rail PIX.</span></h1>
-  <p class="sub">Originação no PIX Parcelado, R$M/mês — FIDC live mar/26.</p></div>
-  <div class="blegend reveal">{tpv_legend}</div>
-  <div class="chartframe reveal">{tpv_svg}</div>
-  <div class="illus">Fonte: Robbin Data · originação PIX Parcelado · mai/25–mai/26</div>
-</section>
+<!-- ORIGINATION (removido a pedido) -->
 
 <!-- CEDENTES & SACADOS -->
 <section class="slide theme-light vcenter" data-num="02">
@@ -1294,15 +1286,7 @@ SLIDES = STYLE + f"""
 
 <!-- AGING DA CARTEIRA — removido a pedido -->
 
-<!-- FIDC LOAN BOOK GROWTH (off-balance, total only) -->
-<section class="slide theme-light vcenter" data-num="06">
-  <div class="chapter-mark light-mark"><span class="chapter-num">05</span><span class="chapter-divider"></span><span class="chapter-year">FIDC · crescimento da carteira</span></div>
-  <div class="slide-head reveal"><div class="slide-kicker">Estruturamos um <b>FIDC</b> para escalar</div><h1>Crescimento da carteira <span class="accent">do FIDC.</span></h1>
-  <p class="sub">Saldo total em aberto no FIDC (R$M) — carve-out off-balance desde dez/25.</p></div>
-  <div class="blegend reveal"><span><i style="background:#0C0C0C"></i>total off-balance · R$M</span></div>
-  <div class="chartframe reveal fit">{fidc_total_svg}</div>
-  <div class="illus">Fonte: Robbin Data · dez/25–mai/26 (FIDC)</div>
-</section>
+<!-- FIDC LOAN BOOK GROWTH (removido a pedido) -->
 
 <!-- INCREASING DIVERSIFICATION (removido) -->
 
@@ -1339,9 +1323,9 @@ SLIDES = STYLE + f"""
     </div>
     <div class="ts-card reveal">
       <div class="ts-head"><span class="ts-title">Term sheet</span><span class="ts-tag">indicativo · ilustrativo</span></div>
-      <div class="ts-sub">Nota comercial garantida pela carteira de crédito</div>
+      <div class="ts-sub">Nota comercial garantida pela cota subordinada do FIDC</div>
       <div class="ts-hero">
-        <div class="ts-hero-main"><span class="ts-hero-k">Remuneração</span><span class="ts-hero-v">CDI <span>+ 5,5%</span> <i>a.a.</i></span></div>
+        <div class="ts-hero-main"><span class="ts-hero-k">Remuneração</span><span class="ts-hero-v">CDI <span>+ 6,5%</span> <i>a.a.</i></span></div>
         <div class="ts-hero-side">
           <div><span class="k">Montante</span><span class="v">R$ 30M</span></div>
           <div><span class="k">Prazo</span><span class="v">40 meses</span></div>
@@ -1350,9 +1334,9 @@ SLIDES = STYLE + f"""
       <div class="ts-rows">
         <div class="ts-row"><span class="k">Instrumento</span><span class="v">Nota comercial</span></div>
         <div class="ts-row"><span class="k">Emissor</span><span class="v">Robbin Pagamentos LTDA</span></div>
-        <div class="ts-row"><span class="k">Garantia</span><span class="v">Cessão fiduciária da carteira · <b>LTV 0,70</b></span></div>
+        <div class="ts-row"><span class="k">Garantia</span><span class="v">Cessão fiduciária da cota subordinada · <b>146% sobre o principal</b></span></div>
         <div class="ts-row"><span class="k">Amortização</span><span class="v">Bullet · juros mensais</span></div>
-        <div class="ts-row"><span class="k">Uso dos recursos</span><span class="v">Crescer a carteira de crédito</span></div>
+        <div class="ts-row"><span class="k">Uso dos recursos</span><span class="v">Financiar a cota subordinada</span></div>
       </div>
       <div class="ts-foot">Termo meramente ilustrativo · não vinculante</div>
     </div>
